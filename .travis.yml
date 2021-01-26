@@ -7,4 +7,9 @@ os:
   - windows
 branches:
   only:
-    - /^backend*$/
+    - master
+    - /^backend.*$/
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE mydb;'
