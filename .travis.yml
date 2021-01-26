@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - openjdk15
+os:
+  - linux
+  - osx
+  - windows
+branches:
+  only:
+    - /^backend*$/
