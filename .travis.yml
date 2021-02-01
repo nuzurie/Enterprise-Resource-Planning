@@ -7,7 +7,4 @@ branches:
   only:
     - master
     - /^backend.*$/
-services:
-  - mysql
-before_install:
-  - mysql -e 'CREATE DATABASE mydb;'
+before_install: cd ./backend
