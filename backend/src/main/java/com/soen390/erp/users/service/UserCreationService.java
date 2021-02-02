@@ -5,6 +5,7 @@ import com.soen390.erp.users.model.User;
 import com.soen390.erp.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +28,7 @@ public class UserCreationService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Secured("ROLE_ADMIN")
     public void createUser(String firstname, String lastname, String email, String password, String role) throws BadCredentialsException{
 
         if (userRepository.findByUsername(email).isPresent()) throw new BadCredentialsException("Already Exists!");
@@ -36,11 +38,5 @@ public class UserCreationService {
                 .password(passwordEncoder.encode(password)).role(role).active(true).build();
         userRepository.save(user);
 
-
-//        User user = new
-//
-//        UserDetails registerUser = new
-//
-//        userDetailsManager.createUser(user);
     }
 }
