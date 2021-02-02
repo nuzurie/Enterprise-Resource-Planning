@@ -18,7 +18,7 @@ class EnterpriseResourcePlanningApplicationTests {
 
     @Test
     void createUser(){
-        userCreationService.createUser("Zubair", "Nurie", "mznurie@msn.com", "soen390", "ROLE_ADMIN");
+//        userCreationService.createUser("Zubair", "Nurie", "mznurie@msn.com", "soen390", "ROLE_ADMIN");
     }
 
 }

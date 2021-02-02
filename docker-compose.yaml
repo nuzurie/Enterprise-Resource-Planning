@@ -9,3 +9,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"

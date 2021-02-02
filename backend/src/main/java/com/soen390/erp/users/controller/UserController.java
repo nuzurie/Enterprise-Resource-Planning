@@ -1,4 +1,4 @@
-package com.soen390.erp.controller;
+package com.soen390.erp.users.controller;
 
 import com.soen390.erp.users.model.User;
 import com.soen390.erp.users.service.UserCreationService;
