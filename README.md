@@ -24,3 +24,12 @@
  * React
  * Jira
  * TravisCI
+
+## Link to Jira
+https://team-1610936365889.atlassian.net/jira/software/projects/ERPS/boards/3
+
+## Instructions
+* Download Docker and run the docker daemon
+* Download the repo from GitHub
+* cd into the project repository
+* Run the script "docker-compose up -d"
