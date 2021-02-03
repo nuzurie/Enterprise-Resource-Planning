@@ -1,7 +1,10 @@
 # SOEN 390 - Team 02
 
  ## Objective
- Develop an ERP system for a company that manufactures bikes. 
+ Develop an ERP system for a company that manufactures bikes.
+ 
+ ## Sprints Documentation Submissions
+ [Directory for Documentation Submissions](../documentation/Sprint 1)
 
  ## Team 
 
