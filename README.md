@@ -4,7 +4,7 @@
  Develop an ERP system for a company that manufactures bikes.
  
  ## Sprints Documentation Submissions
- [Directory for Documentation Submissions](../documentation/Sprint 1)
+[Directory for Documentation Submissions](../documentation/Sprint%201)
 
  ## Team 
 
