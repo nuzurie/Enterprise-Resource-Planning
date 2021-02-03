@@ -1,7 +1,7 @@
 import './App.css';
 import styled from 'styled-components';
 import NavigationContainer from './components/Navigation.js';
-
+import CreateUser from './pages/CreateUser.js';
 
 function App() {
   return (
@@ -9,6 +9,7 @@ function App() {
       <NavigationContainer />
       <Content>
         {/* Insert selected page component here */}
+        <CreateUser mainTitle="Creating User" innerTitle="New User" />
       </Content>
     </Container>
   );
