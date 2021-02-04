@@ -1,25 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import styled from 'styled-components';
+import NavigationContainer from './components/Navigation.js';
+import Main from './Main.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload. This can work within docker.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <NavigationContainer />
+      <Content>
+        {/* Insert selected page component here */}
+        <Main />
+      </Content>
+    </Container>
   );
 }
+
+//STYLED-COMPONENTS
+const Container = styled.div`
+  background: #F2F5FC;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+`
+
+const Content = styled.div`
+  padding: 20px;
+`
 
 export default App;
