@@ -3,9 +3,6 @@
  ## Objective
  Develop an ERP system for a company that manufactures bikes.
  
- ## Sprints Documentation Submissions
-[Directory for Documentation Submissions](documentation/Sprint%201)
-
  ## Team 
 
  | Member Names          | Github Username    |
@@ -27,6 +24,9 @@
  * React
  * Jira
  * TravisCI
+ 
+  ## Sprints Documentation Submissions
+[Directory for Documentation Submissions](documentation/Sprint%201)
 
 ## Link to Jira
 https://team-1610936365889.atlassian.net/jira/software/projects/ERPS/boards/3
