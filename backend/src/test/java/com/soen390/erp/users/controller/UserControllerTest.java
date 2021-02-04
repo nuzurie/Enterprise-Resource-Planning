@@ -30,20 +30,28 @@ public class UserControllerTest {
     @LocalServerPort
     private int port;
 
-
+    //pulled as a variable so that the same user name is deleted after tests are finished
     private final String testUserName = "test@email.com";
 
     @Before
     public void setUp() {
     }
 
+    /***
+     * To test the controller class for null
+     */
     @Test
     public void controllerNotNull() {
         assertThat(controller).isNotNull();
     }
 
+    /***
+     * Uses the controller post method to insert a user and then test if the user exists in the database
+     * @throws JSONException
+     */
     @Test
     void createUser() throws JSONException {
+        //prepare parameters
         String url = "http://localhost:" + port + "/api/create-user";
         String firstNamePropertyName = "firstname";
         String testFirstName = "testFirstName";
@@ -56,7 +64,7 @@ public class UserControllerTest {
         String testRole = "ROLE_ADMIN";
         String activePropertyName = "active";
         String testActive = "true";
-
+        //prepare http request
         restTemplate = new TestRestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -67,12 +75,13 @@ public class UserControllerTest {
         userJsonObject.put(passwordPropertyName, testPassword);
         userJsonObject.put(rolePropertyName, testRole);
         userJsonObject.put(activePropertyName, testActive);
-
+        //create http request
         HttpEntity<String> request = new HttpEntity<>(userJsonObject.toString(), headers);
-
+        //send http request
         restTemplate.postForObject(url, request, String.class);
-
+        //fetch user from database
         Optional<User> userFromDb = userRepository.findByUsername(testUserName);
+        //assert user is not empty
         assertThat(userFromDb).isEmpty();
     }
 
