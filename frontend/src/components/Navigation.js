@@ -8,6 +8,8 @@ import CardTravelOutlinedIcon from '@material-ui/icons/CardTravelOutlined';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AddUser from '@material-ui/icons/PersonAdd';
+import Logout from '@material-ui/icons/PowerSettingsNew';
 
 
 
@@ -50,45 +52,40 @@ class Navigation extends Component {
   render() {
     return (
         <NavigationContainer>
-            {/* Enter icons here */
+          <div>
+            <div>
+              <button onClick={userProfile}><AccountCircleOutlinedIcon /></button>
+            </div>
+            <div>
+              <button onClick={dashboard}><DashboardOutlinedIcon /></button>
+            </div>
+            <div>
+              <button onClick={bike}><DirectionsBikeIcon /></button>
+            </div>
 
-              <div>
+            <div>
+              <button onClick={inventory}><CardTravelOutlinedIcon /></button>
+            </div>
+            
+            <div>
+              <button onClick={maintenance}><SettingsIcon /></button>
+            </div>
 
-                <div>
-                  <button onClick={userProfile}><AccountCircleOutlinedIcon></AccountCircleOutlinedIcon> </button>
-                </div>
+            <div>
+              <button onClick={manufacturingPlan}><DateRangeOutlinedIcon /></button>
+            </div>
 
-                <br></br>
-                <br></br>
+            <div>
+              <button onClick={accounts}><DescriptionOutlinedIcon /></button>
+            </div>
 
-                <div>
-                  <button onClick={dashboard}><DashboardOutlinedIcon></DashboardOutlinedIcon> </button>
-                </div>
-                <div>
-                  <button onClick={bike}><DirectionsBikeIcon></DirectionsBikeIcon></button>
-                </div>
-
-                <div>
-                  <button onClick={inventory}><CardTravelOutlinedIcon></CardTravelOutlinedIcon></button>
-                </div>
-                
-                <div>
-                  <button onClick={maintenance}><SettingsIcon></SettingsIcon></button>
-                </div>
-
-                <div>
-                  <button onClick={manufacturingPlan}><DateRangeOutlinedIcon></DateRangeOutlinedIcon> </button>
-                </div>
-
-                <div>
-                  <button onClick={accounts}><DescriptionOutlinedIcon></DescriptionOutlinedIcon></button>
-                </div>
-              
-              </div>
-
-           
-            }
-
+            <div>
+              <button onClick={accounts}><AddUser /></button>
+            </div>
+          </div>
+          <div>
+            <button onClick={accounts}><Logout /></button>
+          </div>
         </NavigationContainer>
     );
   }
@@ -100,16 +97,34 @@ const NavigationContainer = styled.div`
   padding: 20px;
   height: calc(100vh - 40px);
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  &:nth-child(1) {
+    margin-bottom: 40px;
+  }
 
   button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
+    background-color: transparent;
+    background-repeat: no-repeat;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
     overflow: hidden;
-    outline:none;
+    outline: none;
+    color: #E0E6F1;
+    transition: 250ms;
+    margin-top: 20px;
+
+    &:hover, &::selection {
+      color: #BBC8E3;
+    }
+
+    svg {
+      width: 1.2em;
+      height: 1.2em;
+    }
 }
 `
 
