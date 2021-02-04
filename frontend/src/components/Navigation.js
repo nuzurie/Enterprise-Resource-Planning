@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
@@ -10,9 +11,6 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddUser from '@material-ui/icons/PersonAdd';
 import Logout from '@material-ui/icons/PowerSettingsNew';
-
-
-
 
 function userProfile() {
   alert('This is the profile page!');
@@ -57,31 +55,41 @@ class Navigation extends Component {
               <button onClick={userProfile}><AccountCircleOutlinedIcon /></button>
             </div>
             <div>
-              <button onClick={dashboard}><DashboardOutlinedIcon /></button>
+              <Link to="/dashboard">
+                <button><DashboardOutlinedIcon /></button>
+              </Link>
             </div>
-            <div>
-              <button onClick={bike}><DirectionsBikeIcon /></button>
-            </div>
+            <Link to="/bikeproduction">
+              <button><DirectionsBikeIcon /></button>
+            </Link>
 
             <div>
-              <button onClick={inventory}><CardTravelOutlinedIcon /></button>
+              <Link to="/inventory">
+                <button><CardTravelOutlinedIcon /></button>
+              </Link>
             </div>
             
             <div>
-              <button onClick={maintenance}><SettingsIcon /></button>
+              <Link to="/infrastructure">
+                <button><SettingsIcon /></button>
+              </Link>
             </div>
 
             <div>
-              <button onClick={manufacturingPlan}><DateRangeOutlinedIcon /></button>
+              <Link to="/manufacturing">
+                <button><DateRangeOutlinedIcon /></button>
+              </Link>
             </div>
 
             <div>
-              <button onClick={accounts}><DescriptionOutlinedIcon /></button>
+              <Link to="/accounting">
+                <button><DescriptionOutlinedIcon /></button>
+              </Link>
             </div>
 
-            <div>
-              <button onClick={accounts}><AddUser /></button>
-            </div>
+            <Link to="/createuser">
+              <button><AddUser /></button>
+            </Link>
           </div>
           <div>
             <button onClick={accounts}><Logout /></button>
@@ -102,8 +110,8 @@ const NavigationContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  &:nth-child(1) {
-    margin-bottom: 40px;
+  & div:first-of-type {
+    margin-bottom: 50px;
   }
 
   button {

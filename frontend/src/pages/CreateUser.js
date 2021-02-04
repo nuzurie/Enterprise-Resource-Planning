@@ -13,8 +13,8 @@ class CreateUser extends Component {
 
   render() {
     return (
-        <MainContainer title={this.props.mainTitle}>
-            <InnerContainer title={this.props.innerTitle}>
+        <MainContainer title="Creating User">
+            <InnerContainer title="New User">
                 <NewUserForm action="">
                     <div>
                         <FieldContainer>
@@ -113,8 +113,8 @@ const SubmitButton = styled.input`
 `
 
 CreateUser.propTypes = {
-    innerTitle: PropTypes.string.isRequired,
-    mainTitle: PropTypes.string.isRequired,
+    // innerTitle: PropTypes.string.isRequired,
+    // mainTitle: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
 };
 
