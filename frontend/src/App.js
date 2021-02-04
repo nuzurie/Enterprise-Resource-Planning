@@ -1,7 +1,8 @@
 import './App.css';
+import React from 'react';
 import styled from 'styled-components';
 import NavigationContainer from './components/Navigation.js';
-import CreateUser from './pages/CreateUser.js';
+import Main from './Main.js';
 
 function App() {
   return (
@@ -9,7 +10,7 @@ function App() {
       <NavigationContainer />
       <Content>
         {/* Insert selected page component here */}
-        <CreateUser mainTitle="Creating User" innerTitle="New User" />
+        <Main />
       </Content>
     </Container>
   );
