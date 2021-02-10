@@ -1,13 +1,8 @@
 package com.soen390.erp.users.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Set;
+import javax.validation.constraints.Email;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +16,8 @@ public class User{
     private int id;
     private String firstname;
     private String lastname;
+    @Email
+    @Column(unique = true)
     private String username;
     private String password;
     private String role;
