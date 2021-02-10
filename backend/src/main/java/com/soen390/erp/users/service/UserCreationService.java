@@ -4,14 +4,11 @@ package com.soen390.erp.users.service;
 import com.soen390.erp.users.model.User;
 import com.soen390.erp.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class UserCreationService {
     }
 
     @Secured("ROLE_ADMIN")
-    public void createUser(String firstname, String lastname, String email, String password, String role) throws BadCredentialsException{
+    public void createUser(String firstname, String lastname, String email, String password, String role) throws BadCredentialsException {
 
         if (userRepository.findByUsername(email).isPresent()) throw new BadCredentialsException("Already Exists!");
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -37,6 +34,6 @@ public class UserCreationService {
         User user = User.builder().firstname(firstname).lastname(lastname).username(email)
                 .password(passwordEncoder.encode(password)).role(role).active(true).build();
         userRepository.save(user);
-
     }
+
 }

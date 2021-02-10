@@ -29,7 +29,7 @@ public class ERPAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         Optional<User> user = userRepository.findByUsername(username);
-        return user.map(user1 -> {
+        Authentication authenticationToken = user.map(user1 -> {
             if (passwordEncoder.matches(password, user1.getPassword())) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(user1.getRole()));
@@ -38,6 +38,7 @@ public class ERPAuthenticationProvider implements AuthenticationProvider {
                 throw new BadCredentialsException("Invalid password");
             }
         }).orElseThrow(() -> new BadCredentialsException("No user registered with this details!"));
+        return authenticationToken;
     }
 
     @Override

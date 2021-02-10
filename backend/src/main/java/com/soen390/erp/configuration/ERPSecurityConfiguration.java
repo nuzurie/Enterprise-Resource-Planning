@@ -2,6 +2,7 @@ package com.soen390.erp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +35,7 @@ public class ERPSecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
         }).and().csrf().disable() //todo: this will have to be changed later for additional security
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().and()
