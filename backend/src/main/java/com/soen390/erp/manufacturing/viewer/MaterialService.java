@@ -1,5 +1,6 @@
-package com.soen390.erp.manufacturing.model;
+package com.soen390.erp.manufacturing.viewer;
 
+import com.soen390.erp.manufacturing.model.Material;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class MaterialService {
     static {
         materiallist.add(new Material("Rubber" , 10, null));
         materiallist.add(new Material("Paint",5,null));
-        materiallist.add(new Material("Chain",15,null));
+        materiallist.add(new Material("Metal",25,null));
     }
 
     // Find All available Materials

@@ -1,5 +1,7 @@
-package com.soen390.erp.manufacturing.model;
+package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.manufacturing.model.Material;
+import com.soen390.erp.manufacturing.viewer.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
