@@ -10,10 +10,10 @@ import javax.persistence.Id;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+//@Entity
 
 public class OrderStatus {
-    @Id
+//    @Id
     public int id;
     public String name;
 }

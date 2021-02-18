@@ -4,15 +4,15 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
+//@Getter
+//@Setter
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Entity
 
 public class MaterialType {
-    @Id
+//    @Id
     private int id;
     private String name;
     private double price;

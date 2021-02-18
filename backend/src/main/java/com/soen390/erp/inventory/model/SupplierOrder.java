@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,12 +18,31 @@ import java.util.Set;
 
 public class SupplierOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private Optional<String> title;
-    private ArrayList<OrderMaterial> items;
-    private int statusId;
-    public OrderStatus status;
-    //plus shipping ?
-    private double totalCost;
+
+    private Date date;
+
+//    @ManyToMany(cascade = CascadeType.MERGE)
+//    @JoinTable(name="order_item",
+//            joinColumns=@JoinColumn(name="part_id"))
+//    protected Set<Material> materials;
+
+
+
+
+
+
+
+
+
+//    private Optional<String> title;
+
+//    protected ArrayList<OrderItem> orderItems;
+//
+//    @OneToOne
+//    @JoinColumn(name = "status_id")
+//    public OrderStatus status;
+//    //plus shipping ?
+//    private double totalCost;
 }
