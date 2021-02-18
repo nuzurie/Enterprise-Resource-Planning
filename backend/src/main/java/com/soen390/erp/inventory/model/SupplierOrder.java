@@ -1,11 +1,19 @@
 package com.soen390.erp.inventory.model;
 
 import com.soen390.erp.manufacturing.model.*;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 
 public class SupplierOrder {
     @Id
