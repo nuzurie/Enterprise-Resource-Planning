@@ -18,9 +18,8 @@ import java.util.Set;
 
 public class SupplierOrder {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
     private Date date;
 
 //    @ManyToMany(cascade = CascadeType.MERGE)
