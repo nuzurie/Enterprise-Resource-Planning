@@ -24,12 +24,12 @@ import java.util.Set;
 
 
 
-    static {
-            partlist.add(new Part("HandleBar" , 100, handleBarSet));
-            partlist.add(new Part("Saddle",50,saddleSet));
-            partlist.add(new Part("Rim",50,rimSet));
-            partlist.add(new Part("Tire",50, tireSet));
-        }
+//    static {
+//            partlist.add(new Part("HandleBar" , 100, handleBarSet));
+//            partlist.add(new Part("Saddle",50,saddleSet));
+//            partlist.add(new Part("Rim",50,rimSet));
+//            partlist.add(new Part("Tire",50, tireSet));
+//        }
 
         // Find All available parts
         public List<Part> findAll(){

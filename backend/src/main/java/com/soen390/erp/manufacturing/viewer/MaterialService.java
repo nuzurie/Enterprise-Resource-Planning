@@ -1,6 +1,9 @@
 package com.soen390.erp.manufacturing.viewer;
 
 import com.soen390.erp.manufacturing.model.Material;
+import com.soen390.erp.manufacturing.repository.MaterialRepository;
+import com.soen390.erp.users.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,11 +15,12 @@ public class MaterialService {
     private static List<Material> materiallist = new ArrayList<>();
     private static int materialId = 0;
 
-    // this is for me to understand
-    static {
-        materiallist.add(new Material("Rubber" , 10, null));
-        materiallist.add(new Material("Paint",5,null));
-        materiallist.add(new Material("Metal",25,null));
+
+    MaterialRepository materialRepository;
+
+    @Autowired
+    public MaterialService(MaterialRepository materialRepository) {
+        this.materialRepository = materialRepository;
     }
 
     // Find All available Materials
@@ -25,10 +29,9 @@ public class MaterialService {
     }
 
     // Save a material into the material list
-    public Material saveMaterial( Material material){
-        if(material.getName()== null) {
-            materiallist.add(material);
-        }
+    public Material saveMaterial(Material material){
+        materialRepository.save(material);
+        //TODO: verify object is inserted successfully. maybe by checking if it got a new id
         return material;
     }
 
