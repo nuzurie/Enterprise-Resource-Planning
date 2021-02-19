@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 public class PartController {
-    {
 
         @Autowired
         private PartService partCatalogue;
@@ -41,7 +40,6 @@ public class PartController {
                 buildAndExpand(savedPart.getName()).toUri();
 
         return ResponseEntity.created(location).build();
-    }
     }
 
 }
