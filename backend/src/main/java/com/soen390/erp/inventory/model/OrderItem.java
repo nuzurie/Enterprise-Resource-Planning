@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.model;
 
+import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class OrderItem {
 
     @OneToOne
     @JoinColumn(name = "material_id")
-    private Material2 material;
+    private Material material;
     private int quantity;
 
 
