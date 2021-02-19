@@ -13,15 +13,20 @@ import java.util.Set;
 //@Data
 @Getter
 @Setter
-public class Part {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="product_type",
+        discriminatorType = DiscriminatorType.STRING)
+public abstract class Part {
     @Id
-    private String name;
-    private double cost;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected int id;
+    protected String name;
+    protected double cost;
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name="parts_materials",
-            joinColumns=@JoinColumn(name="part_name"),
-            inverseJoinColumns=@JoinColumn(name = "material_name"))
-    private Set<Material> materials;
+            joinColumns=@JoinColumn(name="part_id"),
+            inverseJoinColumns=@JoinColumn(name = "material_id"))
+    protected Set<Material> materials;
 
     public String getName() {
         return name;

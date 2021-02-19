@@ -1,19 +1,31 @@
 package com.soen390.erp;
 
 
+import com.soen390.erp.manufacturing.model.*;
+import com.soen390.erp.manufacturing.repository.BikeRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
-import com.soen390.erp.manufacturing.model.Material;
-import com.soen390.erp.manufacturing.model.Part;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+import java.util.Set;
+
 @SpringBootTest
 class EnterpriseResourcePlanningApplicationTests{
 
-    @Autowired
+    private MaterialRepository materialRepository;
     private PartRepository partRepository;
+    private BikeRepository bikeRepository;
+
+    @Autowired
+    public EnterpriseResourcePlanningApplicationTests(MaterialRepository materialRepository, PartRepository partRepository, BikeRepository bikeRepository) {
+        this.materialRepository = materialRepository;
+        this.partRepository = partRepository;
+        this.bikeRepository = bikeRepository;
+    }
+
 
     @Test
     void contextLoads() {
@@ -22,15 +34,41 @@ class EnterpriseResourcePlanningApplicationTests{
     //For development testing only
 //    @Test
 //    void testParts(){
-//        Material material = new Material();
-//        material.setName("First_material");
-//        material.setCost(11);
 //
-//        Part part = new Part();
-//        part.setName("First_part");
-//        part.setCost(40.2);
-//        part.addMaterial(material);
+//    Material m1 = new Material();
+//    m1.setName("temp");
+//    m1.setCost(10);
 //
-//        partRepository.save(part);
+//    Wheel wheel = new Wheel();
+//    wheel.setName("frontwheel");
+//    wheel.setCost(20);
+//    wheel.setDiameter(5);
+//    wheel.setGear(false);
+//    partRepository.save(wheel);
+//
+//    Handlebar handlebar = Handlebar.builder().build();
+//    Wheel rearWheel = Wheel.builder().build();
+//    Seat seat = Seat.builder().build();
+//    Pedal pedal = Pedal.builder().build();
+//    Frame frame = Frame.builder().build();
+//
+//    partRepository.saveAll(Set.of(handlebar, rearWheel, seat, pedal, frame));
+//
+//
+//    Bike bike = Bike.builder()
+//            .name("First_bike")
+//            .frontwheel(wheel)
+//            .rearwheel(rearWheel)
+//            .handlebar(handlebar)
+//            .seat(seat)
+//            .pedal(pedal)
+//        .build();
+//
+//    bikeRepository.save(bike);
+//
+//    //TODO: CHECK IF THE ADDED THE SAME PARTS TO ANOTHER BIKE ARE BEING SAVED PROPERLY (possibly not needed)
+    //TODO: CHECK ACCESSORIES BEING ADDED
 //    }
+
+
 }

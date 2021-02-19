@@ -2,9 +2,7 @@ package com.soen390.erp.manufacturing.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -13,11 +11,14 @@ import java.util.Set;
 //@Data
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Material {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected int id;
     private String name;
     private double cost;
     @ManyToMany(mappedBy = "materials")
