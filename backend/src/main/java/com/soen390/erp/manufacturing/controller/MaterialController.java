@@ -31,6 +31,8 @@ public class MaterialController {
 
     @PostMapping("/materials")
     public ResponseEntity<Object> creatMaterial(@RequestBody Material material) {
+        //TODO: validate input
+
         Material savedMaterial = materialCatalogue.saveMaterial(material);
         // CREATED 201
         URI location = ServletUriComponentsBuilder.
