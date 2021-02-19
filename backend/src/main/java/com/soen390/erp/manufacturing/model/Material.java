@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,5 +26,34 @@ public class Material {
 
     public Optional<Set<Part>> getParts() {
         return Optional.ofNullable(parts);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public void setParts(Set<Part> parts) {
+        this.parts = parts;
+    }
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "name='" + name + '\'' +
+                ", cost=" + cost +
+                ", parts=" + parts +
+                '}';
     }
 }

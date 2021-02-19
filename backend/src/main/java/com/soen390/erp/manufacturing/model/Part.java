@@ -28,6 +28,30 @@ public abstract class Part {
             inverseJoinColumns=@JoinColumn(name = "material_id"))
     protected Set<Material> materials;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public Set<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Set<Material> materials) {
+        this.materials = materials;
+    }
+
     public void addMaterial(Material material){
         if (materials==null)
             materials = new HashSet<>();
@@ -39,5 +63,14 @@ public abstract class Part {
         //add the current part to the materials part set
         parts.add(this);
         material.setParts(parts);
+    }
+
+    @Override
+    public String toString() {
+        return "Part{" +
+                "name='" + name + '\'' +
+                ", cost=" + cost +
+                ", materials=" + materials +
+                '}';
     }
 }
