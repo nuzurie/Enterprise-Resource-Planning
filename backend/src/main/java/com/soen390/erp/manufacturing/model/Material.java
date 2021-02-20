@@ -1,10 +1,10 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.soen390.erp.inventory.model.OrderItem;
 import lombok.*;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,12 +17,15 @@ import java.util.Set;
 @Entity
 public class Material {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
     private String name;
     private double cost;
     @ManyToMany(mappedBy = "materials")
     private Set<Part> parts;
+
+    @OneToMany(mappedBy = "material")
+    private Set<OrderItem> orderItems;
 
     public Optional<Set<Part>> getParts() {
         return Optional.ofNullable(parts);

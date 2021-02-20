@@ -1,6 +1,6 @@
 package com.soen390.erp.inventory.service;
 
-import com.soen390.erp.inventory.model.SupplierOrder;
+import com.soen390.erp.inventory.model.Supplierorder;
 import com.soen390.erp.inventory.repository.SupplierOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,12 +17,12 @@ public class SupplierOrderService {
         this.repository = repository;
     }
 
-    public ArrayList<SupplierOrder> getAllSupplierOrders(){
-        Iterable<SupplierOrder> supplierOrderList = repository.findAll();
+    public ArrayList<Supplierorder> getAllSupplierOrders(){
+        Iterable<Supplierorder> supplierOrderList = repository.findAll();
 
-        ArrayList<SupplierOrder> result = new ArrayList<>();
-        for (SupplierOrder supplierOrder : supplierOrderList) {
-            result.add(supplierOrder);
+        ArrayList<Supplierorder> result = new ArrayList<>();
+        for (Supplierorder supplierorder : supplierOrderList) {
+            result.add(supplierorder);
         }
 
         return result;

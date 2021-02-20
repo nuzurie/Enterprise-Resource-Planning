@@ -4,10 +4,7 @@ import com.soen390.erp.manufacturing.model.*;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -15,12 +12,14 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
-public class SupplierOrder {
+public class Supplierorder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private Date date;
+
+    @OneToMany(mappedBy = "supplierorder")
+    private Set<OrderItem> orderItems;
 
 //    @ManyToMany(cascade = CascadeType.MERGE)
 //    @JoinTable(name="order_item",

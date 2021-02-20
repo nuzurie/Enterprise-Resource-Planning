@@ -1,12 +1,8 @@
 package com.soen390.erp.inventory.model;
 
 import com.soen390.erp.manufacturing.model.Material;
-import com.soen390.erp.manufacturing.model.Part;
-import lombok.*;
 
 import javax.persistence.*;
-import java.util.Optional;
-import java.util.Set;
 
 //@Getter
 //@Setter
@@ -14,20 +10,27 @@ import java.util.Set;
 //@AllArgsConstructor
 //@NoArgsConstructor
 @Entity
-
+@IdClass(OrderItemId.class)
 public class OrderItem {
     @Id
     private int id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "material_id")
-    private Material material;
+    Material material;
+
+    @ManyToOne
+    @JoinColumn(name = "supplierorder_id")
+    Supplierorder supplierorder;
+
     private int quantity;
 
-
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private SupplierOrder supplier;
+//    @OneToOne
+//    @JoinColumn(name = "material_id")
+//    private Material material;
+//    @OneToOne
+//    @JoinColumn(name = "order_id")
+//    private Supplierorder supplier;
 
 
 
@@ -41,7 +44,7 @@ public class OrderItem {
 //    private Double totalCost;
 
 //    @ManyToMany(mappedBy = "order_material")
-//    private Set<SupplierOrder> orders;
+//    private Set<Supplierorder> orders;
 
 //    @ManyToMany(mappedBy = "order_materials")
 //    private int orderId;
