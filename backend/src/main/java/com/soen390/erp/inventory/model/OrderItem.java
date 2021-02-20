@@ -13,6 +13,7 @@ import javax.persistence.*;
 @IdClass(OrderItemId.class)
 public class OrderItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
 
@@ -26,30 +27,6 @@ public class OrderItem {
 
     private int quantity;
 
-//    @OneToOne
-//    @JoinColumn(name = "material_id")
-//    private Material material;
-//    @OneToOne
-//    @JoinColumn(name = "order_id")
-//    private SupplierOrder supplier;
-
-
-
-
-
-
-
-
-
 //    private Double cost;
 //    private Double totalCost;
-
-//    @ManyToMany(mappedBy = "order_material")
-//    private Set<SupplierOrder> orders;
-
-//    @ManyToMany(mappedBy = "order_materials")
-//    private int orderId;
-
-
-
 }

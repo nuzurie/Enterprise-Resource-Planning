@@ -14,17 +14,32 @@ import java.util.*;
 @Entity
 public class SupplierOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date date;
-
     @OneToMany(mappedBy = "supplierOrder")
     private Set<OrderItem> orderItems;
 
-//    @ManyToMany(cascade = CascadeType.MERGE)
-//    @JoinTable(name="order_item",
-//            joinColumns=@JoinColumn(name="part_id"))
-//    protected Set<Material> materials;
+    public int getId() {
+        return id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
 
 
 
@@ -35,9 +50,6 @@ public class SupplierOrder {
 
 
 //    private Optional<String> title;
-
-//    protected ArrayList<OrderItem> orderItems;
-//
 //    @OneToOne
 //    @JoinColumn(name = "status_id")
 //    public OrderStatus status;

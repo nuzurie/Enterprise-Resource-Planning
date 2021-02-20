@@ -27,4 +27,14 @@ public class SupplierOrderService {
 
         return result;
     }
+
+    public boolean insertSupplierOrder(SupplierOrder supplierOrder) {
+        repository.save(supplierOrder);
+        if (supplierOrder.getId() != 0){
+            return true;
+        }else{
+            return false;
+        }
+        //TODO: verify insertion and return a response
+    }
 }

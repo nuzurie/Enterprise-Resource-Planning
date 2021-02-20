@@ -3,9 +3,9 @@ package com.soen390.erp.inventory.controller;
 import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.inventory.service.SupplierOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -19,5 +19,16 @@ public class SupplierOrderController {
     @GetMapping(path = "/SupplierOrders")
     public ArrayList<SupplierOrder> getAllSupplierOrders(){
         return service.getAllSupplierOrders();
+    }
+
+    @PostMapping(path = "/SupplierOrders")
+    public ResponseEntity<?> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
+        //TODO: validate input
+        boolean isSuccessful = service.insertSupplierOrder(supplierOrder);
+        if (isSuccessful == true){
+            return ResponseEntity.status(HttpStatus.OK).body(supplierOrder.getId());
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+        }
     }
 }
