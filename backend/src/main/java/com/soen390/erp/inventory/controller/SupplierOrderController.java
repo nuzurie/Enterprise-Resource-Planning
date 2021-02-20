@@ -17,7 +17,7 @@ public class SupplierOrderController {
     private SupplierOrderService service;
 
     @GetMapping(path = "/SupplierOrders")
-    public ArrayList<Supplierorder> getAllSupplierOrders(){
+    public ArrayList<SupplierOrder> getAllSupplierOrders(){
         return service.getAllSupplierOrders();
     }
 }
