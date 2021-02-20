@@ -12,13 +12,13 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Supplierorder {
+public class SupplierOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private Date date;
 
-    @OneToMany(mappedBy = "supplierorder")
+    @OneToMany(mappedBy = "supplierOrder")
     private Set<OrderItem> orderItems;
 
 //    @ManyToMany(cascade = CascadeType.MERGE)

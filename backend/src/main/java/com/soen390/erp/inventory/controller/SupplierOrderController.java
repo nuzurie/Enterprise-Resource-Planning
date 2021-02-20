@@ -1,6 +1,6 @@
 package com.soen390.erp.inventory.controller;
 
-import com.soen390.erp.inventory.model.Supplierorder;
+import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.inventory.service.SupplierOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

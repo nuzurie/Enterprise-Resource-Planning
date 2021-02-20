@@ -15,13 +15,14 @@ public class OrderItem {
     @Id
     private int id;
 
+
     @ManyToOne
     @JoinColumn(name = "material_id")
     Material material;
 
     @ManyToOne
-    @JoinColumn(name = "supplierorder_id")
-    Supplierorder supplierorder;
+    @JoinColumn(name = "supplier_order_id")
+    SupplierOrder supplierOrder;
 
     private int quantity;
 
@@ -30,7 +31,7 @@ public class OrderItem {
 //    private Material material;
 //    @OneToOne
 //    @JoinColumn(name = "order_id")
-//    private Supplierorder supplier;
+//    private SupplierOrder supplier;
 
 
 
@@ -44,7 +45,7 @@ public class OrderItem {
 //    private Double totalCost;
 
 //    @ManyToMany(mappedBy = "order_material")
-//    private Set<Supplierorder> orders;
+//    private Set<SupplierOrder> orders;
 
 //    @ManyToMany(mappedBy = "order_materials")
 //    private int orderId;

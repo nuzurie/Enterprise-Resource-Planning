@@ -6,8 +6,6 @@ import java.util.Objects;
 public class OrderItemId implements Serializable {
 
     int id;
-//    int material;
-//    int supplierorder;
 
     @Override
     public boolean equals(Object o) {
@@ -18,15 +16,10 @@ public class OrderItemId implements Serializable {
 
         OrderItemId that = (OrderItemId) o;
         return Objects.equals(id, that.id);
-//                &&
-//                Objects.equals(material, that.material)
-//                &&
-//                Objects.equals(supplierorder, that.supplierorder);
     }
 
     @Override
     public int hashCode() {
-//        return Objects.hash(material, supplierorder);
         return Objects.hash(id);
     }
 }
