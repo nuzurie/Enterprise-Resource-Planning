@@ -1,6 +1,7 @@
 package com.soen390.erp.manufacturing.model;
 
 import com.soen390.erp.inventory.model.OrderItem;
+import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,11 @@ public class Material {
 
     @OneToMany(mappedBy = "material")
     private Set<OrderItem> orderItems;
+
+    //Connect Materials to plants
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
 
     public Optional<Set<Part>> getParts() {
         return Optional.ofNullable(parts);

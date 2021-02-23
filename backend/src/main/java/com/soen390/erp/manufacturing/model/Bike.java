@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,6 +17,10 @@ public class Bike {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
 
     @ManyToOne(optional = false)
     @JoinColumn(name="handlebar_id")
@@ -36,5 +41,8 @@ public class Bike {
     @JoinTable(name = "bike_accesories",
             joinColumns = { @JoinColumn(name = "bike_id") },
             inverseJoinColumns = { @JoinColumn(name = "accessory_id") })
+
+
+
     private Set<Accessory> accessories;
 }

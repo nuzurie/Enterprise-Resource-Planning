@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,10 @@ public abstract class Part {
             joinColumns=@JoinColumn(name="part_id"),
             inverseJoinColumns=@JoinColumn(name = "material_id"))
     protected Set<Material> materials;
+
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
 
     public String getName() {
         return name;
