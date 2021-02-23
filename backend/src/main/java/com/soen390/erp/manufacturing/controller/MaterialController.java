@@ -25,7 +25,6 @@ public class MaterialController {
         this.assembler = assembler;
     }
 
-
     @GetMapping("/materials")
     public ResponseEntity<?> all() {
 
@@ -39,6 +38,7 @@ public class MaterialController {
 
     @GetMapping(path = "/materials/{id}")
     public ResponseEntity<?> one(@PathVariable int id) {
+
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new MaterialNotFoundException(id));
 
@@ -48,10 +48,10 @@ public class MaterialController {
     @PostMapping("/materials")
     ResponseEntity<?> newMaterial(@RequestBody Material material){
 
+
         EntityModel<Material> entityModel = assembler.toModel(materialRepository.save(material));
 
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
-
     }
 
 }

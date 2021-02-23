@@ -1,5 +1,9 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,10 +17,22 @@ import java.util.Set;
 //@Data
 @Getter
 @Setter
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "partType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Frame.class, name = "frame"),
+        @JsonSubTypes.Type(value = Handlebar.class, name = "handlebar"),
+        @JsonSubTypes.Type(value = Pedal.class, name = "pedal"),
+        @JsonSubTypes.Type(value = Seat.class, name = "seat"),
+        @JsonSubTypes.Type(value = Wheel.class, name = "wheel"),
+        @JsonSubTypes.Type(value = Accessory.class, name = "accessory")
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="product_type",
         discriminatorType = DiscriminatorType.STRING)
-public abstract class Part {
+public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
@@ -26,6 +42,7 @@ public abstract class Part {
     @JoinTable(name="parts_materials",
             joinColumns=@JoinColumn(name="part_id"),
             inverseJoinColumns=@JoinColumn(name = "material_id"))
+//    @JsonManagedReference
     protected Set<Material> materials;
 
     public String getName() {

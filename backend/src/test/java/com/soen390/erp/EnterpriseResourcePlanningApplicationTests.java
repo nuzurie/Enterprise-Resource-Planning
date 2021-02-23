@@ -32,19 +32,22 @@ class EnterpriseResourcePlanningApplicationTests{
     }
 
     //For development testing only
-//    @Test
-//    void testParts(){
+    @Test
+    void testParts(){
 //
-//    Material m1 = new Material();
-//    m1.setName("temp");
-//    m1.setCost(10);
+    Material m1 = new Material();
+    m1.setName("temp");
+    m1.setCost(10);
+    materialRepository.save(m1);
+
 //
-//    Wheel wheel = new Wheel();
-//    wheel.setName("frontwheel");
-//    wheel.setCost(20);
-//    wheel.setDiameter(5);
-//    wheel.setGear(false);
-//    partRepository.save(wheel);
+    Wheel wheel = new Wheel();
+    wheel.setName("frontwheel2");
+    wheel.setCost(22);
+    wheel.setDiameter(6);
+    wheel.setGear(false);
+    wheel.addMaterial(m1);
+    partRepository.save(wheel);
 //
 //    Handlebar handlebar = Handlebar.builder().build();
 //    Wheel rearWheel = Wheel.builder().build();
@@ -68,7 +71,7 @@ class EnterpriseResourcePlanningApplicationTests{
 //
 //    //TODO: CHECK IF THE ADDED THE SAME PARTS TO ANOTHER BIKE ARE BEING SAVED PROPERLY (possibly not needed)
     //TODO: CHECK ACCESSORIES BEING ADDED
-//    }
+    }
 
 
 }

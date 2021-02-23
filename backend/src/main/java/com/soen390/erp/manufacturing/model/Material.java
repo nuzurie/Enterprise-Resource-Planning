@@ -1,5 +1,8 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +24,7 @@ public class Material {
     protected int id;
     private String name;
     private double cost;
+    @JsonIgnore
     @ManyToMany(mappedBy = "materials", fetch = FetchType.EAGER)
     private Set<Part> parts;
 
