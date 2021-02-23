@@ -22,7 +22,6 @@ const Main = () => {
         <Route exact path='/accounting' component={Accounting}></Route>
         <Route exact path='/createuser' component={CreateUser}></Route>
         <Route exact path='/login' component={Login}></Route>
-
     </Switch>
   );
 }

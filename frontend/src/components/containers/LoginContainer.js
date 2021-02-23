@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 
-class MainContainer extends Component {
+class LoginContainer extends Component {
   constructor(props) {
     super(props);
   }
@@ -19,48 +19,25 @@ class MainContainer extends Component {
 
 //STYLED-COMPONENTS
 const Container = styled.div`
-  background: white;
+  background: #F9F9F9;
   padding: 20px;
   border-radius: 12px;
-  height: calc(100% - 40px);
-  box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
-
-
-  button {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-    color: #FF7A67;;
-    transition: 250ms;
-    margin-top: 20px;
-
-    &:hover, &::selection {
-      color: #BBC8E3;
-    }
-
-    svg {
-      width: 1.2em;
-      height: 1.2em;
-    }
-}
-
+  height: calc(100% - 73px);
+  margin-top: 15px;
 `
 
 const Title = styled.div`
     font-family: Montserrat;
-    font-size: 12pt;
+    font-size: 11pt;
     color: black;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     font-weight: 500;
 `
 
-MainContainer.propTypes = {
-    title: PropTypes.string.isRequired,
+InnerContainer.propTypes = {
+    innerTitle: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
 };
 
-export default MainContainer;
+export default InnerContainer;
