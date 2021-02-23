@@ -12,34 +12,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AddUser from '@material-ui/icons/PersonAdd';
 import Logout from '@material-ui/icons/PowerSettingsNew';
 
-function userProfile() {
-  alert('This is the profile page!');
-}
-
-function dashboard() {
-  alert('This is the dashboard!');
-}
-
-function bike() {
-  alert('This is the bike section!');
-}
-
-function inventory() {
-  alert('This is the inventory page!');
-}
-
-function maintenance() {
-  alert('This is the maintenance page!');
-}
-
-function manufacturingPlan() {
-  alert('This is the manufacturing plan page!');
-}
-
-function accounts() {
-  alert('This is the accounts page!');
-}
-
 
 class Navigation extends Component {
   constructor(props) {
@@ -52,7 +24,7 @@ class Navigation extends Component {
         <NavigationContainer>
           <div>
             <div>
-              <button onClick={userProfile}><AccountCircleOutlinedIcon /></button>
+              <button><AccountCircleOutlinedIcon /></button>
             </div>
             <div>
               <Link to="/dashboard">
@@ -92,7 +64,7 @@ class Navigation extends Component {
             </Link>
           </div>
           <div>
-            <button onClick={accounts}><Logout /></button>
+            <button><Logout /></button>
           </div>
         </NavigationContainer>
     );
