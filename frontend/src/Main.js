@@ -8,6 +8,8 @@ import Infrastructure from './pages/Infrastructure.js';
 import Manufacturing from './pages/Manufacturing.js';
 import Accounting from './pages/Accounting.js';
 import CreateUser from './pages/CreateUser.js';
+import Login from './pages/Login.js';
+
 
 const Main = () => {
   return (
@@ -19,6 +21,8 @@ const Main = () => {
         <Route exact path='/manufacturing' component={Manufacturing}></Route>
         <Route exact path='/accounting' component={Accounting}></Route>
         <Route exact path='/createuser' component={CreateUser}></Route>
+        <Route exact path='/login' component={Login}></Route>
+
     </Switch>
   );
 }

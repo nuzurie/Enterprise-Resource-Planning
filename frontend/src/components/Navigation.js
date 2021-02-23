@@ -51,9 +51,10 @@ class Navigation extends Component {
     return (
         <NavigationContainer>
           <div>
-            <div>
-              <button onClick={userProfile}><AccountCircleOutlinedIcon /></button>
-            </div>
+              <Link to="/login">
+                <button><AccountCircleOutlinedIcon /></button>
+              </Link>
+            
             <div>
               <Link to="/dashboard">
                 <button><DashboardOutlinedIcon /></button>
