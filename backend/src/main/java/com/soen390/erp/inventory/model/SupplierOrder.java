@@ -2,6 +2,7 @@ package com.soen390.erp.inventory.model;
 
 import com.soen390.erp.manufacturing.model.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.*;
@@ -19,6 +20,11 @@ public class SupplierOrder {
     private Date date;
     @OneToMany(mappedBy = "supplierOrder")
     private Set<OrderItem> orderItems;
+
+    @JsonIgnore
+    @ManyToOne// (fetch = FetchType.EAGER)
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
 
     public int getId() {
         return id;
