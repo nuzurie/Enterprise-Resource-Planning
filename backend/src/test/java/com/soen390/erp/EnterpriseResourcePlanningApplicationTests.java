@@ -42,32 +42,33 @@ class EnterpriseResourcePlanningApplicationTests{
 
 //
     Wheel wheel = new Wheel();
-    wheel.setName("frontwheel2");
-    wheel.setCost(22);
-    wheel.setDiameter(6);
+    wheel.setName("frontwheel121");
+    wheel.setCost(32);
+    wheel.setDiameter(2);
     wheel.setGear(false);
     wheel.addMaterial(m1);
     partRepository.save(wheel);
 //
-//    Handlebar handlebar = Handlebar.builder().build();
-//    Wheel rearWheel = Wheel.builder().build();
-//    Seat seat = Seat.builder().build();
-//    Pedal pedal = Pedal.builder().build();
-//    Frame frame = Frame.builder().build();
-//
-//    partRepository.saveAll(Set.of(handlebar, rearWheel, seat, pedal, frame));
-//
-//
-//    Bike bike = Bike.builder()
-//            .name("First_bike")
-//            .frontwheel(wheel)
-//            .rearwheel(rearWheel)
-//            .handlebar(handlebar)
-//            .seat(seat)
-//            .pedal(pedal)
-//        .build();
-//
-//    bikeRepository.save(bike);
+    Handlebar handlebar = Handlebar.builder().build();
+    Wheel rearWheel = Wheel.builder().build();
+    Seat seat = Seat.builder().build();
+    Pedal pedal = Pedal.builder().build();
+    Frame frame = Frame.builder().build();
+
+    partRepository.saveAll(Set.of(handlebar, rearWheel, seat, pedal, frame));
+
+
+    Bike bike = Bike.builder()
+            .name("Second_bike")
+            .frontwheel(wheel)
+            .rearwheel(rearWheel)
+            .handlebar(handlebar)
+            .seat(seat)
+            .frame(frame)
+            .pedal(pedal)
+        .build();
+
+    bikeRepository.save(bike);
 //
 //    //TODO: CHECK IF THE ADDED THE SAME PARTS TO ANOTHER BIKE ARE BEING SAVED PROPERLY (possibly not needed)
     //TODO: CHECK ACCESSORIES BEING ADDED

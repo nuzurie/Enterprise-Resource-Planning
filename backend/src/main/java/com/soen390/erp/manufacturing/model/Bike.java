@@ -22,6 +22,10 @@ public class Bike {
     private Handlebar handlebar;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name="frame_id")
+    private Frame frame;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name="frontwheel_id")
     private Wheel frontwheel;
 

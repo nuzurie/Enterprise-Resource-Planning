@@ -2,6 +2,7 @@ package com.soen390.erp.manufacturing.controller;
 
 import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
+import com.soen390.erp.manufacturing.model.Handlebar;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import com.soen390.erp.manufacturing.service.BikeModelAssembler;
 import org.springframework.hateoas.CollectionModel;
@@ -47,6 +48,9 @@ public class BikeController {
 
     @PostMapping("/bikes")
     ResponseEntity<?> newBike(@RequestBody Bike bike){
+
+        Handlebar handlebar = bike.getHandlebar();
+
 
         EntityModel<Bike> entityModel = assembler.toModel(bikeRepository.save(bike));
 
