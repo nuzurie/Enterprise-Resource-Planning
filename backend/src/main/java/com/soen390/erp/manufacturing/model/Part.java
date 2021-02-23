@@ -1,7 +1,11 @@
 package com.soen390.erp.manufacturing.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -23,15 +27,18 @@ public abstract class Part {
     protected int id;
     protected String name;
     protected double cost;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
+
+
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name="parts_materials",
             joinColumns=@JoinColumn(name="part_id"),
             inverseJoinColumns=@JoinColumn(name = "material_id"))
     protected Set<Material> materials;
-
-    @ManyToOne
-    @JoinColumn(name = "plant_id")
-    private Plant plant;
 
     public String getName() {
         return name;
@@ -55,6 +62,14 @@ public abstract class Part {
 
     public void setMaterials(Set<Material> materials) {
         this.materials = materials;
+    }
+    @JsonIgnore
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     public void addMaterial(Material material){

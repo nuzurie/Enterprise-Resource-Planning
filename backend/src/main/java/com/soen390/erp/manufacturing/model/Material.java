@@ -1,8 +1,12 @@
 package com.soen390.erp.manufacturing.model;
 
+
 import com.soen390.erp.inventory.model.OrderItem;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -22,16 +26,25 @@ public class Material {
     protected int id;
     private String name;
     private double cost;
+    @JsonIgnore
     @ManyToMany(mappedBy = "materials")
     private Set<Part> parts;
+    @JsonIgnore
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
+    }
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
+
 
     @OneToMany(mappedBy = "material")
     private Set<OrderItem> orderItems;
-
-    //Connect Materials to plants
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "plant_id")
-    private Plant plant;
 
     public Optional<Set<Part>> getParts() {
         return Optional.ofNullable(parts);
