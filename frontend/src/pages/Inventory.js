@@ -10,14 +10,28 @@ class Inventory extends Component {
 
   render() {
     return (
-        <MainContainer title="Inventory">
+      <Container>
+        <MainContainer title="Bike parts">
+          
+        </MainContainer>
+        <MainContainer title="Raw Material">
             
         </MainContainer>
+      </Container>
     );
   }
 }
 
 //STYLED-COMPONENTS
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  & > div > div {
+    margin-right: 20px;
+  }
+`
 
 Inventory.propTypes = {
 };

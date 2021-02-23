@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
+import AddIcon from '@material-ui/icons/Add';
 
 class MainContainer extends Component {
   constructor(props) {
@@ -10,8 +11,11 @@ class MainContainer extends Component {
   render() {
     return (
         <Container>
+          <Header>
             <Title>{this.props.title}</Title>
-            {this.props.children}
+            <button isVisible={this.props.createFeature}><AddIcon /></button>
+          </Header>
+          {this.props.children}
         </Container>
     );
   }
@@ -25,7 +29,6 @@ const Container = styled.div`
   height: calc(100% - 40px);
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
 
-
   button {
     background-color: transparent;
     background-repeat: no-repeat;
@@ -35,7 +38,7 @@ const Container = styled.div`
     outline: none;
     color: #FF7A67;;
     transition: 250ms;
-    margin-top: 20px;
+    padding: 0;
 
     &:hover, &::selection {
       color: #BBC8E3;
@@ -46,7 +49,13 @@ const Container = styled.div`
       height: 1.2em;
     }
 }
+`
 
+const Header = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `
 
 const Title = styled.div`
@@ -61,6 +70,7 @@ const Title = styled.div`
 MainContainer.propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
+    createFeature: PropTypes.bool.isRequired,
 };
 
 export default MainContainer;
