@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import styled from 'styled-components';
 import MainContainer from '../components/containers/MainContainer.js';
 import BikeContainer from "../components/containers/BikeContainer.js";
+
 import ToggleOnIcon from '@material-ui/icons/ToggleOn';
+import AddIcon from '@material-ui/icons/Add';
 
 
 class BikeProduction extends Component {
@@ -51,27 +53,6 @@ class BikeProduction extends Component {
 
 
 //STYLED-COMPONENTS
-
-
-const TextInput = styled.input`
-    border: 0;
-    font-family: Montserrat;
-    font-size: 9pt;
-    color: #556C99;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 500;
-    margin: 8px;
-    width: 400px;
-
-    &:focus {
-        outline: none;
-    }
-
-    ::placeholder {
-        color: #BBC8E3;
-    }
-`
 const Title = styled.div`
     font-family: Montserrat;
     font-size: 10pt;

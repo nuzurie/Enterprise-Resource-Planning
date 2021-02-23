@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import InnerContainer from '../components/containers/InnerContainer.js';
 import MainContainer from '../components/containers/MainContainer.js';
 import FieldContainer from '../components/containers/FieldContainer.js';
-import CustomRadioButton from '../components/CustomRadioButton.js';
+import GradientButton from '../components/GradientButton';
 
 class Login extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Login extends Component {
                         </FieldContainer>
                 
                     </div>
-                    <SubmitButton type="submit" value="Login" />
+                    <GradientButton type="submit" buttonValue="Login" />
                 </LoginForm>
             </InnerContainer>
         </MainContainer>
@@ -69,41 +69,6 @@ const Title = styled.div`
     letter-spacing: 0.2em;
     font-weight: 500;
     margin-top: 20px;
-`
-
-const SubmitButton = styled.input`
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    color: white;
-    font-family: Montserrat;
-    font-size: 10pt;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 500;
-    width: 100%;
-    background: linear-gradient(to right, #FF7A67, #FFE2C8);
-    cursor: pointer;
-    transition: 1000ms;
-
-    position: absolute;
-    width: 445px;
-    height: 51px;
-    left: 161px;
-    top: 348px;
-
-
-    &:focus {
-        outline: none;
-    }
-
-    &:hover {
-        background: #FF7A67;
-    }
 `
 
 Login.propTypes = {
