@@ -1,45 +1,57 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
-import com.soen390.erp.manufacturing.viewer.MaterialService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.soen390.erp.manufacturing.repository.MaterialRepository;
+import com.soen390.erp.manufacturing.service.MaterialModelAssembler;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MaterialController {
 
-    @Autowired
-    private MaterialService materialCatalogue;
+    private final MaterialRepository materialRepository;
+    private final MaterialModelAssembler assembler;
 
-    @GetMapping(path = "/materials")
-    public List<Material> retrieveAllMaterial(){
-        return materialCatalogue.findAll();
+    public MaterialController(MaterialRepository materialRepository, MaterialModelAssembler assembler) {
+        this.materialRepository = materialRepository;
+        this.assembler = assembler;
+    }
+
+
+    @GetMapping("/materials")
+    public ResponseEntity<?> all() {
+
+        List<EntityModel<Material>> materials = materialRepository.findAll().stream() //
+                .map(assembler::toModel) //
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(
+                CollectionModel.of(materials, linkTo(methodOn(MaterialController.class).all()).withSelfRel()));
     }
 
     @GetMapping(path = "/materials/{id}")
-    public Material retrieveMaterial(@PathVariable String name) throws Exception {
-        Material material = materialCatalogue.findOne(name);
-        if( material == null )
-            throw new Exception("material not found");
-        return materialCatalogue.findOne(name);
+    public ResponseEntity<?> one(@PathVariable int id) {
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new MaterialNotFoundException(id));
+
+        return ResponseEntity.ok().body(assembler.toModel(material));
     }
 
     @PostMapping("/materials")
-    public ResponseEntity<Object> creatMaterial(@RequestBody Material material) {
-        Material savedMaterial = materialCatalogue.saveMaterial(material);
-        // CREATED 201
-        URI location = ServletUriComponentsBuilder.
-                fromCurrentRequest().
-                path("{id}").
-                buildAndExpand(savedMaterial.getName()).toUri();
+    ResponseEntity<?> newMaterial(@RequestBody Material material){
 
-        return ResponseEntity.created(location).build();
+        EntityModel<Material> entityModel = assembler.toModel(materialRepository.save(material));
+
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+
     }
-
 
 }

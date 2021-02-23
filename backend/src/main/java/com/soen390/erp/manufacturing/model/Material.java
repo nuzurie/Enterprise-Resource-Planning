@@ -21,7 +21,7 @@ public class Material {
     protected int id;
     private String name;
     private double cost;
-    @ManyToMany(mappedBy = "materials")
+    @ManyToMany(mappedBy = "materials", fetch = FetchType.EAGER)
     private Set<Part> parts;
 
     public Optional<Set<Part>> getParts() {
