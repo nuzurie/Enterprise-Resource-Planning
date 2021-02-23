@@ -13,7 +13,9 @@ class MainContainer extends Component {
         <Container>
           <Header>
             <Title>{this.props.title}</Title>
-            <button isVisible={this.props.createFeature}><AddIcon /></button>
+            <AddButton isVisible={this.props.createFeature}>
+              <AddIcon />
+            </AddButton>
           </Header>
           {this.props.children}
         </Container>
@@ -56,6 +58,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `
 
 const Title = styled.div`
@@ -65,6 +68,23 @@ const Title = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.2em;
     font-weight: 500;
+`
+
+const AddButton = styled.div`
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  color: #FF7A67;;
+  transition: 250ms;
+  padding: 0;
+  display: ${props => props.isVisible ? 'block' : 'none'};
+
+  &:hover, &::selection {
+    color: #BBC8E3;
+  }
 `
 
 MainContainer.propTypes = {

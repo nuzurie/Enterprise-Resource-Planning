@@ -11,10 +11,10 @@ class Inventory extends Component {
   render() {
     return (
       <Container>
-        <MainContainer title="Bike parts">
-          
+        <MainContainer title="Bike parts" createFeature={true}>
+
         </MainContainer>
-        <MainContainer title="Raw Material">
+        <MainContainer title="Raw Material" createFeature={true}>
             
         </MainContainer>
       </Container>

@@ -13,7 +13,7 @@ class Login extends Component {
 
   render() {
     return (
-        <MainContainer title="Login">
+        <MainContainer title="Login" createFeature={false}>
             <InnerContainer title="User">
                 <LoginForm action="">
                     <div>
