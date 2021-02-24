@@ -63,7 +63,7 @@ const Header = styled.div`
 `
 
 const Title = styled.div`
-    font-family: Montserrat;
+    font-family: Proxima Nova;
     font-size: 12pt;
     color: black;
     text-transform: uppercase;
