@@ -1,6 +1,7 @@
 package com.soen390.erp.manufacturing.controller;
 
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
+import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
@@ -12,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,7 +54,12 @@ public class PartController {
     @PostMapping("/parts")
     ResponseEntity<?> newPart(@RequestBody Part part){
 
-        part.getMaterials().forEach(materialRepository::save);
+        Set<Material> materials = part.getMaterials()
+                .orElseGet(() -> new HashSet<>());
+        materials
+                .forEach(materialRepository::save);
+        materials
+                .forEach(part::addMaterial);
         EntityModel<Part> entityModel = assembler.toModel(partRepository.save(part));
 
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);

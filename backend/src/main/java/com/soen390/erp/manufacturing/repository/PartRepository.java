@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PartRepository extends PagingAndSortingRepository<Part, Integer> {
 
-    List<Part> findAll();
+    public List<Part> findAll();
 }

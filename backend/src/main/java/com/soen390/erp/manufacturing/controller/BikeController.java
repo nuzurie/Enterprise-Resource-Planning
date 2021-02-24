@@ -4,7 +4,9 @@ import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Handlebar;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
+import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.BikeModelAssembler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -20,10 +22,12 @@ public class BikeController {
 
     private final BikeRepository bikeRepository;
     private final BikeModelAssembler assembler;
+    private final PartRepository partRepository;
 
-    public BikeController(BikeRepository bikeRepository, BikeModelAssembler assembler) {
+    public BikeController(BikeRepository bikeRepository, BikeModelAssembler assembler, PartRepository partRepository) {
         this.bikeRepository = bikeRepository;
         this.assembler = assembler;
+        this.partRepository = partRepository;
     }
 
     @GetMapping("/bikes")
@@ -50,7 +54,7 @@ public class BikeController {
     ResponseEntity<?> newBike(@RequestBody Bike bike){
 
         Handlebar handlebar = bike.getHandlebar();
-
+        partRepository.save(handlebar);
 
         EntityModel<Bike> entityModel = assembler.toModel(bikeRepository.save(bike));
 

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -55,6 +56,10 @@ public class Plant {
             materials = new HashSet<>();
         }
         this.materials.add(plantMaterial);
+    }
+
+    public Optional<Set<PlantPart>> getParts() {
+        return Optional.ofNullable(parts);
     }
 
 
