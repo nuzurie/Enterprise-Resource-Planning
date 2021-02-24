@@ -48,30 +48,37 @@ class EnterpriseResourcePlanningApplicationTests{
     void testPlant(){
 //        Material m1 = materialRepository.findAll().get(1);
 
-        Material m1 = materialRepository.findById(1).orElseGet(()->Material.builder().name("didn't find").cost(10).build());
+        Material m1 = materialRepository.findById(54).orElseGet(()->Material.builder().name("didn't find").cost(10).build());
 //        m1.setName("test");
 //        m1.setCost(21);
 //        materialRepository.save(m1);
 //        PlantMaterial pm = PlantMaterial.builder().material(m1).quantity(12).build();
-        PlantMaterial pm = plantMaterialRepository.findByMaterial(m1).orElseGet(()->PlantMaterial.builder().material(m1).build());
-        pm.setQuantity(24);
-        plantMaterialRepository.save(pm);
+//        PlantMaterial pm = plantMaterialRepository.findByMaterial(m1)
+//                .orElseGet(()->PlantMaterial.builder().material(m1).build());
+//        pm.setQuantity(24);
+//        plantMaterialRepository.save(pm);
         Plant plant = plantRepository.findById(1).orElse(new Plant());
 //        plant.setName("Plant1");
 //        plant.setAddress("123 Street");
 
-        plant.addPlantMaterial(pm);
-        plantRepository.save(plant);
+        plantService.addPlantMaterial(plant, m1, 4);
+//        plantRepository.save(plant);
 
     }
+
+
 
     @Test
     void testInventory(){
         Plant plant = plantRepository.findById(1).orElse(new Plant());
         Part part = partRepository.findById(48).orElseGet(()->new Part());
-        PlantPart pp = PlantPart.builder().part(part).quantity(1).build();
 
-        plantService.addPlantPart(plant, part, 1);
+        Material material = materialRepository.findById(54).orElseGet(() -> new Material());
+        part.addMaterial(material);
+
+//        PlantPart pp = PlantPart.builder().part(part).quantity(1).build();
+
+        plantService.addPlantPart(plant, part, 5);
     }
 
     //For development testing only

@@ -5,8 +5,10 @@ import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
+import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,4 +46,12 @@ public class PlantController {
         return ResponseEntity.ok().body(pmAssembler.toModel(plant));
     }
 
+    @ResponseBody
+    @ExceptionHandler(PlantNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String partNotFoundException(PlantNotFoundException ex){
+        return ex.getMessage();
+    }
+
 }
+

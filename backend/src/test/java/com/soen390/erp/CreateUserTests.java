@@ -115,9 +115,9 @@ public class CreateUserTests {
         System.out.println(mvcResult.getResponse().getContentAsString());
     }
 
-    @AfterAll
-    void tearDown() {
+//    @AfterAll
+//    void tearDown() {
 //        userRepository.findByUsername(username)
 //                .ifPresent(userRepository::delete);
-    }
+//    }
 }

@@ -4,6 +4,7 @@ import com.soen390.erp.manufacturing.model.Material;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -20,5 +21,6 @@ public class PlantMaterial {
     @JoinColumn(name = "material_id")
     private Material material;
 
+    @Min(value = 1)
     private int quantity;
 }
