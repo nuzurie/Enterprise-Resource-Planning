@@ -1,6 +1,5 @@
 package com.soen390.erp.inventory.model;
 
-import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
 import lombok.*;
 
