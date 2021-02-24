@@ -28,7 +28,7 @@ public class CreateUserTests {
     protected MockMvc mockMvc;
     @Autowired
     private UserRepository userRepository;
-    private static final String username = "mznurie@msn.com";
+    private static final String username = "admin123@msn.com";
 
     @Test
     @WithMockUser("ROLE_ADMIN")
@@ -115,9 +115,9 @@ public class CreateUserTests {
         System.out.println(mvcResult.getResponse().getContentAsString());
     }
 
-//    @AfterAll
-//    void tearDown() {
-//        userRepository.findByUsername(username)
-//                .ifPresent(userRepository::delete);
-//    }
+    @AfterAll
+    void tearDown() {
+        userRepository.findByUsername(username)
+                .ifPresent(userRepository::delete);
+    }
 }

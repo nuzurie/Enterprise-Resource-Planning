@@ -2,8 +2,7 @@ package com.soen390.erp;
 
 
 import com.soen390.erp.inventory.model.Plant;
-import com.soen390.erp.inventory.model.PlantMaterial;
-import com.soen390.erp.inventory.model.PlantPart;
+
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.model.*;
@@ -14,6 +13,8 @@ import com.soen390.erp.inventory.repository.PlantMaterialRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Set;
 
 @SpringBootTest
 class EnterpriseResourcePlanningApplicationTests{
@@ -76,19 +77,31 @@ class EnterpriseResourcePlanningApplicationTests{
         Material material = materialRepository.findById(54).orElseGet(() -> new Material());
         part.addMaterial(material);
 
-//        PlantPart pp = PlantPart.builder().part(part).quantity(1).build();
-
         plantService.addPlantPart(plant, part, 5);
     }
 
     //For development testing only
     @Test
     void testParts() {
-//
+
         Material m1 = materialRepository.findById(1).orElseGet(() -> Material.builder().name("ugh").cost(20).build());
         m1.setName("temp");
         m1.setCost(10);
         materialRepository.save(m1);
+    }
+
+    @Test
+    void testBikePlant(){
+        Bike bike = bikeRepository.findById(86).get();
+        Plant plant = plantRepository.findById(1).get();
+
+        Set<Part> bikeParts = Set.of(bike.getFrame(), bike.getFrontwheel(), bike.getHandlebar(), bike.getRearwheel(),
+                bike.getPedal(), bike.getSeat());
+
+        bikeParts.forEach(part -> plantService.addPlantPart(plant, part, 10));
+
+        plantService.addPlantBike(plant, bike, 1);
+
     }
 
 //

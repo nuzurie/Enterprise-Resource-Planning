@@ -30,6 +30,10 @@ public class Plant {
     @JoinColumn(name = "plantpart_id")
     private Set<PlantPart> parts;
 
+    @OneToMany( fetch = FetchType.EAGER)
+    @JoinColumn(name = "plantbike_id")
+    private Set<PlantBike> bikes;
+
     @OneToMany(mappedBy = "plant")
     private List<SupplierOrder> supplierOrders;
 
@@ -41,10 +45,20 @@ public class Plant {
         return Optional.ofNullable(materials);
     }
 
+    public Optional<Set<PlantBike>> getBikes() {
+        return Optional.ofNullable(bikes);
+    }
+
     public void addMaterial(PlantMaterial plantMaterial){
         if (materials==null)
             materials = new HashSet<>();
         materials.add(plantMaterial);
+    }
+
+    public void addBike(PlantBike plantBike){
+        if (bikes==null)
+            bikes = new HashSet<>();
+        bikes.add(plantBike);
     }
 
 }
