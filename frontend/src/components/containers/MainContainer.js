@@ -13,7 +13,7 @@ class MainContainer extends Component {
         <Container>
           <Header>
             <Title>{this.props.title}</Title>
-            <AddButton isVisible={this.props.createFeature}>
+            <AddButton onClick={this.props.showModal} isVisible={this.props.createFeature}>
               <AddIcon />
             </AddButton>
           </Header>
@@ -30,6 +30,7 @@ const Container = styled.div`
   border-radius: 12px;
   height: calc(100% - 40px);
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
+  position: relative;
 
   button {
     background-color: transparent;
