@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 
-class FieldContainer extends Component {
+class CustomDropdown extends Component {
   constructor(props) {
     super(props);
   }
@@ -35,8 +35,8 @@ const Container = styled.select`
   font-weight: 500;
 `
 
-FieldContainer.propTypes = {
+CustomDropdown.propTypes = {
     children: PropTypes.element.isRequired,
 };
 
-export default FieldContainer;
+export default CustomDropdown;

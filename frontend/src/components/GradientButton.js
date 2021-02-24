@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 
-class CustomRadioButton extends Component {
+class GradientButton extends Component {
   constructor(props) {
     super(props);
   }
@@ -43,7 +43,7 @@ const CustomButton = styled.input`
     }
 `
 
-CustomRadioButton.propTypes = {
+GradientButton.propTypes = {
 };
 
-export default CustomRadioButton;
+export default GradientButton;
