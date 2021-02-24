@@ -120,7 +120,7 @@ const Title = styled.div`
 
 const AddBikePopup = styled.div`
   position: absolute;
-  z-index: 1;
+  z-index: 2; //over bike progress
   top: -20px;
   left: -101px;
   display: ${props => props.isVisible ? 'block' : 'none'};
