@@ -3,7 +3,9 @@ package com.soen390.erp;
 
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.model.PlantMaterial;
+import com.soen390.erp.inventory.model.PlantPart;
 import com.soen390.erp.inventory.repository.PlantRepository;
+import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.model.*;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
@@ -18,12 +20,16 @@ class EnterpriseResourcePlanningApplicationTests{
 
     @Autowired
     private MaterialRepository materialRepository;
+    @Autowired
     private PartRepository partRepository;
+    @Autowired
     private BikeRepository bikeRepository;
     @Autowired
     private PlantRepository plantRepository;
     @Autowired
     PlantMaterialRepository plantMaterialRepository;
+    @Autowired
+    PlantService plantService;
 
 //    @Autowired
 //    public EnterpriseResourcePlanningApplicationTests(MaterialRepository materialRepository, PartRepository partRepository, BikeRepository bikeRepository, PlantRepository plantRepository) {
@@ -42,15 +48,15 @@ class EnterpriseResourcePlanningApplicationTests{
     void testPlant(){
 //        Material m1 = materialRepository.findAll().get(1);
 
-        Material m1 = materialRepository.findById(4).orElseGet(()->Material.builder().name("didn't find").cost(10).build());
+        Material m1 = materialRepository.findById(1).orElseGet(()->Material.builder().name("didn't find").cost(10).build());
 //        m1.setName("test");
 //        m1.setCost(21);
 //        materialRepository.save(m1);
 //        PlantMaterial pm = PlantMaterial.builder().material(m1).quantity(12).build();
         PlantMaterial pm = plantMaterialRepository.findByMaterial(m1).orElseGet(()->PlantMaterial.builder().material(m1).build());
-        pm.setQuantity(28);
+        pm.setQuantity(24);
         plantMaterialRepository.save(pm);
-        Plant plant = plantRepository.findById(7).orElse(new Plant());
+        Plant plant = plantRepository.findById(1).orElse(new Plant());
 //        plant.setName("Plant1");
 //        plant.setAddress("123 Street");
 
@@ -59,21 +65,35 @@ class EnterpriseResourcePlanningApplicationTests{
 
     }
 
+    @Test
+    void testInventory(){
+        Plant plant = plantRepository.findById(1).orElse(new Plant());
+        Part part = partRepository.findById(48).orElseGet(()->new Part());
+        PlantPart pp = PlantPart.builder().part(part).quantity(1).build();
+
+        plantService.addPlantPart(plant, part, 1);
+    }
+
     //For development testing only
-//    @Test
-//    void testParts(){
+    @Test
+    void testParts() {
 //
-//    Material m1 = new Material();
-//    m1.setName("temp");
-//    m1.setCost(10);
+        Material m1 = materialRepository.findById(1).orElseGet(() -> Material.builder().name("ugh").cost(20).build());
+        m1.setName("temp");
+        m1.setCost(10);
+        materialRepository.save(m1);
+    }
+
 //
+////
 //    Wheel wheel = new Wheel();
-//    wheel.setName("frontwheel");
-//    wheel.setCost(20);
-//    wheel.setDiameter(5);
+//    wheel.setName("frontwheel121");
+//    wheel.setCost(32);
+//    wheel.setDiameter(2);
 //    wheel.setGear(false);
+//    wheel.addMaterial(m1);
 //    partRepository.save(wheel);
-//
+////
 //    Handlebar handlebar = Handlebar.builder().build();
 //    Wheel rearWheel = Wheel.builder().build();
 //    Seat seat = Seat.builder().build();
@@ -84,18 +104,19 @@ class EnterpriseResourcePlanningApplicationTests{
 //
 //
 //    Bike bike = Bike.builder()
-//            .name("First_bike")
+//            .name("Second_bike")
 //            .frontwheel(wheel)
 //            .rearwheel(rearWheel)
 //            .handlebar(handlebar)
 //            .seat(seat)
+//            .frame(frame)
 //            .pedal(pedal)
 //        .build();
 //
 //    bikeRepository.save(bike);
-//
-//    //TODO: CHECK IF THE ADDED THE SAME PARTS TO ANOTHER BIKE ARE BEING SAVED PROPERLY (possibly not needed)
-    //TODO: CHECK ACCESSORIES BEING ADDED
+////
+////    //TODO: CHECK IF THE ADDED THE SAME PARTS TO ANOTHER BIKE ARE BEING SAVED PROPERLY (possibly not needed)
+//    //TODO: CHECK ACCESSORIES BEING ADDED
 //    }
 
 

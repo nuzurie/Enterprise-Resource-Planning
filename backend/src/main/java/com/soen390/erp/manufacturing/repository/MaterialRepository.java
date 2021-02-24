@@ -6,5 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface MaterialRepository extends PagingAndSortingRepository<Material, Integer> {
-    List<Material> findAll();
+
+    public List<Material> findAll();
 }

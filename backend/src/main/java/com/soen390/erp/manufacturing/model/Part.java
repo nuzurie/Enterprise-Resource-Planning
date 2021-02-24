@@ -1,11 +1,8 @@
 package com.soen390.erp.manufacturing.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.soen390.erp.inventory.model.Plant;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,23 +15,28 @@ import java.util.Set;
 //@Data
 @Getter
 @Setter
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "partType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Frame.class, name = "frame"),
+        @JsonSubTypes.Type(value = Handlebar.class, name = "handlebar"),
+        @JsonSubTypes.Type(value = Pedal.class, name = "pedal"),
+        @JsonSubTypes.Type(value = Seat.class, name = "seat"),
+        @JsonSubTypes.Type(value = Wheel.class, name = "wheel"),
+        @JsonSubTypes.Type(value = Accessory.class, name = "accessory")
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="product_type",
         discriminatorType = DiscriminatorType.STRING)
-public abstract class Part {
+public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
     protected String name;
     protected double cost;
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(name = "plant_id")
-//    private Plant plant;
-
-
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name="parts_materials",
             joinColumns=@JoinColumn(name="part_id"),
             inverseJoinColumns=@JoinColumn(name = "material_id"))
@@ -56,21 +58,13 @@ public abstract class Part {
         this.cost = cost;
     }
 
-    public Set<Material> getMaterials() {
-        return materials;
+    public Optional<Set<Material>> getMaterials() {
+        return Optional.ofNullable(materials);
     }
 
     public void setMaterials(Set<Material> materials) {
         this.materials = materials;
     }
-//    @JsonIgnore
-//    public Plant getPlant() {
-//        return plant;
-//    }
-//
-//    public void setPlant(Plant plant) {
-//        this.plant = plant;
-//    }
 
     public void addMaterial(Material material){
         if (materials==null)

@@ -1,16 +1,11 @@
 package com.soen390.erp.manufacturing.model;
 
-
-import com.soen390.erp.inventory.model.OrderItem;
-import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,18 +16,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Material{
+public class Material {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
     private String name;
     private double cost;
     @JsonIgnore
-    @ManyToMany(mappedBy = "materials")
+    @ManyToMany(mappedBy = "materials", fetch = FetchType.EAGER)
     private Set<Part> parts;
-
-    @OneToMany(mappedBy = "material")
-    private Set<OrderItem> orderItems;
 
     public Optional<Set<Part>> getParts() {
         return Optional.ofNullable(parts);

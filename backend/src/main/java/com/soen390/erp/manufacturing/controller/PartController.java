@@ -1,47 +1,68 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
+import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
-import com.soen390.erp.manufacturing.viewer.PartService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.soen390.erp.manufacturing.repository.MaterialRepository;
+import com.soen390.erp.manufacturing.repository.PartRepository;
+import com.soen390.erp.manufacturing.service.PartModelAssembler;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 public class PartController {
 
-        @Autowired
-        private PartService partCatalogue;
+    private final PartRepository partRepository;
+    private final MaterialRepository materialRepository;
+    private final PartModelAssembler assembler;
 
-        @GetMapping(path = "/parts")
-        public List<Part> retrieveAllPart(){
-        return partCatalogue.findAll();
+    public PartController(PartRepository partRepository, PartModelAssembler assembler, MaterialRepository materialRepository) {
+        this.partRepository = partRepository;
+        this.assembler = assembler;
+        this.materialRepository = materialRepository;
     }
 
-        @GetMapping(path = "/parts/{id}")
-        public Part retrievePart (@PathVariable String name) throws Exception {
-        Part part = partCatalogue.findOne(name);
-        if (part == null)
-            throw new Exception("part not found");
-        return partCatalogue.findOne(name);
+    @GetMapping("/parts")
+    public ResponseEntity<?> all() {
+
+        List<EntityModel<Part>> parts = partRepository.findAll().stream() //
+                .map(assembler::toModel) //
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(
+                CollectionModel.of(parts, linkTo(methodOn(PartController.class).all()).withSelfRel()));
     }
 
-        @PostMapping("/parts")
-        public ResponseEntity<Object> creatPart (@RequestBody Part part){
-        Part savedPart = partCatalogue.savePart(part);
-        // CREATED 201
-        URI location = ServletUriComponentsBuilder.
-                fromCurrentRequest().
-                path("{id}").
-                buildAndExpand(savedPart.getName()).toUri();
+    @GetMapping(path = "/parts/{id}")
+    public ResponseEntity<?> one(@PathVariable int id) {
 
-        return ResponseEntity.created(location).build();
+        Part part = partRepository.findById(id)
+                .orElseThrow(() -> new PartNotFoundException(id));
+
+        return ResponseEntity.ok().body(assembler.toModel(part));
+    }
+
+    @PostMapping("/parts")
+    ResponseEntity<?> newPart(@RequestBody Part part){
+
+        Set<Material> materials = part.getMaterials()
+                .orElseGet(() -> new HashSet<>());
+        materials
+                .forEach(materialRepository::save);
+        materials
+                .forEach(part::addMaterial);
+        EntityModel<Part> entityModel = assembler.toModel(partRepository.save(part));
+
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
 }
-
-
