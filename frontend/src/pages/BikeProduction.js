@@ -65,16 +65,17 @@ class BikeProduction extends Component {
           </Popup>
         </AddBikePopup>
         <MainContainer title="Bikes" createFeature={true} showModal={this.toggleBikeModal}>
-          <div>
+          {/* TODO: Add interactive toggle
+              <div>
               <button><ToggleOnIcon /></button>
               <Title>In Progress</Title>
-          </div>
+          </div> */}
           
-          <BikeContainer>
-            <Title>Bike #SerialID</Title>
-
+          <BikeContainer title="Bike #SerialID">
+            
           </BikeContainer>
-          <BikeContainer>
+
+          {/* <BikeContainer>
             <Title>Bike #SerialID</Title>
 
           </BikeContainer>
@@ -92,7 +93,7 @@ class BikeProduction extends Component {
           <BikeContainer>
             <Title>Bike #SerialID</Title>
 
-          </BikeContainer>
+          </BikeContainer> */}
 
         </MainContainer>
       </Container>
