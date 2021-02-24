@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima Nova'), url(./fonts/Proxima\ Nova\ Semibold.otf) format('otf');
+}
