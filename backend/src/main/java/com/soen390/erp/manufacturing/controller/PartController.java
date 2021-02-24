@@ -49,7 +49,7 @@ public class PartController {
     }
 
     @PostMapping("/parts")
-    ResponseEntity<?> newPart(@RequestBody Part part){
+    public ResponseEntity<?> newPart(@RequestBody Part part){
 
         part.getMaterials().forEach(materialRepository::save);
         EntityModel<Part> entityModel = assembler.toModel(partRepository.save(part));
