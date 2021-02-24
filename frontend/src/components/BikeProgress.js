@@ -35,7 +35,7 @@ class BikeProgress extends Component {
     const step3Content = <h1>Step 3 Content</h1>;
 
     return (
-        <Container class="hello"
+        <Container
             startingStep={0}
             onSubmit={this.onFormSubmit}
             steps={[
@@ -55,27 +55,28 @@ class BikeProgress extends Component {
                     label: 'assemble',
                     name: 'step 3',
                     content: step3Content,
-                    validator: this.step3Validator
+                    validator: this.step2Validator
                 },
                 {
                     label: 'check-up',
                     name: 'step 1',
                     content: step1Content,
+                    validator: this.step2Validator,
                     onSubmit: this.onFormSubmit
-                    },
-                    {
+                },
+                {
                     label: 'packaging',
                     name: 'step 2',
                     content: step2Content,
                     validator: this.step2Validator,
                     onSubmit: this.onFormSubmit
-                    },
-                    {
+                },
+                {
                     label: 'shipping',
                     name: 'step 3',
                     content: step3Content,
-                    validator: this.step3Validator
-                    }
+                    validator: this.step2Validator
+                }
             ]}
         />
     );

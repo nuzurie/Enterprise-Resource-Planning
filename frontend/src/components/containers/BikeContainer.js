@@ -22,15 +22,15 @@ class BikeContainer extends Component {
   }
 
   toggleExpansion() {
-
+    this.setState({ showExpansion: !this.state.showExpansion });
   }
 
   render() {
     return (
-        <Container>
+        <Container isExpanded={this.state.showExpansion}>
             <Header>
               <Title>{this.props.title}</Title>
-              <ExpandButton onClick={this.props.toggleExpansion} isVisible={this.props.createFeature}>
+              <ExpandButton onClick={this.toggleExpansion} isExpanded={this.state.showExpansion}>
                 <ExpandLessMore />
               </ExpandButton>
             </Header>
@@ -61,20 +61,24 @@ class BikeContainer extends Component {
               </Characteristic>
             </CharacteristicContainer>
             {/* {this.props.children} */}
-            <BikeProgress progressLevel={this.state.progressLevel} />
+            <ProgressContainer isExpanded={this.state.showExpansion} >
+              <BikeProgress progressLevel={this.state.progressLevel} />
+            </ProgressContainer>
         </Container>
     );
   }
 }
 
 //STYLED-COMPONENTS
+
 const Container = styled.div`
   background: #F9F9F9;
   padding: 15px;
   border-radius: 12px;
-  height: calc(100%-109px);
+  height: ${props => props.isExpanded ? '200px' : '100px'};
   width: 506px;
   margin-top: 15px;
+  transition: 250ms;
 `
 
 const Header = styled.div`
@@ -104,6 +108,8 @@ const ExpandButton = styled.div`
   color: #BBC8E3;
   transition: 250ms;
   display: block;
+  transform:  ${props => props.isExpanded ? 'rotate(180deg)': 'rotate(0deg)'};
+  transition: 250ms;
 
   &:hover, &::selection {
     color: #BBC8E3;
@@ -154,6 +160,10 @@ const ColorIcon = styled.div`
   width: 2.5em;
   height: 2.5em;
   background-color: blue;
+`
+
+const ProgressContainer = styled.div`
+  display:  ${props => props.isExpanded ? 'block' : 'none'};
 `
 
 BikeContainer.propTypes = {

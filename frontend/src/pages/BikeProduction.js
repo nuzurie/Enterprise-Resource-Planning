@@ -105,6 +105,7 @@ class BikeProduction extends Component {
 //STYLED-COMPONENTS
 const Container = styled.div`
   position: relative;
+  height: 100%;
 `
 
 const Title = styled.div`
