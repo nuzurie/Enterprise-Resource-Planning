@@ -20,27 +20,18 @@ public class Bike {
     @ManyToOne(optional = false)
     @JoinColumn(name="handlebar_id")
     private Handlebar handlebar;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name="frame_id")
-    private Frame frame;
-
     @ManyToOne(optional = false)
     @JoinColumn(name="frontwheel_id")
     private Wheel frontwheel;
-
     @ManyToOne(optional = false)
     @JoinColumn(name="rearwheel_id")
     private Wheel rearwheel;
-
     @ManyToOne(optional = false)
     @JoinColumn(name="seat_id")
     private Seat seat;
-
     @ManyToOne(optional = false)
     @JoinColumn(name="pedal_id")
     private Pedal pedal;
-
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "bike_accesories",
             joinColumns = { @JoinColumn(name = "bike_id") },
