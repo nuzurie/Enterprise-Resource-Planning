@@ -3,25 +3,26 @@ import PropTypes from "prop-types";
 import styled from 'styled-components';
 import ExpandLessMore from '@material-ui/icons/ExpandMore';
 
-class BikeContainer extends Component {
+class RawMaterials extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-        <Container>
-            <Header>
-              <Title>{this.props.title}</Title>
-              <ExpandButton onClick={this.props.showModal} isVisible={this.props.createFeature}>
-                
-              </ExpandButton>
-            </Header>
-            {this.props.children}
-        </Container>
+      <Container>
+        <Header>
+            <Title>{this.props.title}</Title>
+            <ExpandButton onClick={this.props.showModal} isVisible={this.props.createFeature}>
+              
+            </ExpandButton>
+        </Header>
+        {this.props.children}
+      </Container>
     );
   }
 }
+
 
 //STYLED-COMPONENTS
 const Container = styled.div`
@@ -66,9 +67,9 @@ const ExpandButton = styled.div`
   }
 `
 
-BikeContainer.propTypes = {
-    innerTitle: PropTypes.string.isRequired,
-    children: PropTypes.element.isRequired,
+RawMaterials.propTypes = {
+  innerTitle: PropTypes.string.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
-export default BikeContainer;
+export default RawMaterials;
