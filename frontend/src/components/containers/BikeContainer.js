@@ -31,7 +31,7 @@ class BikeContainer extends Component {
             <Header>
               <Title>{this.props.title}</Title>
               <ExpandButton onClick={this.toggleExpansion} isExpanded={this.state.showExpansion}>
-                <ExpandLessMore />
+                <ExpandLessMore />                
               </ExpandButton>
             </Header>
             <CharacteristicContainer>
