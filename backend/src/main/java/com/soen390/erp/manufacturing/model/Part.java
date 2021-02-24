@@ -27,10 +27,10 @@ public abstract class Part {
     protected int id;
     protected String name;
     protected double cost;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "plant_id")
-    private Plant plant;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "plant_id")
+//    private Plant plant;
 
 
     @JsonIgnore
@@ -63,14 +63,14 @@ public abstract class Part {
     public void setMaterials(Set<Material> materials) {
         this.materials = materials;
     }
-    @JsonIgnore
-    public Plant getPlant() {
-        return plant;
-    }
-
-    public void setPlant(Plant plant) {
-        this.plant = plant;
-    }
+//    @JsonIgnore
+//    public Plant getPlant() {
+//        return plant;
+//    }
+//
+//    public void setPlant(Plant plant) {
+//        this.plant = plant;
+//    }
 
     public void addMaterial(Material material){
         if (materials==null)

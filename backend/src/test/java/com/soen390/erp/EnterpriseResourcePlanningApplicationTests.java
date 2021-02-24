@@ -1,34 +1,62 @@
 package com.soen390.erp;
 
 
+import com.soen390.erp.inventory.model.Plant;
+import com.soen390.erp.inventory.model.PlantMaterial;
+import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.manufacturing.model.*;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
+import com.soen390.erp.inventory.repository.PlantMaterialRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
-import java.util.Set;
-
 @SpringBootTest
 class EnterpriseResourcePlanningApplicationTests{
 
+    @Autowired
     private MaterialRepository materialRepository;
     private PartRepository partRepository;
     private BikeRepository bikeRepository;
-
     @Autowired
-    public EnterpriseResourcePlanningApplicationTests(MaterialRepository materialRepository, PartRepository partRepository, BikeRepository bikeRepository) {
-        this.materialRepository = materialRepository;
-        this.partRepository = partRepository;
-        this.bikeRepository = bikeRepository;
-    }
+    private PlantRepository plantRepository;
+    @Autowired
+    PlantMaterialRepository plantMaterialRepository;
+
+//    @Autowired
+//    public EnterpriseResourcePlanningApplicationTests(MaterialRepository materialRepository, PartRepository partRepository, BikeRepository bikeRepository, PlantRepository plantRepository) {
+//        this.materialRepository = materialRepository;
+//        this.partRepository = partRepository;
+//        this.bikeRepository = bikeRepository;
+//        this.plantRepository = plantRepository;
+//    }
 
 
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    void testPlant(){
+//        Material m1 = materialRepository.findAll().get(1);
+
+        Material m1 = materialRepository.findById(4).orElseGet(()->Material.builder().name("didn't find").cost(10).build());
+//        m1.setName("test");
+//        m1.setCost(21);
+//        materialRepository.save(m1);
+//        PlantMaterial pm = PlantMaterial.builder().material(m1).quantity(12).build();
+        PlantMaterial pm = plantMaterialRepository.findByMaterial(m1).orElseGet(()->PlantMaterial.builder().material(m1).build());
+        pm.setQuantity(28);
+        plantMaterialRepository.save(pm);
+        Plant plant = plantRepository.findById(7).orElse(new Plant());
+//        plant.setName("Plant1");
+//        plant.setAddress("123 Street");
+
+        plant.addPlantMaterial(pm);
+        plantRepository.save(plant);
+
     }
 
     //For development testing only

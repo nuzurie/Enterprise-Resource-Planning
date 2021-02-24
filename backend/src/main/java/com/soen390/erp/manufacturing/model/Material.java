@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Material {
+public class Material{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
@@ -29,19 +30,6 @@ public class Material {
     @JsonIgnore
     @ManyToMany(mappedBy = "materials")
     private Set<Part> parts;
-    @JsonIgnore
-    public Plant getPlant() {
-        return plant;
-    }
-
-    public void setPlant(Plant plant) {
-        this.plant = plant;
-    }
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "plant_id")
-    private Plant plant;
-
 
     @OneToMany(mappedBy = "material")
     private Set<OrderItem> orderItems;

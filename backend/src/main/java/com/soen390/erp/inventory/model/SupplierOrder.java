@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.soen390.erp.manufacturing.model.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -21,9 +22,9 @@ public class SupplierOrder {
     @OneToMany(mappedBy = "supplierOrder")
     private Set<OrderItem> orderItems;
 
-    @JsonIgnore
-    @ManyToOne// (fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_id")
+    @JsonBackReference
     private Plant plant;
 
     public int getId() {

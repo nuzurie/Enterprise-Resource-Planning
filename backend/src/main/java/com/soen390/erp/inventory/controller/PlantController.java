@@ -36,7 +36,6 @@ public class PlantController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(
                 CollectionModel.of(plants, linkTo(methodOn(this.getClass()).all()).withSelfRel()));
-
     }
 
     @GetMapping("/plants/{id}")
