@@ -28,7 +28,7 @@ public class CreateUserTests {
     protected MockMvc mockMvc;
     @Autowired
     private UserRepository userRepository;
-    private static final String username = "zubair@gmail.com";
+    private static final String username = "admin123@msn.com";
 
     @Test
     @WithMockUser("ROLE_ADMIN")
@@ -46,7 +46,7 @@ public class CreateUserTests {
                     "firstname":"Zubair",
                     "lastname":"Nurie",
                     "username":"%s",
-                    "password":"12345",
+                    "password":"soen390",
                     "role":"ROLE_ADMIN",
                     "active":true
                 }""", username);

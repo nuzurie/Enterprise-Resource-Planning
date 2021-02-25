@@ -16,7 +16,6 @@ function accounts() {
   alert('This is the accounts page!');
 }
 
-
 class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -70,7 +69,7 @@ class Navigation extends Component {
             </Link>
           </div>
           <div>
-            <button onClick={accounts}><Logout /></button>
+            <button><Logout /></button>
           </div>
         </NavigationContainer>
     );
