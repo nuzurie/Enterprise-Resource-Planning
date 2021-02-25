@@ -14,5 +14,5 @@ code {
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: local('Proxima Nova'), url(./fonts/Proxima\ Nova\ Semibold.otf) format('otf');
+  src: local('Proxima Nova'), url(./fonts/proxima-nova-semibold.otf) format('otf');
 }
