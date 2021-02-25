@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 
-class FieldContainer extends Component {
+class CustomDropdown extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-        <Container textColor={this.props.textColor} >
+        <Container name={this.props.dropdownName} id={this.props.dropdownID}>
             {this.props.children}
         </Container>
     );
@@ -17,23 +17,26 @@ class FieldContainer extends Component {
 }
 
 //STYLED-COMPONENTS
-const Container = styled.div`
+const Container = styled.select`
   background: white;
-  padding: 5px;
-  border-radius: 12px;
-  margin-top: 15px;
+  padding: 7px;
+  width: 250px;
+  border-radius: 8px;
+  margin-bottom: 5px;
   border: solid 2px #BBC8E3;
+  display: flex;
+  flex-direction: column;
 
   font-family: Proxima Nova;
   font-size: 9pt;
-  color: ${props => props.textColor ? props.textColor : '#556C99'};
-  text-transform: uppercase;
+  color: '#556C99';
+  text-transform: lowercase;
   letter-spacing: 0.2em;
   font-weight: 500;
 `
 
-FieldContainer.propTypes = {
+CustomDropdown.propTypes = {
     children: PropTypes.element.isRequired,
 };
 
-export default FieldContainer;
+export default CustomDropdown;

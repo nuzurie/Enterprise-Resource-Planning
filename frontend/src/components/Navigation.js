@@ -12,6 +12,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AddUser from '@material-ui/icons/PersonAdd';
 import Logout from '@material-ui/icons/PowerSettingsNew';
 
+function accounts() {
+  alert('This is the accounts page!');
+}
 
 class Navigation extends Component {
   constructor(props) {
@@ -24,7 +27,9 @@ class Navigation extends Component {
         <NavigationContainer>
           <div>
             <div>
-              <button><AccountCircleOutlinedIcon /></button>
+              <Link to="/login">
+                <button><AccountCircleOutlinedIcon /></button>
+              </Link>
             </div>
             <div>
               <Link to="/dashboard">

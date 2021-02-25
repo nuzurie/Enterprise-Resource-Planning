@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 
-class InnerContainer extends Component {
+class LoginContainer extends Component {
   constructor(props) {
     super(props);
   }
@@ -22,7 +22,7 @@ const Container = styled.div`
   background: #F9F9F9;
   padding: 20px;
   border-radius: 12px;
-  height: calc(100% - 88px);
+  height: calc(100% - 73px);
   margin-top: 15px;
 `
 
