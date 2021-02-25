@@ -3,10 +3,12 @@ package com.soen390.erp.inventory.controller;
 
 import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
 import com.soen390.erp.inventory.model.Plant;
+import com.soen390.erp.inventory.model.PlantBike;
 import com.soen390.erp.inventory.model.PlantPart;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
 import com.soen390.erp.inventory.service.PlantService;
+import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.inventory.model.PlantMaterial;
 import com.soen390.erp.manufacturing.model.Material;
@@ -83,6 +85,19 @@ public class PlantController {
         Material material = plantMaterial.getMaterial();
         int quantity = plantMaterial.getQuantity();
         plantService.addPlantMaterial(plant,material,quantity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/addBikeToInventory")
+    ResponseEntity<?> addBikeToInventory(@RequestBody PlantBike plantBike) {
+        //TODO: get from header?
+        int plantId = 1;
+
+        Plant plant = plantRepository.findById(plantId).orElseThrow(()-> new RuntimeException());
+        Bike bike = plantBike.getBike();
+        int quantity = plantBike.getQuantity();
+        plantService.addPlantBike(plant,bike,quantity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
