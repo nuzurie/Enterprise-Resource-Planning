@@ -5,17 +5,40 @@ import InnerContainer from '../components/containers/InnerContainer.js';
 import MainContainer from '../components/containers/MainContainer.js';
 import FieldContainer from '../components/containers/FieldContainer.js';
 import GradientButton from '../components/GradientButton';
+import {Link, Redirect} from 'react-router-dom'
+import axios from "axios";
 
 class Login extends Component {
   constructor(props) {
     super(props);
   }
 
+  handleLogin(e){
+      e.preventDefault();
+
+      const form = new FormData(e.target);
+      const email = form.get("email");
+      const password = form.get("password");
+
+      const credentials = window.btoa(email+":"+password)
+      const auth = "Basic "+credentials
+
+      axios.get('/', {
+          headers: {
+              'Authorization': credentials
+          }
+      })
+          .then(
+              <Link to="/dashboard"/>
+          )
+          .catch(err => console.log(err))
+  }
+
   render() {
     return (
         <MainContainer title="Login" createFeature={false}>
             <InnerContainer title="User">
-                <LoginForm action="">
+                <LoginForm action="" onSubmit={this.handleLogin}>
                     <div>
                         <FieldContainer>
                             <TextInput type="email" id="email" name="email" placeholder="email" />
