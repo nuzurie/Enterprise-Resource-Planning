@@ -28,10 +28,16 @@ class Login extends Component {
               'Authorization': credentials
           }
       })
-          .then(
-              <Link to="/dashboard"/>
-          )
-          .catch(err => console.log(err))
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
+
+    axios.get('/asd', {
+        headers: {
+            'Authorization': credentials
+        }
+    })
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
   }
 
   render() {

@@ -7,6 +7,7 @@ import Popup from "../components/Popup.js";
 import CustomDropdown from "../components/CustomDropdown";
 import CustomRadioButton from "../components/CustomRadioButton";
 import FieldContainer from '../components/containers/FieldContainer.js';
+import GradientButton from '../components/GradientButton';
 
 class Inventory extends Component {
   constructor(props) {
@@ -36,12 +37,12 @@ class Inventory extends Component {
         <AddBikeParts isVisible={this.state.showBikePartModal}>
           <Popup showModal={this.toggleBikeModal} title="Bike Part Settings" buttonTitle="add bike(s)" > 
            <form>
-                <CustomDropdown dropdownName="bikeParts" dropddownID="bikeParts">
-                  <option value={"HANDLE"}>handle</option>
-                  <option value={"SEAT"}>seat</option>
-                  <option value={"FRAMES"}>frames</option>
-                  <option value={"WHEEL"}>wheel</option>
-                </CustomDropdown>
+              <CustomDropdown dropdownName="bikeParts" dropddownID="bikeParts">
+                <option value={"HANDLE"}>handle</option>
+                <option value={"SEAT"}>seat</option>
+                <option value={"FRAMES"}>frames</option>
+                <option value={"WHEEL"}>wheel</option>
+              </CustomDropdown>
 
               <Title>Materials Needed</Title>
               <FieldContainer>
@@ -52,6 +53,7 @@ class Inventory extends Component {
               <FieldContainer>
                 <TextInput type="number" id="bamount" name="bamount" placeholder="amount" min ="0"/>
               </FieldContainer>
+              <GradientButton type="submit" buttonValue="add bike part" />
            </form>
           </Popup>
         </AddBikeParts>
@@ -71,6 +73,7 @@ class Inventory extends Component {
               <FieldContainer>
                 <TextInput type="number" id="ramount" name="ramount" placeholder="amount" min ="0"/>
               </FieldContainer>
+              <GradientButton type="submit" buttonValue="add raw material" />
            </form>
           </Popup>
         </AddRawMaterials>
@@ -103,15 +106,15 @@ height: 100%;
 border-radius: 0px;
 display: flex;
 flex-direction: row;
+position: relative;
 
 & > div {
   margin-right: 20px;
-  width: 558px; //to remove once components are added into it
 }
 `
 const Title = styled.div`
-    font-family: Montserrat;
-    font-size: 10pt;
+    font-family: Proxima Nova;
+    font-size: 8pt;
     color: black;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -125,6 +128,10 @@ const AddBikeParts = styled.div`
   top: -20px;
   left: -101px;
   display: ${props => props.isVisible ? 'block' : 'none'};
+
+  & > div > div > form > input {
+    margin-top: 20px;
+  }
 `
 
 const AddRawMaterials = styled.div`
@@ -133,11 +140,15 @@ const AddRawMaterials = styled.div`
   top: -20px;
   left: -101px;
   display: ${props => props.isVisible ? 'block' : 'none'};
+
+  & > div > div > form > input {
+    margin-top: 20px;
+  }
 `
 
 const TextInput = styled.input`
 border: 0;
-font-family: Montserrat;
+font-family: Proxima Nova;
 font-size: 9pt;
 color: #556C99;
 text-transform: uppercase;
