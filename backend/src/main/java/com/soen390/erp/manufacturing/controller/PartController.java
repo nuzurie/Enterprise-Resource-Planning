@@ -53,7 +53,7 @@ public class PartController {
     }
 
     @PostMapping("/parts")
-    ResponseEntity<?> newPart(@RequestBody Part part){
+    public ResponseEntity<?> newPart(@RequestBody Part part){
 
         Set<Material> materials = part.getMaterials()
                 .orElseGet(() -> new HashSet<>());
