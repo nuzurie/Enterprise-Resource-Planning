@@ -3,9 +3,11 @@ package com.soen390.erp.inventory.controller;
 
 import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
 import com.soen390.erp.inventory.model.Plant;
+import com.soen390.erp.inventory.model.PlantPart;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
-import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
+import com.soen390.erp.inventory.service.PlantService;
+import com.soen390.erp.manufacturing.model.Part;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class PlantController {
     private final PlantRepository plantRepository;
     private final PlantModelAssembler pmAssembler;
-
-    public PlantController(PlantRepository plantRepository, PlantModelAssembler pmAssembler){
+    private final PlantService plantService;
+    public PlantController(PlantRepository plantRepository, PlantModelAssembler pmAssembler, PlantService plantService){
         this.plantRepository = plantRepository;
         this.pmAssembler = pmAssembler;
+        this.plantService = plantService;
     }
 
     @GetMapping("/plants")
@@ -44,6 +47,19 @@ public class PlantController {
     public ResponseEntity<?> one(@PathVariable int id){
         Plant plant = plantRepository.findById(id).orElseThrow(() -> new PlantNotFoundException(id));
         return ResponseEntity.ok().body(pmAssembler.toModel(plant));
+    }
+
+
+    @PostMapping("/addPartToInventory/")
+    ResponseEntity<?> addPartToInventory(@RequestBody PlantPart plantPart) {
+
+        int plantId = 1;
+        Plant plant = plantRepository.findById(1).orElseThrow(()->new RuntimeException());
+        Part part = plantPart.getPart();
+        int quantity = plantPart.getQuantity();
+        plantService.addPlantPart(plant, part, quantity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @ResponseBody
