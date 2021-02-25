@@ -34,7 +34,6 @@ class Login extends Component {
 }
 
 //STYLED-COMPONENTS
-
 const LoginForm = styled.form`
     display: flex;
     flex-direction: column;

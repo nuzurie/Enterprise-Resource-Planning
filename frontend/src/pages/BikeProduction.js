@@ -5,6 +5,7 @@ import MainContainer from '../components/containers/MainContainer.js';
 import BikeContainer from "../components/containers/BikeContainer.js";
 import Popup from "../components/Popup.js";
 import CustomDropdown from "../components/CustomDropdown";
+import GradientButton from "../components/GradientButton.js"
 
 import ToggleOnIcon from '@material-ui/icons/ToggleOn';
 
@@ -28,7 +29,7 @@ class BikeProduction extends Component {
       //TODO: Separate containers into components
       <Container>
         <AddBikePopup isVisible={this.state.showModal}>
-          <Popup showModal={this.toggleBikeModal} title="Bike settings" buttonTitle="add bike(s)" > 
+          <Popup showModal={this.toggleBikeModal} title="Bike settings" > 
             <form>
               <CustomDropdown dropdownName="bikeSize" dropddownID="bikeSize">
                 <option value={0}>small</option>
@@ -61,6 +62,7 @@ class BikeProduction extends Component {
                 <option value={"STRAP"}>strap</option>
                 <option value={"CLIP"}>clip</option>
               </CustomDropdown>
+              <GradientButton type="submit" buttonValue="add bike(s)" />
             </form>
           </Popup>
         </AddBikePopup>
@@ -71,29 +73,7 @@ class BikeProduction extends Component {
               <Title>In Progress</Title>
           </div> */}
           
-          <BikeContainer title="Bike #SerialID">
-            
-          </BikeContainer>
-
-          {/* <BikeContainer>
-            <Title>Bike #SerialID</Title>
-
-          </BikeContainer>
-      
-          <BikeContainer>
-            <Title>Bike #SerialID</Title>
-
-          </BikeContainer>
-        
-          <BikeContainer>
-            <Title>Bike #SerialID</Title>
-
-          </BikeContainer>
-
-          <BikeContainer>
-            <Title>Bike #SerialID</Title>
-
-          </BikeContainer> */}
+          <BikeContainer title="Bike #SerialID" />
 
         </MainContainer>
       </Container>
@@ -125,6 +105,10 @@ const AddBikePopup = styled.div`
   top: -20px;
   left: -101px;
   display: ${props => props.isVisible ? 'block' : 'none'};
+
+  & > div > div > form > input {
+    margin-top: 20px;
+  }
 `
 
 BikeProduction.propTypes = {

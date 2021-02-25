@@ -24,7 +24,7 @@ class Popup extends Component {
                     </CloseButton>
                 </Header>
                 {this.props.children}
-                <GradientButton type="submit" buttonValue={this.props.buttonTitle} />
+                {/* <GradientButton type="submit" buttonValue={this.props.buttonTitle} /> */}
             </Content>
         </Container>
     );
