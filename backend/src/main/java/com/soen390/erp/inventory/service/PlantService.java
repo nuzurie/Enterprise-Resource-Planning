@@ -48,10 +48,12 @@ public class PlantService {
     }
     public void addPlantMaterial(Plant plant, Material material, int quantity) {
 
-        materialRepository.findById(material.getId()).orElseThrow(() -> new MaterialNotFoundException(material.getId()));
+        Material material1 = materialRepository.findById(material.getId()).orElseGet(() -> Material.builder().name(material.getName())
+                .cost(material.getCost()).build());
+        materialRepository.save(material1);
         //try to find the pm from the pm repository
-        PlantMaterial pm = plantMaterialRepository.findByMaterial(material)
-                .orElseGet(() -> PlantMaterial.builder().material(material).build());
+        PlantMaterial pm = plantMaterialRepository.findByMaterial(material1)
+                .orElseGet(() -> PlantMaterial.builder().material(material1).build());
 
         //increase the quantity
         pm.setQuantity(pm.getQuantity() + quantity);
