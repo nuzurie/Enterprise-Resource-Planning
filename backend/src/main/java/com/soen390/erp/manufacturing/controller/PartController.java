@@ -9,6 +9,7 @@ import com.soen390.erp.manufacturing.service.PartModelAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -63,6 +64,13 @@ public class PartController {
         EntityModel<Part> entityModel = assembler.toModel(partRepository.save(part));
 
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(PartNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String partNotFoundException(PartNotFoundException ex){
+        return ex.getMessage();
     }
 
 }
