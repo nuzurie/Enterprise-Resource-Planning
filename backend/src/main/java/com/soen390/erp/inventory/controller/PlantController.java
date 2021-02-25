@@ -8,6 +8,8 @@ import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
 import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.model.Part;
+import com.soen390.erp.inventory.model.PlantMaterial;
+import com.soen390.erp.manufacturing.model.Material;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -50,7 +52,7 @@ public class PlantController {
     }
 
 
-    @PostMapping("/addPartToInventory/")
+    @PostMapping("/addPartToInventory")
     ResponseEntity<?> addPartToInventory(@RequestBody PlantPart plantPart) {
 
         int plantId = 1;
@@ -67,6 +69,22 @@ public class PlantController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String partNotFoundException(PlantNotFoundException ex){
         return ex.getMessage();
+    }
+
+
+
+
+    @PostMapping("/addMaterialToInventory")
+    ResponseEntity<?> addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {
+        //TODO: get from header?
+        int plantId = 1;
+
+        Plant plant = plantRepository.findById(plantId).orElseThrow(()-> new RuntimeException());
+        Material material = plantMaterial.getMaterial();
+        int quantity = plantMaterial.getQuantity();
+        plantService.addPlantMaterial(plant,material,quantity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
