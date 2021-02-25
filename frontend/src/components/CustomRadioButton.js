@@ -22,7 +22,7 @@ class CustomRadioButton extends Component {
 
 //STYLED-COMPONENTS
 const Container = styled.div`
-    font-family: Montserrat;
+    font-family: Proxima Nova;
     font-size: 10pt;
     color: #556C99;
     text-transform: uppercase;

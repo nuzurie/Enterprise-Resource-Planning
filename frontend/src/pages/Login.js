@@ -67,7 +67,7 @@ const LoginForm = styled.form`
 
 const TextInput = styled.input`
     border: 0;
-    font-family: Montserrat;
+    font-family: Proxima Nova;
     font-size: 9pt;
     color: #556C99;
     text-transform: uppercase;
@@ -85,7 +85,7 @@ const TextInput = styled.input`
     }
 `
 const Title = styled.div`
-    font-family: Montserrat;
+    font-family: Proxima Nova;
     font-size: 10pt;
     color: black;
     text-transform: uppercase;
