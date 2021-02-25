@@ -109,7 +109,7 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-    font-family: Montserrat;
+    font-family: Proxima Nova;
     font-size: 10pt;
     color: black;
     text-transform: uppercase;
