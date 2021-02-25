@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
+
 import ExpandLessMore from '@material-ui/icons/ExpandMore';
 import FrameIcon from '../../icons/bikeframe.svg';
 import FormatPaintIcon from '@material-ui/icons/FormatPaint';
@@ -37,27 +38,27 @@ class BikeContainer extends Component {
             <CharacteristicContainer>
               <Characteristic>
                 <img src={FrameIcon} />
-                <PartTitle>small</PartTitle>
+                <PartTitle>{this.props.size}</PartTitle>
               </Characteristic>
               <Characteristic>
                 <ColorIcon frameColor={this.props.frameColor} />
-                <PartTitle>blue</PartTitle>
+                <PartTitle>{this.props.frameColor}</PartTitle>
               </Characteristic>
               <Characteristic>
                 <FormatPaintIcon color="#BBC8E3"/>
-                <PartTitle>matte</PartTitle>
+                <PartTitle>{this.props.finish}</PartTitle>
               </Characteristic>
               <Characteristic>
                 <LayersIcon color="#BBC8E3"/>
-                <PartTitle>carbon</PartTitle>
+                <PartTitle>{this.props.grade}</PartTitle>
               </Characteristic>
               <Characteristic>
                 <img src={HandleIcon} />
-                <PartTitle>dropbar</PartTitle>
+                <PartTitle>{this.props.handlebar}</PartTitle>
               </Characteristic>
               <Characteristic>
                 <img src={PedalIcon} />
-                <PartTitle>straight</PartTitle>
+                <PartTitle>{this.props.pedal}</PartTitle>
               </Characteristic>
             </CharacteristicContainer>
             {/* {this.props.children} */}
@@ -159,7 +160,7 @@ const ColorIcon = styled.div`
   border-radius: 100%;
   width: 2.5em;
   height: 2.5em;
-  background-color: blue;
+  background-color: ${props => props.frameColor ? props.frameColor : 'blue'};
 `
 
 const ProgressContainer = styled.div`
