@@ -13,9 +13,9 @@ class RawMaterials extends Component {
       <Container>
         <Header>
             <Title>{this.props.title}</Title>
-            <ExpandButton onClick={this.props.showModal} isVisible={this.props.createFeature}>
-              
-            </ExpandButton>
+            <Title>{this.props.type}</Title>
+            <Title>{this.props.cost}</Title>
+            <Title>{this.props.amount}</Title>
         </Header>
         {this.props.children}
       </Container>
@@ -40,6 +40,18 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  div:nth-child(1), div:nth-child(2) {
+    min-width: 120px;
+  }
+
+  div:nth-child(3) {
+    width: 60px;
+  }
+
+  div:nth-child(4) {
+    width: 30px;
+  }
 `
 
 const Title = styled.div`
