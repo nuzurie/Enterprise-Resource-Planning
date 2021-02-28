@@ -1,4 +1,5 @@
 # SOEN 390 - Team 02
+[![Build Status](https://travis-ci.org/nuzurie/soen390-team02-erp.png?branch=master)](https://travis-ci.com/nuzurie/soen390-team02-erp.svg?token=L3eJakqZPcfupp7ZczHj&branch=master)
 [![Build Status](https://travis-ci.org/nuzurie/soen390-team02-erp.png?branch=master)](https://travis-ci.org/nuzurie/soen390-team02-erp)
  ## Objective
  Develop an ERP system for a company that manufactures bikes.
