@@ -1,5 +1,5 @@
 # SOEN 390 - Team 02
-(https://github.com/nuzurie/soen390-team02-erp/actions/workflows/travis.yml/badge.svg)
+[![Build Status](https://travis-ci.org/nuzurie/soen390-team02-erp.png?branch=master)](https://travis-ci.org/nuzurie/soen390-team02-erp)
  ## Objective
  Develop an ERP system for a company that manufactures bikes.
  
