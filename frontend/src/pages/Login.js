@@ -13,7 +13,7 @@ class Login extends Component {
     super(props);
   }
 
-  handleLogin(e){
+  handleLogin = (e) => {
       e.preventDefault();
 
       const form = new FormData(e.target);
@@ -29,7 +29,7 @@ class Login extends Component {
 
           }
       })
-    .then(res => console.log(res.data))
+    .then(this.props.history.push('/dashboard'))
     .catch(err => console.log(err))
 
     // axios.get('/asd', {

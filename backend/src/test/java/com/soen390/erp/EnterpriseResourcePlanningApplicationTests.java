@@ -3,6 +3,7 @@ package com.soen390.erp;
 
 import com.soen390.erp.inventory.model.Plant;
 
+import com.soen390.erp.inventory.repository.PlantPartRepository;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.model.*;
@@ -31,6 +32,8 @@ class EnterpriseResourcePlanningApplicationTests{
     PlantMaterialRepository plantMaterialRepository;
     @Autowired
     PlantService plantService;
+    @Autowired
+    PlantPartRepository plantPartRepository;
 
 //    @Autowired
 //    public EnterpriseResourcePlanningApplicationTests(MaterialRepository materialRepository, PartRepository partRepository, BikeRepository bikeRepository, PlantRepository plantRepository) {
@@ -43,7 +46,15 @@ class EnterpriseResourcePlanningApplicationTests{
 
     @Test
     void contextLoads() {
+
     }
+
+
+//    @Test
+//    void delete(){
+//
+//        partRepository.deleteById(106);
+//    }
 
 //    @Test
 //    void testPlant(){
