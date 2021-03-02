@@ -21,23 +21,24 @@ class Login extends Component {
       const password = form.get("password");
 
       const credentials = window.btoa(email+":"+password)
-      const auth = "Basic "+credentials
+      const auth = 'Basic '+credentials
 
-      axios.get('/', {
+      axios.get('http://localhost:8080/', {
           headers: {
-              'Authorization': credentials
+              'authorization': auth
+
           }
       })
     .then(res => console.log(res.data))
     .catch(err => console.log(err))
 
-    axios.get('/asd', {
-        headers: {
-            'Authorization': credentials
-        }
-    })
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
+    // axios.get('/asd', {
+    //     headers: {
+    //         'authorization': credentials
+    //     }
+    // })
+    // .then(res => console.log(res.data))
+    // .catch(err => console.log(err))
   }
 
   render() {
