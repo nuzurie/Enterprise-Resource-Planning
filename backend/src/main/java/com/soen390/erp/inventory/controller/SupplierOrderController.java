@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -17,7 +18,7 @@ public class SupplierOrderController {
     private SupplierOrderService service;
 
     @GetMapping(path = "/SupplierOrders")
-    public ArrayList<SupplierOrder> getAllSupplierOrders(){
+    public List<SupplierOrder> getAllSupplierOrders(){
         return service.getAllSupplierOrders();
     }
 
