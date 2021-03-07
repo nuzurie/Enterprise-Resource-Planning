@@ -8,7 +8,6 @@ import CustomDropdown from "../components/CustomDropdown";
 import CustomRadioButton from "../components/CustomRadioButton";
 import FieldContainer from '../components/containers/FieldContainer.js';
 import GradientButton from '../components/GradientButton';
-import axios from "axios";
 
 class Inventory extends Component {
   constructor(props) {
@@ -17,33 +16,10 @@ class Inventory extends Component {
     this.state = {
       showBikePartModal: false,
       showRawMatModal: false,
-      materials: [],
-      bikeParts: [],
     }
 
     this.toggleBikeModal = this.toggleBikeModal.bind(this);
     this.toggleMaterialModal = this.toggleMaterialModal.bind(this);
-    this.addMaterial = this.addMaterial.bind(this);
-  }
-
-  componentDidMount() {
-    this.initializeInventoryLists();
-  }
-
-  initializeInventoryLists() {
-    axios.get('/materials')
-    .then(res =>
-      this.setState({
-        materials: res.data._embedded.materialList, 
-      }))
-    .catch(err => console.log(err));
-
-    axios.get('/plants')
-    .then(res =>
-      this.setState({
-        bikeParts: res.data._embedded.plantList[0].parts, 
-      }))
-    .catch(err => console.log(err));
   }
 
   toggleBikeModal() {
@@ -54,53 +30,8 @@ class Inventory extends Component {
     this.setState({ showRawMatModal: !this.state.showRawMatModal });
   }
 
-  addMaterial(e) {
-    // e.preventDefault();
-
-    const form = new FormData(e.target);
-    const materialName = form.get("materialName");
-    const ramount = form.get("ramount");
-
-    let material = {
-        "material" :{
-            "name": materialName,
-            "cost": ramount
-        },
-        "quantity": 1
-    }
-
-    axios.post('/addMaterialToInventory', material);
-    console.log(materialName + ": " + ramount);
-  }
-
 
   render() {
-    let materialList = <div></div>;
-    let bikePartList = <div></div>;
-
-    if (this.state.materials.length !== 0) {
-      materialList = this.state.materials.map((element, index) => {
-        return (
-          <RawMaterials key={index} title={element.name} cost={element.cost} />
-        );
-      });
-    }
-
-    if (this.state.bikeParts.length !== 0) {
-      bikePartList = this.state.bikeParts.map((element, index) => {
-        if (element.part.partType === "frame") {
-          return (
-            <RawMaterials key={index} title={element.part.partType} type={`${element.part.size} | ${element.part.colour}`} cost={`${element.part.cost}$`} amount={element.quantity} />
-          );
-        } else {
-          return (
-            <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={`${element.part.cost}$`} amount={element.quantity} />
-          );
-        }
-      });
-    }
-
-    console.log(this.state.bikeParts);
     return (
       <Container>
         <AddBikeParts isVisible={this.state.showBikePartModal}>
@@ -130,20 +61,17 @@ class Inventory extends Component {
 
         <AddRawMaterials isVisible={this.state.showRawMatModal}>
           <Popup showModal={this.toggleMaterialModal} title="Raw Material" buttonTitle="add bike(s)" > 
-           <form onSubmit={this.addMaterial}>
-              <FieldContainer>
-                <TextInput type="text" id="materialName" name="materialName" placeholder="material name" />
-              </FieldContainer>
-                {/* <CustomDropdown dropdownName="bikeParts" dropddownID="bikeParts">
+           <form>
+                <CustomDropdown dropdownName="bikeParts" dropddownID="bikeParts">
                   <option value={"HANDLE"}>handle</option>
                   <option value={"SEAT"}>seat</option>
                   <option value={"FRAMES"}>frames</option>
                   <option value={"WHEEL"}>wheel</option>
-                </CustomDropdown> */}
+                </CustomDropdown>
 
               <Title>Amount</Title>
               <FieldContainer>
-                <TextInput type="number" id="ramount" name="ramount" placeholder="amount" min ="0" step="0.01" />
+                <TextInput type="number" id="ramount" name="ramount" placeholder="amount" min ="0"/>
               </FieldContainer>
               <GradientButton type="submit" buttonValue="add raw material" />
            </form>
@@ -152,22 +80,19 @@ class Inventory extends Component {
 
 
         <MainContainer title="Bike parts" createFeature={true} showModal={this.toggleBikeModal}>
-          <Legend>
-            <div>Part</div>
-            <div>Type</div>
-            <div>Cost</div>
-            <div>Qty</div>
-          </Legend>
-          {bikePartList}
+          <RawMaterials title="road - 16x1 3/8in [iso 349]">
+          </RawMaterials>
+    
+          <RawMaterials title="handle - mountain/silver">
+          </RawMaterials>
         </MainContainer>
         
         <MainContainer title="Raw Material" createFeature={true} showModal={this.toggleMaterialModal}>
-          {materialList}
-          {/* <RawMaterials title="rubber tire">
+          <RawMaterials title="rubber tire">
           </RawMaterials>
     
           <RawMaterials title="rim 700c">
-          </RawMaterials> */}
+          </RawMaterials>
         </MainContainer>
         
       </Container>
@@ -241,29 +166,7 @@ width: 400px;
 }
 `
 
-const Legend = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 10px;
-  background: white;
 
-  div {
-    font-family: Proxima Nova;
-  }
-
-  div:nth-child(1), div:nth-child(2) {
-    min-width: 120px;
-  }
-
-  div:nth-child(3) {
-    width: 50px;
-  }
-
-  div:nth-child(4) {
-    width: 50px;
-  }
-`
 
 
 Inventory.propTypes = {
