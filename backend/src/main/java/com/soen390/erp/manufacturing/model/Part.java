@@ -79,12 +79,4 @@ public class Part {
         material.setParts(parts);
     }
 
-    @Override
-    public String toString() {
-        return "Part{" +
-                "name='" + name + '\'' +
-                ", cost=" + cost +
-                ", materials=" + materials +
-                '}';
-    }
 }
