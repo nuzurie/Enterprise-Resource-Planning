@@ -192,7 +192,13 @@ class BikeProduction extends Component {
               <CustomDropdown dropdownName="bikePedal" dropddownID="bikePedal">
                 <option value={12}>strap</option>
                 <option value={82}>clip</option>
-              </CustomDropdown>
+              </CustomDropdown>  
+              <FieldContainer>
+                <TextInput type="quantity" id="bikeQuantity" name="bikeQuantity" placeholder="quantity" />
+              </FieldContainer>
+              <FieldContainer>
+                <TextInput type="clientID" id="clientID" name="clientID" placeholder="client ID" />
+              </FieldContainer>
               <GradientButton type="submit" buttonValue="add bike(s)" />
             </form>
           </Popup>
