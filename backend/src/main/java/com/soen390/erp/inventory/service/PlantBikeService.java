@@ -18,7 +18,7 @@ public class PlantBikeService {
 
     public PlantBike findPlantBikeById(int id) throws PlantBikeNotFoundException {
 
-        if (!plantBikeRepository.existsById(id))
+        if ( !plantBikeRepository.existsById(id) )
             throw new PlantBikeNotFoundException(id);
 
         return plantBikeRepository.findById(id);
@@ -35,7 +35,7 @@ public class PlantBikeService {
 
     public boolean deletePlantBikeById(int id) {
 
-        if (!plantBikeRepository.existsById(id))
+        if ( !plantBikeRepository.existsById(id) )
             return false;
 
         plantBikeRepository.deleteById(id);

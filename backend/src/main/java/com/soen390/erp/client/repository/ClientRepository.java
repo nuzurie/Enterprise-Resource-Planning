@@ -8,6 +8,7 @@ import java.util.List;
 public interface ClientRepository extends PagingAndSortingRepository<Client, Integer> {
 
     public List<Client> findAll();
+
     public Client findById(int id);
 
     public void deleteById(int id);

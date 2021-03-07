@@ -19,7 +19,7 @@ public class ClientService {
 
     public Client findClientById(int id) throws ClientNotFoundException{
 
-        if (!clientRepository.existsById(id))
+        if ( !clientRepository.existsById(id) )
             throw new ClientNotFoundException(id);
 
         return clientRepository.findById(id);
@@ -35,9 +35,10 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+
     public boolean deleteClientById(int id) {
 
-        if (!clientRepository.existsById(id))
+        if ( !clientRepository.existsById(id) )
             return false;
 
         clientRepository.deleteById(id);
