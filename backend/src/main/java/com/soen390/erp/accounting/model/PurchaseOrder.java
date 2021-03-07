@@ -1,18 +1,36 @@
 package com.soen390.erp.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.soen390.erp.inventory.model.OrderItem;
+import com.soen390.erp.inventory.model.Plant;
+import lombok.*;
+
+import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * this gets created and one record gets inserted everytime we order material from a supplier
  */
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class PurchaseOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date date;
-    private int plant_id;
-    /**
-     * supplier id
-     */
-    private int vendor_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plant_id")
+    @JsonBackReference
+    private Plant plant;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
     /**
      * before discount and tax
      */
@@ -37,4 +55,7 @@ public class PurchaseOrder {
      * after discount and tax = totalAmount - discountAmount + taxAmount
      */
     private double grandTotal;
+
+    @OneToMany(mappedBy = "purchaseOrder")
+    private Set<PurchaseOrderItems> purchaseOrderItems;
 }
