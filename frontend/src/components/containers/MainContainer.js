@@ -17,7 +17,9 @@ class MainContainer extends Component {
               <AddIcon />
             </AddButton>
           </Header>
-          {this.props.children}
+          <Content>
+            {this.props.children}
+          </Content>
         </Container>
     );
   }
@@ -54,12 +56,18 @@ const Container = styled.div`
 }
 `
 
+const Content = styled.div`
+  overflow-y: auto;
+  height: calc(100% - 20px);
+`
+
 const Header = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background: white;
 `
 
 const Title = styled.div`
