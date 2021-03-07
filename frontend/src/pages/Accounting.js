@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
-import MainContainer from '../components/containers/MainContainer.js';
+import AccountingContainer from '../components/containers/AccountingContainer.js';
 
 class Accounting extends Component {
   constructor(props) {
@@ -10,9 +10,20 @@ class Accounting extends Component {
 
   render() {
     return (
-        <MainContainer title="Accounting">
+      <Container>
+        <AccountingContainer title="Accounts Payable">
             
-        </MainContainer>
+        </AccountingContainer>
+
+        <AccountingContainer title="Accounts Receivable">
+            
+        </AccountingContainer>
+
+        <AccountingContainer title="Invoice">
+            
+        </AccountingContainer>
+        </Container>
+        
     );
   }
 }
@@ -23,3 +34,15 @@ Accounting.propTypes = {
 };
 
 export default Accounting;
+
+const Container = styled.div`
+height: 100%;
+border-radius: 0px;
+display: flex;
+flex-direction: row;
+position: relative;
+
+& > div {
+  margin-right: 20px;
+}
+`
