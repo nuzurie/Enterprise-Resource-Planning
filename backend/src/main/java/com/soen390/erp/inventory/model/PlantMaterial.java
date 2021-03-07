@@ -23,4 +23,13 @@ public class PlantMaterial {
 
     @Min(value = 1)
     private int quantity;
+
+    @Override
+    public String toString() {
+        return "PlantMaterial{" +
+                "id=" + id +
+                ", material=" + material +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
