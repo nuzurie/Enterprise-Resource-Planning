@@ -32,15 +32,13 @@ class Login extends Component {
     .then(() => this.props.history.push('/dashboard'))
     .catch(err => console.log(err))
 
-
-    axios.get('/plants', {
-        headers: {
-            'Authorization': credentials
-        }
-    })
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
-
+    // axios.get('/asd', {
+    //     headers: {
+    //         'authorization': credentials
+    //     }
+    // })
+    // .then(res => console.log(res.data))
+    // .catch(err => console.log(err))
   }
 
   render() {

@@ -20,7 +20,7 @@ class CustomDropdown extends Component {
 const Container = styled.select`
   background: white;
   padding: 7px;
-  width: 100%;
+  width: 250px;
   border-radius: 8px;
   margin-bottom: 5px;
   border: solid 2px #BBC8E3;
