@@ -13,16 +13,11 @@ import org.springframework.context.event.EventListener;
 @SpringBootApplication
 public class EnterpriseResourcePlanningApplication {
 
-    @Autowired
-    private EmailService emailService;
     public static void main(String[] args) {
         SpringApplication.run(EnterpriseResourcePlanningApplication.class, args);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void triggerWhenStarts(){
-        EmailToSend email = EmailToSend.builder().to("mzn@msn.com").subject("test").body("test body").build();
 
-        emailService.sendMail(email);
-    }
+
+
 }

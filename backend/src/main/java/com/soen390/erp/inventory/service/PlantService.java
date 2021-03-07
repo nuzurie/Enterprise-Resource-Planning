@@ -1,5 +1,7 @@
 package com.soen390.erp.inventory.service;
 
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
 import com.soen390.erp.inventory.model.Plant;
@@ -10,7 +12,6 @@ import com.soen390.erp.inventory.repository.PlantBikeRepository;
 import com.soen390.erp.inventory.repository.PlantMaterialRepository;
 import com.soen390.erp.inventory.repository.PlantPartRepository;
 import com.soen390.erp.inventory.repository.PlantRepository;
-import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Material;
@@ -36,8 +37,9 @@ public class PlantService {
     private final PartRepository partRepository;
     private final MaterialRepository materialRepository;
     private final BikeRepository bikeRepository;
+    private final EmailService emailService;
 
-    public PlantService(PlantRepository plantRepository, PlantMaterialRepository plantMaterialRepository, PlantPartRepository plantPartRepository, PlantBikeRepository plantBikeRepository, PartRepository partRepository, MaterialRepository materialRepository, BikeRepository bikeRepository) {
+    public PlantService(PlantRepository plantRepository, PlantMaterialRepository plantMaterialRepository, PlantPartRepository plantPartRepository, PlantBikeRepository plantBikeRepository, PartRepository partRepository, MaterialRepository materialRepository, BikeRepository bikeRepository, EmailService emailService) {
         this.plantRepository = plantRepository;
         this.plantMaterialRepository = plantMaterialRepository;
         this.plantPartRepository = plantPartRepository;
@@ -45,11 +47,11 @@ public class PlantService {
         this.partRepository = partRepository;
         this.materialRepository = materialRepository;
         this.bikeRepository = bikeRepository;
+        this.emailService = emailService;
     }
     public void addPlantMaterial(Plant plant, Material material, int quantity) {
 
-        Material material1 = materialRepository.findById(material.getId()).orElseGet(() -> Material.builder().name(material.getName())
-                .cost(material.getCost()).build());
+        Material material1 = materialRepository.findById(material.getId()).orElseThrow(()->new PartNotFoundException(material.getId()));
         materialRepository.save(material1);
         //try to find the pm from the pm repository
         PlantMaterial pm = plantMaterialRepository.findByMaterial(material1)
@@ -77,8 +79,11 @@ public class PlantService {
 
 
         Set<PlantMaterial> materialsInPlant = materialsInPlantForPart.collect(Collectors.toSet());
-        if (materialsInPlant.size()!=materials.size())
+        if (materialsInPlant.size()!=materials.size()) {
+            EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("test").body("Restock the inventory!").build();
+            emailService.sendMail(email);
             throw new NotEnoughMaterialInPlantException("Please ensure all the materials are present.");
+        }
 
 
         Set<PlantMaterial> pm = materialsInPlant.stream()
@@ -91,8 +96,11 @@ public class PlantService {
 
         //check if the quantity of matrerial has gone below 0
         pm.forEach(plantMaterial -> {
-            if (plantMaterial.getQuantity()<0)
+            if (plantMaterial.getQuantity()<0) {
+                EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Material Inventory Stock Low").body("Restock the inventory!").build();
+                emailService.sendMail(email);
                 throw new NotEnoughMaterialInPlantException("Not enough material with id " + plantMaterial.getMaterial().getId());
+            }
         });
         //otherwise save
         pm.forEach(plantMaterialRepository::save);
@@ -124,8 +132,12 @@ public class PlantService {
         Set<PlantPart> partsInPlant = plantPartInInventory.collect(Collectors.toSet());
 
         //TODO: Make this to return the specific parts not available
-        if (partsInPlant.size()!=bikeParts.size())
+        if (partsInPlant.size()!=bikeParts.size()){
+            EmailToSend email = EmailToSend.builder().to("part.manager@msn.com").subject("Material Inventory Stock Low").body("Restock the inventory!").build();
+            emailService.sendMail(email);
             throw new NotEnoughPartsInPlantException("Please ensure all the parts are present.");
+        }
+
 
         Set<PlantPart> pp = partsInPlant.stream()
                 .map(plantPart -> PlantPart.builder()
@@ -137,8 +149,12 @@ public class PlantService {
 
         //check if the quantity of part has gone below 0
         pp.forEach(plantPart -> {
-            if (plantPart.getQuantity()<0)
-                throw new NotEnoughMaterialInPlantException("Not enough parts with id " + plantPart.getPart().getId());
+            if (plantPart.getQuantity()<0) {
+                String ex = "Not enough parts with id " + plantPart.getPart().getId();
+                EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Material Inventory Stock Low").body(ex).build();
+                emailService.sendMail(email);
+                throw new NotEnoughMaterialInPlantException(ex);
+            }
         });
         //otherwise save
         pp.forEach(plantPartRepository::save);
