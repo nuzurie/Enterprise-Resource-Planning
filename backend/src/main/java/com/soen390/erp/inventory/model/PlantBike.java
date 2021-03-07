@@ -5,11 +5,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.io.Serializable;
+
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 public class PlantBike {
@@ -17,7 +19,9 @@ public class PlantBike {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @ManyToOne(optional = false)
+
+    // a plant bike is associated to only one bike_id and vice versa
+    @OneToOne (optional = false)
     @JoinColumn(name = "bike_id")
     private Bike bike;
 

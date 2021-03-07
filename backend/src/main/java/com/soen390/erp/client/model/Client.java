@@ -1,12 +1,12 @@
 package com.soen390.erp.client.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-public class Client {
+public class Client  {
 
     // client id
     @Id

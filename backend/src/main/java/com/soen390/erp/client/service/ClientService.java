@@ -3,9 +3,6 @@ package com.soen390.erp.client.service;
 import com.soen390.erp.client.exception.ClientNotFoundException;
 import com.soen390.erp.client.model.Client;
 import com.soen390.erp.client.repository.ClientRepository;
-import com.soen390.erp.inventory.exceptions.InvalidClientOrderException;
-import com.soen390.erp.inventory.model.ClientOrder;
-import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +18,11 @@ public class ClientService {
 
 
     public Client findClientById(int id) throws ClientNotFoundException{
-        Client c = clientRepository.findById(id);
 
-        if (c == null) throw new ClientNotFoundException(id);
+        if (!clientRepository.existsById(id))
+            throw new ClientNotFoundException(id);
 
-        return c;
+        return clientRepository.findById(id);
     }
 
 
@@ -36,5 +33,15 @@ public class ClientService {
 
     public Client saveClient(Client client) {
         return clientRepository.save(client);
+    }
+
+    public boolean deleteClientById(int id) {
+
+        if (!clientRepository.existsById(id))
+            return false;
+
+        clientRepository.deleteById(id);
+
+        return true;
     }
 }

@@ -9,4 +9,6 @@ public interface ClientRepository extends PagingAndSortingRepository<Client, Int
 
     public List<Client> findAll();
     public Client findById(int id);
+
+    public void deleteById(int id);
 }

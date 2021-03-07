@@ -1,6 +1,8 @@
 package com.soen390.erp.inventory.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.soen390.erp.client.model.Client;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,10 +15,11 @@ public class ClientOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // client id
-    @OneToOne (optional = false)
+    // client id, an order can belong to only one client. many orders can belong to a client.
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // to fix serializable issue
     @JoinColumn(name = "client_id")
-    private int clientId;
+    private Client client;
 
     // cost
     private double cost;
@@ -24,7 +27,8 @@ public class ClientOrder {
     // quantity
     private int quantity;
 
-    // bike id
+    // assuming we cannot re-order the same bike id
+    // bike id, one order belongs to only one bike
     @OneToOne (optional = false)
     @JoinColumn(name = "plantBike_id")
     private PlantBike plantBike;
