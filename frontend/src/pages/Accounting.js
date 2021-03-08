@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 import AccountingContainer from '../components/containers/AccountingContainer.js';
+import BottomContainer from "../components/containers/BottomContainer.js";
+import InnerContainer from "../components/containers/InnerContainer.js";
+import InvoiceContainer from "../components/containers/InvoiceContainer.js";
 
 class Accounting extends Component {
   constructor(props) {
@@ -12,7 +15,6 @@ class Accounting extends Component {
     return (
       <Container>
         <AccountingContainer title="Accounts Payable">
-            
         </AccountingContainer>
 
         <AccountingContainer title="Accounts Receivable">
@@ -20,8 +22,13 @@ class Accounting extends Component {
         </AccountingContainer>
 
         <AccountingContainer title="Invoice">
-            
+            <InvoiceContainer>
+            </InvoiceContainer>
         </AccountingContainer>
+
+        <BottomContainer title="Raw Cost">
+
+        </BottomContainer>
         </Container>
         
     );
