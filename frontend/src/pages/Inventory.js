@@ -62,21 +62,29 @@ class Inventory extends Component {
     const ramount = form.get("ramount");
 
     let material = {
-        "material" :{
-            "name": materialName,
-            "cost": ramount
-        },
-        "quantity": 1
+      "name": materialName,
+      "cost": ramount
     }
 
-    axios.post('/addMaterialToInventory', material);
-    console.log(materialName + ": " + ramount);
+    axios.post('/materials', material)
+    .then(res =>
+      console.log(res.data))
+    .catch(err => console.log(err));
   }
 
 
   render() {
     let materialList = <div></div>;
     let bikePartList = <div></div>;
+    let materialsForParts = <div></div>;
+
+    if (this.state.materials.length !== 0) {
+      materialsForParts = this.state.materials.map((element, index) => {
+        return (
+          <CustomRadioButton key={index} id={element.name} value={element.name}>{element.name}</CustomRadioButton>
+        );
+      });
+    }
 
     if (this.state.materials.length !== 0) {
       materialList = this.state.materials.map((element, index) => {
@@ -100,7 +108,7 @@ class Inventory extends Component {
       });
     }
 
-    console.log(this.state.bikeParts);
+    console.log(this.state.materials);
     return (
       <Container>
         <AddBikeParts isVisible={this.state.showBikePartModal}>
@@ -114,8 +122,9 @@ class Inventory extends Component {
               </CustomDropdown>
 
               <Title>Materials Needed</Title>
+
               <FieldContainer>
-                <CustomRadioButton value="gears">Gears</CustomRadioButton>
+                {materialsForParts}
               </FieldContainer>
 
               <Title>Amount</Title>
@@ -162,6 +171,9 @@ class Inventory extends Component {
         </MainContainer>
         
         <MainContainer title="Raw Material" createFeature={true} showModal={this.toggleMaterialModal}>
+          <Legend>
+            <div>Part</div>
+          </Legend>
           {materialList}
           {/* <RawMaterials title="rubber tire">
           </RawMaterials>
@@ -206,6 +218,10 @@ const AddBikeParts = styled.div`
 
   & > div > div > form > input {
     margin-top: 20px;
+  }
+
+  & > div > div > form > div:nth-child(3) {
+    padding: 0 0 10px 10px;
   }
 `
 
