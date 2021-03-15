@@ -48,8 +48,10 @@ class Accounting extends Component {
         <PaymentPopup isVisible={this.state.showModal}>
           <Popup showModal={this.togglePaymentModal} title="ORDER PAYMENT" >
             <form onSubmit={this.deductAmount}>
-            
-            <GradientButton type="submit" buttonValue="pay order" />
+              Order <InvoiceDetail>#{this.state.invoiceID}</InvoiceDetail> cost <InvoiceDetail>${this.state.invoiceCost}</InvoiceDetail>.
+              <br/><br/>
+              <InvoiceDetail>${this.state.invoiceCost}</InvoiceDetail> will be deducted from your account.
+              <GradientButton type="submit" buttonValue="pay order" />
             </form>
           </Popup>
         </PaymentPopup>
@@ -180,11 +182,14 @@ const PaymentPopup = styled.div`
     margin-top: 20px;
   }
 
-  & > div > div > form > div:nth-child(1) {
-    margin-bottom: 15px;
-  }
-
   & > div > div {
     width: 275px;
   }
+`
+
+const InvoiceDetail = styled.div`
+  font-weight: 500;
+  color: #FF7A67;
+  text-transform: uppercase;
+  display: inline-block;
 `
