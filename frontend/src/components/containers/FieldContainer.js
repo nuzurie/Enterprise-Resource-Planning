@@ -24,7 +24,7 @@ const Container = styled.div`
   margin-top: 15px;
   border: solid 2px #BBC8E3;
 
-  font-family: Proxima Nova;
+  
   font-size: 9pt;
   color: ${props => props.textColor ? props.textColor : '#556C99'};
   text-transform: uppercase;

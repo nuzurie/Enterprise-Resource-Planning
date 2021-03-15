@@ -91,7 +91,7 @@ const Header = styled.div`
 `
 
 const Title = styled.div`
-    font-family: Proxima Nova;
+    
     font-size: 9pt;
     color: black;
     text-transform: uppercase;
@@ -148,7 +148,7 @@ const Characteristic = styled.div`
 `
 
 const PartTitle = styled.div`
-  font-family: Proxima Nova;
+  
   font-weight: 400;
   font-size: 8pt;
   letter-spacing: 0.2em;

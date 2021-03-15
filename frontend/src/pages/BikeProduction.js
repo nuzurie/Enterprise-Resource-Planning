@@ -226,7 +226,7 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-    font-family: Proxima Nova;
+    
     font-size: 10pt;
     color: black;
     text-transform: uppercase;
@@ -238,7 +238,7 @@ const Title = styled.div`
 
 const TextInput = styled.input`
     border: 0;
-    font-family: Proxima Nova;
+    
     font-size: 9pt;
     color: #556C99;
     text-transform: uppercase;

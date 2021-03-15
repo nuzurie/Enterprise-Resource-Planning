@@ -24,9 +24,11 @@ class InvoiceContainer extends Component {
               </PriceContainer>
             </LeftHandside>
             <RightHandside hidden={this.props.readOnly}>
-              <PayActionButton payAction={this.props.payAction}>
-                {this.props.payAction}
-              </PayActionButton>
+              <form>
+                <PayActionButton payAction={this.props.payAction}>
+                  {this.props.payAction}
+                </PayActionButton>
+              </form>
               <StatusTitle>
                 {this.props.productStatus}
               </StatusTitle>
@@ -50,7 +52,7 @@ const Container = styled.div`
 
 const LeftHandside = styled.div`
   & > div:nth-child(2), & > div:nth-child(3) {
-    font-family: Proxima Nova;
+    
     font-size: 7pt;
     font-weight: 100;
     margin-top: 5px;
@@ -66,7 +68,7 @@ const RightHandside = styled.div`
 `
 
 const PayActionButton = styled.button`
-  background-color: ${props => props.payAction == "NOT PAID" ? '#FF7A67' : '#3BC351'};
+  background-color: ${props => props.payAction == "NOT PAID" || "PAY" ? '#FF7A67' : '#3BC351'};
   color: white;
   font-family: Proxima Nova;
   font-size: 7pt;
@@ -77,12 +79,11 @@ const PayActionButton = styled.button`
   margin-bottom: 5px;
 
   &:hover {
-    background-color: ${props => props.payAction == "NOT PAID" ? '#F44A32' : '#3BC351'};
+    background-color: ${props => props.payAction == "NOT PAID" || "PAY" ? '#F44A32' : '#3BC351'};
   }
 `
 
 const StatusTitle = styled.div`
-  font-family: Proxima Nova;
   font-size: 8pt;
   color: #A3A3A3;
   text-transform: uppercase;
@@ -91,7 +92,7 @@ const StatusTitle = styled.div`
 `
 
 const Title = styled.div`
-  font-family: Proxima Nova;
+  
   font-size: 8pt;
   color: black;
   text-transform: uppercase;

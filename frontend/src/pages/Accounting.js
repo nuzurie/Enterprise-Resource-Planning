@@ -62,7 +62,7 @@ class Accounting extends Component {
                   productName="brakes"
                   payType="Material Cost"
                   totalCost={200}
-                  payAction="NOT PAID"
+                  payAction="PAY"
                   productStatus="Not Received" />
             </MainContainer>
           </InvoicesContainer>

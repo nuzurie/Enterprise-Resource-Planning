@@ -27,7 +27,7 @@ const Container = styled.select`
   display: flex;
   flex-direction: column;
 
-  font-family: Proxima Nova;
+  
   font-size: 9pt;
   color: '#556C99';
   text-transform: lowercase;
