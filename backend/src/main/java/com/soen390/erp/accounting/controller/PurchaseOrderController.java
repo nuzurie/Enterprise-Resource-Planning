@@ -1,26 +1,13 @@
 package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
-import com.soen390.erp.inventory.model.SupplierOrder;
-import com.soen390.erp.manufacturing.controller.BikeController;
-import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
-import com.soen390.erp.manufacturing.model.Bike;
 import lombok.AllArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @AllArgsConstructor
 @RestController
@@ -68,12 +55,11 @@ public class PurchaseOrderController {
         }
         //TODO check if transaction valid
         //TODO check if bank balance is more than grand total
-        //TODO: check if new status is valid
+        //TODO check if new status is valid
         //endregion
 
         //region accounts
         //Bank and inventory
-        //TODO create account service, fetch account and compare
         //TODO deduct from bank
         //TODO add to inventory
         //endregion
