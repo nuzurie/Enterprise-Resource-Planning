@@ -57,4 +57,38 @@ public class PurchaseOrderController {
         }
     }
 
+    @PutMapping(path = "/PurchaseOrders/{id}/makePayment")
+    public ResponseEntity<?> makePayment(@PathVariable int id){
+
+        //region validation
+        //check if purchase order exists
+        Optional<PurchaseOrder> purchaseOrder = service.getPurchaseOrder(id);
+        if (purchaseOrder.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        //TODO check if transaction valid
+        //TODO check if bank balance is more than grand total
+        //TODO: check if new status is valid
+        //endregion
+
+        //region accounts
+        //Bank and inventory
+        //TODO create account service, fetch account and compare
+        //TODO deduct from bank
+        //TODO add to inventory
+        //endregion
+
+        //region ledger
+        //TODO insert a ledger entry
+        //endregion
+
+        //region purchase order
+        //update status
+        purchaseOrder.get().setPaid(true);
+        //endregion
+
+        //region return
+        return ResponseEntity.ok().build();
+        //endregion
+    }
 }
