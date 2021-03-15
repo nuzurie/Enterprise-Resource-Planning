@@ -26,19 +26,11 @@ class Login extends Component {
       axios.get('http://localhost:8080/', {
           headers: {
               'authorization': auth
-
           }
       })
     .then(() => this.props.history.push('/dashboard'))
     .catch(err => console.log(err))
 
-    // axios.get('/asd', {
-    //     headers: {
-    //         'authorization': credentials
-    //     }
-    // })
-    // .then(res => console.log(res.data))
-    // .catch(err => console.log(err))
   }
 
   render() {
