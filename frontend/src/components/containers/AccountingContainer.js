@@ -34,25 +34,25 @@ const Container = styled.div`
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
   position: relative;
 
-  button {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-    color: #FF7A67;;
-    transition: 250ms;
-    padding: 0;
+  // button {
+  //   background-color: transparent;
+  //   background-repeat: no-repeat;
+  //   border: none;
+  //   cursor: pointer;
+  //   overflow: hidden;
+  //   outline: none;
+  //   color: #FF7A67;;
+  //   transition: 250ms;
+  //   padding: 0;
 
-    &:hover, &::selection {
-      color: #BBC8E3;
-    }
+  //   &:hover, &::selection {
+  //     color: #BBC8E3;
+  //   }
 
-    svg {
-      width: 1.2em;
-      height: 1.2em;
-    }
+  //   svg {
+  //     width: 1.2em;
+  //     height: 1.2em;
+  //   }
 }
 `
 
