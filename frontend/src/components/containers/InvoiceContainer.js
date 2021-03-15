@@ -101,11 +101,11 @@ const Title = styled.div`
 `
 
 const GeneralInfoContainer = styled.div`
-  
+  font-weight: 400;
 `
 
 const PriceContainer = styled.div`
-
+  font-weight: 400;
 `
 
 InvoiceContainer.propTypes = {
