@@ -72,7 +72,7 @@ const Header = styled.div`
 `
 
 const Title = styled.div`
-    
+    font-family: Proxima Nova;
     font-size: 12pt;
     color: black;
     text-transform: uppercase;
@@ -100,7 +100,6 @@ const AddButton = styled.div`
 MainContainer.propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
-    createFeature: PropTypes.bool.isRequired,
 };
 
 export default MainContainer;

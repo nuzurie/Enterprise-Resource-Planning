@@ -91,7 +91,6 @@ const Header = styled.div`
 `
 
 const Title = styled.div`
-    
     font-size: 9pt;
     color: black;
     text-transform: uppercase;
@@ -148,8 +147,7 @@ const Characteristic = styled.div`
 `
 
 const PartTitle = styled.div`
-  
-  font-weight: 400;
+  font-weight: 500;
   font-size: 8pt;
   letter-spacing: 0.2em;
   color: #556C99;

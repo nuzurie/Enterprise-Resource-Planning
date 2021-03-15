@@ -5,6 +5,20 @@ import styled from 'styled-components';
 class InvoiceContainer extends Component {
   constructor(props) {
     super(props);
+
+    this.updatePaymentStatus = this.updatePaymentStatus.bind(this);
+  }
+
+  updatePaymentStatus(e) {
+    e.preventDefault();
+    if (this.props.payType == "Bike Cost") {
+      //TODO: Update payment status for bike invoice
+      /////// Add amount to company's account
+      console.log(`${this.props.totalCost}$ has been added to the company's account.`);
+    } else if (this.props.payType == "Material Cost") {
+      this.props.showModal();
+      this.props.sendInvoiceCost(this.props.totalCost, this.props.title);
+    }
   }
 
   render() {
@@ -24,10 +38,8 @@ class InvoiceContainer extends Component {
               </PriceContainer>
             </LeftHandside>
             <RightHandside hidden={this.props.readOnly}>
-              <form>
-                <PayActionButton payAction={this.props.payAction}>
-                  {this.props.payAction}
-                </PayActionButton>
+              <form onSubmit={this.updatePaymentStatus}>
+                <PayActionButton type="submit" payAction={this.props.payAction} value={this.props.payAction} />
               </form>
               <StatusTitle>
                 {this.props.productStatus}
@@ -67,19 +79,27 @@ const RightHandside = styled.div`
   align-items: flex-end;
 `
 
-const PayActionButton = styled.button`
-  background-color: ${props => props.payAction == "NOT PAID" || "PAY" ? '#FF7A67' : '#3BC351'};
+const PayActionButton = styled.input`
+  background-color: ${props => props.payAction == ("PAID" || "PAY") ? '#3BC351' : '#FF7A67'};
   color: white;
   font-family: Proxima Nova;
   font-size: 7pt;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   border-radius: 4px;
-  padding: 5px;
+  padding: 5px 20px;
   margin-bottom: 5px;
+  pointer-events: ${props => props.payAction == ("NOT PAID" || "PAY") ? 'auto' : 'none'};
+
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  transition: 250ms;
 
   &:hover {
-    background-color: ${props => props.payAction == "NOT PAID" || "PAY" ? '#F44A32' : '#3BC351'};
+    background-color: ${props => props.payAction == ("NOT PAID" || "PAY") ? '#F44A32' : '#3BC351'};
   }
 `
 
@@ -109,8 +129,6 @@ const PriceContainer = styled.div`
 `
 
 InvoiceContainer.propTypes = {
-    innerTitle: PropTypes.string.isRequired,
-    children: PropTypes.element.isRequired,
 };
 
 export default InvoiceContainer;
