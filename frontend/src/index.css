@@ -1,15 +1,10 @@
 body {
   margin: 0;
-  font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, BlinkMacSystemFont, 'Proxima Nova', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-select, input {
-  font-family: 'Proxima Nova';
-  font-weight: 500;
 }
 
 code {
@@ -19,14 +14,14 @@ code {
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: local('Proxima Nova'), url(./fonts/proxima-nova-semibold.otf) format('otf');
+  src: local('Proxima Nova'), url(./fonts/proxima-nova-semibold.otf) format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: local('Proxima Nova'), url(./fonts/proxima-nova-regular.ttf) format('ttf');
+  src: local('Proxima Nova'), url(./fonts/proxima-nova-regular.ttf) format('truetype');
   font-weight: 400;
   font-style: normal;
 }
