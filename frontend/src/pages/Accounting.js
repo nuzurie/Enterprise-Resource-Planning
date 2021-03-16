@@ -33,6 +33,7 @@ class Accounting extends Component {
   deductAmount(e) {
     e.preventDefault();
     console.log(`Deduct ${this.state.invoiceCost}$ from account`);
+    this.togglePaymentModal();
   }
 
   getInvoiceDetails(cost, id) {

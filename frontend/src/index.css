@@ -24,10 +24,3 @@ code {
   font-weight: 500;
   font-style: normal;
 }
-
-@font-face {
-  font-family: 'Proxima Nova';
-  src: local('Proxima Nova'), url(./fonts/proxima-nova-regular.ttf) format('ttf');
-  font-weight: 400;
-  font-style: normal;
-}
