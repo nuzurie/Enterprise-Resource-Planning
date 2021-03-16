@@ -13,6 +13,11 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("handlebar")
 public class Handlebar extends Part{
+    @Override
+    public Part createPart() {
+        return new Handlebar();
+    }
+
     enum Type {DROPBAR, STRAIGHT, BULLHORN}
 
     protected Type type;
