@@ -1,29 +1,36 @@
 package com.soen390.erp.accounting.controller;
 
+import com.soen390.erp.accounting.model.Account;
+import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
+import com.soen390.erp.accounting.service.AccountService;
+import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
 public class PurchaseOrderController {
-    private final PurchaseOrderService service;
+    private final PurchaseOrderService purchaseOrderService;
+    private final AccountService accountService;
+    private final LedgerService ledgerService;
 
     @GetMapping(path = "/PurchaseOrders")
     public ResponseEntity<?> all(){
         //TODO: use stream and return a mapped collection or use assembler
-        return ResponseEntity.ok().body(service.getAllPurchaseOrders());
+        return ResponseEntity.ok().body(purchaseOrderService.getAllPurchaseOrders());
     }
 
     @GetMapping(path = "/PurchaseOrders/{id}")
     public ResponseEntity<?> one(@PathVariable int id) {
 
-        Optional<PurchaseOrder> purchaseOrder = service.getPurchaseOrder(id);
+        Optional<PurchaseOrder> purchaseOrder = purchaseOrderService.getPurchaseOrder(id);
 
         if (purchaseOrder.isPresent()){
             return ResponseEntity.ok().body(purchaseOrder.get());
@@ -35,7 +42,11 @@ public class PurchaseOrderController {
     @PostMapping(path = "/PurchaseOrders")
     public ResponseEntity<?> createPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
         //TODO: validate input
-        boolean isSuccessful = service.addPurchaseOrder(purchaseOrder);
+
+        purchaseOrder.setPaid(false);
+        purchaseOrder.setReceived(false);
+
+        boolean isSuccessful = purchaseOrderService.addPurchaseOrder(purchaseOrder);
         if (isSuccessful == true){
             //TODO: debug if id has value
             return ResponseEntity.ok().body(purchaseOrder.getId());
@@ -49,28 +60,58 @@ public class PurchaseOrderController {
 
         //region validation
         //check if purchase order exists
-        Optional<PurchaseOrder> purchaseOrder = service.getPurchaseOrder(id);
-        if (purchaseOrder.isEmpty()){
+        Optional<PurchaseOrder> purchaseOrderOptional = purchaseOrderService.getPurchaseOrder(id);
+        if (purchaseOrderOptional.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
+        PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
         //TODO check if transaction valid
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
         //endregion
 
+
+
+
+
+
+
+
+
+
+        //get amount from po
+        double amount = purchaseOrder.getGrandTotal();
+
+
         //region accounts
-        //Bank and inventory
-        //TODO deduct from bank
-        //TODO add to inventory
+        //FIXME fetch bank and inventory accounts using enum and not id.
+        int bankAccountId = 1; //wrong assumption
+        int accountPayableAccountId = 2; //wrong assumption
+
+        //FIXME Account gets infinite reference with Ledger
+        Account bank = accountService.getAccount(bankAccountId).get();
+        Account accountPayable = accountService.getAccount(accountPayableAccountId).get();
+
+        bank.setBalance(bank.getBalance() - amount);
+        accountPayable.setBalance(bank.getBalance() - amount);
         //endregion
 
         //region ledger
         //TODO insert a ledger entry
+        Ledger ledgerEntry = new Ledger();
+        ledgerEntry.setDebitAccount(bank);
+        ledgerEntry.setCreditAccount(accountPayable);
+        ledgerEntry.setDate(new Date());
+        ledgerEntry.setAmount(amount);
+        ledgerEntry.setPurchaseOrder(purchaseOrder);
+
+        //save
+        ledgerService.addLedger(ledgerEntry);
         //endregion
 
         //region purchase order
         //update status
-        purchaseOrder.get().setPaid(true);
+        purchaseOrder.setPaid(true);
         //endregion
 
         //region return
