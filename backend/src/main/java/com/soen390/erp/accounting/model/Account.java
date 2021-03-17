@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Account {
-    enum AccountName {AccountPayable, AccountReceivable, Cash, Sale, Inventory, Material}
+    enum AccountName {AccountPayable, AccountReceivable, Cash, Inventory}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
