@@ -1,5 +1,6 @@
 package com.soen390.erp.accounting.model;
 
+import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.model.PlantBike;
 import lombok.*;
 
@@ -21,8 +22,8 @@ public class SaleOrder {
     private Date date;
 
     @ManyToOne (optional = false)
-    @JoinColumn(name = "plantBike_id")
-    private PlantBike plantBike;
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
