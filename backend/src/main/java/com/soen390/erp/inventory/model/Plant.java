@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.model;
 
+import com.soen390.erp.accounting.model.PurchaseOrder;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,7 +36,7 @@ public class Plant {
     private Set<PlantBike> bikes;
 
     @OneToMany(mappedBy = "plant")
-    private List<SupplierOrder> supplierOrders;
+    private List<PurchaseOrder> purchaseOrders;
 
     public Optional<Set<PlantPart>> getParts() {
         return Optional.ofNullable(parts);
