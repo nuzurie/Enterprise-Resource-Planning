@@ -1,5 +1,6 @@
 package com.soen390.erp.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Material;
 import lombok.*;
@@ -25,6 +26,7 @@ public class SaleOrderItems {
 
     @ManyToOne
     @JoinColumn(name = "sale_order_id")
+    @JsonIgnore
     private SaleOrder saleOrder;
 
     @ManyToOne
