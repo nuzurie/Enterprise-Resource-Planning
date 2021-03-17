@@ -3,7 +3,7 @@ package com.soen390.erp.accounting.controller;
 
 import com.soen390.erp.accounting.exceptions.LedgerNotFoundException;
 import com.soen390.erp.accounting.model.Ledger;
-import com.soen390.erp.accounting.repository.LedgeRepository;
+import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -21,10 +21,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class LedgerController {
 
-    private final LedgeRepository ledgerRepository;
+    private final LedgerRepository ledgerRepository;
     private final LedgerModelAssembler assembler;
 
-    public LedgerController(LedgeRepository ledgerRepository, LedgerModelAssembler assembler) {
+    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler) {
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
     }

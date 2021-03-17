@@ -56,6 +56,10 @@ public class PurchaseOrder {
      */
     private double grandTotal;
 
+    private boolean paid;
+    private boolean received;
+
+
     @OneToMany(mappedBy = "purchaseOrder")
     private Set<PurchaseOrderItems> purchaseOrderItems;
 }

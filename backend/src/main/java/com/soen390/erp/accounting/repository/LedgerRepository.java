@@ -5,7 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface LedgeRepository extends PagingAndSortingRepository<Ledger, Integer> {
+public interface LedgerRepository extends PagingAndSortingRepository<Ledger, Integer> {
     public List<Ledger> findAll();
 
 }
