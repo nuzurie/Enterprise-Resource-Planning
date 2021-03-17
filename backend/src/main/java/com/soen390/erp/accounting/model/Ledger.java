@@ -37,7 +37,7 @@ public class Ledger {
     /**
      * the purchase order that is linked to this ledger entry
      */
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "purchase_order_id")
     @JsonBackReference
     private PurchaseOrder purchaseOrder;
