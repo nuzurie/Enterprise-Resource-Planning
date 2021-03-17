@@ -1,4 +1,5 @@
 # SOEN 390 - Team 02
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c56216dc014449ce8c90765bc919224c)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nuzurie/soen390-team02-erp&amp;utm_campaign=Badge_Grade)
 
  ## Objective
  Develop an ERP system for a company that manufactures bikes.
