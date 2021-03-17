@@ -122,8 +122,6 @@ class Inventory extends Component {
            </form>
           </Popup>
         </AddBikeParts>
-        
-
         <AddRawMaterials isVisible={this.state.showRawMatModal}>
           <Popup showModal={this.toggleMaterialModal} title="Raw Material" buttonTitle="add bike(s)" > 
            <form onSubmit={this.addMaterial}>
@@ -146,7 +144,7 @@ class Inventory extends Component {
           </Popup>
         </AddRawMaterials>
 
-
+      <InventoryContainer>
         <MainContainer title="Bike parts" createFeature={true} showModal={this.toggleBikeModal}>
           {/* <RawMaterials title="road - 16x1 3/8in [iso 349]">
           </RawMaterials>
@@ -155,7 +153,8 @@ class Inventory extends Component {
           </RawMaterials> */}
           {bikePartList}
         </MainContainer>
-        
+      </InventoryContainer>
+      <InventoryContainer>
         <MainContainer title="Raw Material" createFeature={true} showModal={this.toggleMaterialModal}>
           {materialList}
           {/* <RawMaterials title="rubber tire">
@@ -164,10 +163,10 @@ class Inventory extends Component {
           <RawMaterials title="rim 700c">
           </RawMaterials> */}
         </MainContainer>
+      </InventoryContainer>
 
-
-        
-          <MaterialsContainer>
+      <InventoryContainer>
+        <RawMaterialsContainer>
             <MainContainer title="Raw Material Orders">
               <MatContainer
                 title="Bike Invoice ID"
@@ -178,9 +177,7 @@ class Inventory extends Component {
                 payAction="Received"
                 productStatus="Not paid" />
             </MainContainer>
-          </MaterialsContainer>
      
-        <BottomContainer>
           <MainContainer title="Order Raw Material">
             <br />
             <form>
@@ -191,7 +188,6 @@ class Inventory extends Component {
                 <option value={"supplier id4"}>supplier id4</option>
               </CustomDropdown>
               <br />
-             
               <CustomDropdown dropdownName="MaterialID" dropddownID="MaterialID">
                 <option value={"Material id1"}>Material id1</option>
                 <option value={"Material id2"}>Material id2</option>
@@ -199,24 +195,24 @@ class Inventory extends Component {
                 <option value={"Material id4"}>Material id4</option>
               </CustomDropdown>
               <br />
-
               <Title>Quantity</Title>
               <FieldContainer>
                 <TextInput type="quantity" id="rquantity" name="rquantity" placeholder="quantity" min ="0"/>
               </FieldContainer>
               <br></br>
               <GradientButton type="submit" buttonValue="create order" />
-
             </form>
           </MainContainer>
-        </BottomContainer>
-        
+          </RawMaterialsContainer>
+        </InventoryContainer>
+
       </Container>
     );
   }
 }
 
 //STYLED-COMPONENTS
+
 const Container = styled.div`
 height: 100%;
 border-radius: 0px;
@@ -228,6 +224,37 @@ position: relative;
   margin-right: 20px;
 }
 `
+
+const InventoryContainer = styled.div`
+  flex-direction: row;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  // height: 100%;
+
+  & > div {
+    flex: 1;
+    margin-right: 20px;
+  }
+
+  & > div:nth-child(3) {
+    margin-right: 0;
+  }
+`
+
+const RawMaterialsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  & > div {
+    flex: 1;
+    width: calc(100% - 40px); // TODO: fix fixed-width (100% should work, probably not accessing the right div)
+  }
+  & > div:nth-child(2) {
+    margin-top: 20px;
+  }
+`
+
 const Title = styled.div`
     
     font-size: 8pt;
@@ -281,28 +308,6 @@ width: 400px;
     color: #BBC8E3;
 }
 `
-
-
-const MaterialsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  & > div {
-    flex: 1;
-    width: calc(100% - 40px); // TODO: fix fixed-width (100% should work, probably not accessing the right div)
-  }
-
-  & > div:nth-child(2) {
-    margin-top: 20px;
-  }
-`
-
-const BottomContainer = styled.div`
-  flex: 1;
-  margin-top: 20px;
-`
-
 
 
 Inventory.propTypes = {
