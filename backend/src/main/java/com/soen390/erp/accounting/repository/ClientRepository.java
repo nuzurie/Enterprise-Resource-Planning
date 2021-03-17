@@ -1,6 +1,6 @@
-package com.soen390.erp.client.repository;
+package com.soen390.erp.accounting.repository;
 
-import com.soen390.erp.client.model.Client;
+import com.soen390.erp.accounting.model.Client;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;

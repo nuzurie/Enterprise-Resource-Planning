@@ -1,9 +1,9 @@
-package com.soen390.erp.client.controller;
+package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.client.exception.ClientNotFoundException;
-import com.soen390.erp.client.exception.InvalidClientException;
-import com.soen390.erp.client.model.Client;
-import com.soen390.erp.client.service.ClientService;
+import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
+import com.soen390.erp.accounting.exceptions.InvalidClientException;
+import com.soen390.erp.accounting.model.Client;
+import com.soen390.erp.accounting.service.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

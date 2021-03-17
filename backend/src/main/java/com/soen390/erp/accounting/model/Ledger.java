@@ -44,7 +44,7 @@ public class Ledger {
     /**
      * the client order that is linked to this ledger entry
      */
-//    @ManyToOne(optional = true)
-//    @JoinColumn(name = "sale_order_id")
-//    private SaleOrder saleOrder;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "sale_order_id")
+    private SaleOrder saleOrder;
 }

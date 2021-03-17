@@ -1,7 +1,7 @@
 package com.soen390.erp.inventory.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.soen390.erp.client.model.Client;
+import com.soen390.erp.accounting.model.Client;
 import lombok.*;
 
 import javax.persistence.*;

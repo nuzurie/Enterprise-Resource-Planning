@@ -1,8 +1,8 @@
-package com.soen390.erp.client.service;
+package com.soen390.erp.accounting.service;
 
-import com.soen390.erp.client.exception.ClientNotFoundException;
-import com.soen390.erp.client.model.Client;
-import com.soen390.erp.client.repository.ClientRepository;
+import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
+import com.soen390.erp.accounting.model.Client;
+import com.soen390.erp.accounting.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

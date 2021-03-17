@@ -1,4 +1,4 @@
-package com.soen390.erp.client.model;
+package com.soen390.erp.accounting.model;
 
 import lombok.*;
 
@@ -8,11 +8,8 @@ import javax.persistence.*;
 @Entity
 public class Client  {
 
-    // client id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-
-    // client name ?
+    private String name;
 }
