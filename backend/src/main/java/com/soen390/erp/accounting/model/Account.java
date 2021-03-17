@@ -1,5 +1,6 @@
 package com.soen390.erp.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.soen390.erp.manufacturing.model.Frame;
 import lombok.*;
 
@@ -13,15 +14,19 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Account {
-    enum AccountName {AccountPayable, AccountReceivable, Cash, Sale, Inventory, Material}
+    enum AccountName {AccountPayable, AccountReceivable, Cash, Inventory}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private AccountName name;
     private double balance;
+
     @OneToMany(mappedBy = "debitAccount")
+    @JsonBackReference
     private Set<Ledger> debitLedgerEntries;
+
     @OneToMany(mappedBy = "creditAccount")
-    private Set<Ledger> CreditLedgerEntries;
+    @JsonBackReference
+    private Set<Ledger> creditLedgerEntries;
 }

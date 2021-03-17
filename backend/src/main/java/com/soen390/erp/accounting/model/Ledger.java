@@ -1,5 +1,6 @@
 package com.soen390.erp.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Ledger {
     @ManyToOne(optional = false)
     @JoinColumn(name = "debit_account_id")
     private Account debitAccount;
+
     /**
      * the account where we gained something in (e.g. we gained material because we received it in the inventory)
      */
@@ -37,11 +39,12 @@ public class Ledger {
      */
     @ManyToOne(optional = false)
     @JoinColumn(name = "purchase_order_id")
+    @JsonBackReference
     private PurchaseOrder purchaseOrder;
     /**
      * the client order that is linked to this ledger entry
      */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "sale_order_id")
-    private SaleOrder saleOrder;
+//    @ManyToOne(optional = true)
+//    @JoinColumn(name = "sale_order_id")
+//    private SaleOrder saleOrder;
 }
