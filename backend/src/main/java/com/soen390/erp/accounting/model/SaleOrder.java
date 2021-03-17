@@ -57,7 +57,6 @@ public class SaleOrder {
 
     private boolean paid;
     private boolean shipped;
-    private int quantity;
 
     @OneToMany(mappedBy = "saleOrder")
     private Set<SaleOrderItems> saleOrderItems;
