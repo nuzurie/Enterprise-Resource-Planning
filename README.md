@@ -2,6 +2,13 @@
 
  ## Objective
  Develop an ERP system for a company that manufactures bikes.
+ The current features include :
+ * Allows a user to customize a bike
+ * Allows user to order a bike and materials
+ * System tracks the inventory and automatically restocks when supplies are low
+ * Enforces limited access to the account creation and accounting depending on user access role
+ * Sends emails triggered by the process driven work flow to relevant users
+ * Tracks supplier and client orders 
  
  ## Team 
 
@@ -36,3 +43,14 @@ https://team-1610936365889.atlassian.net/jira/software/projects/ERPS/boards/3
 * Download the repo from GitHub
 * cd into the project repository
 * Run the script "docker-compose up -d"
+
+## Linter
+We are using the ``google-java-format`` plugin with Intellij to lint our files.
+Documentation can be found here : https://github.com/google/google-java-format
+
+## Style Guide
+We are following the Google Jave Style Guide : https://google.github.io/styleguide/javaguide.html
+
+## Static Analysis
+We integrated Codacy into our Github account to track our code quality.
+
