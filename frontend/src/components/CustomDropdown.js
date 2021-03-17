@@ -20,14 +20,14 @@ class CustomDropdown extends Component {
 const Container = styled.select`
   background: white;
   padding: 7px;
-  width: 250px;
+  width: 100%;
   border-radius: 8px;
   margin-bottom: 5px;
   border: solid 2px #BBC8E3;
   display: flex;
   flex-direction: column;
 
-  font-family: Proxima Nova;
+  
   font-size: 9pt;
   color: '#556C99';
   text-transform: lowercase;
