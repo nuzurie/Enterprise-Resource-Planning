@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
-import com.soen390.erp.inventory.model.PlantBike;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,14 +21,14 @@ public class SaleOrder {
     private int id;
     private Date date;
 
-    @ManyToOne (optional = false)
-    @JoinColumn(name = "plantBike_id")
-    private PlantBike plantBike;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "plant_id")
+    @JsonBackReference
+    private Plant plant;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "client_id")
     private Client client;
-
 
     /**
      * before discount and tax
@@ -56,9 +57,9 @@ public class SaleOrder {
 
     private boolean paid;
     private boolean shipped;
-    private int quantity;
 
-    @OneToMany(mappedBy = "saleOrder")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "sale_order_id")
     private Set<SaleOrderItems> saleOrderItems;
 
 }
