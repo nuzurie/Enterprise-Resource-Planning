@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class PurchaseOrderService {
     private final PurchaseOrderRepository repository;
 
     public boolean addPurchaseOrder(PurchaseOrder purchaseOrder){
+        purchaseOrder.setDate(new Date());
         repository.save(purchaseOrder);
         if (purchaseOrder.getId() != 0){
             return true;

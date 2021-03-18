@@ -32,7 +32,6 @@ public class SaleOrder {
     @JoinColumn(name = "client_id")
     private Client client;
 
-
     /**
      * before discount and tax
      */

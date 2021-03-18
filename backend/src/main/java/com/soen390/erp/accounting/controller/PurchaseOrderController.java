@@ -159,7 +159,7 @@ public class PurchaseOrderController {
         //endregion
 
         //region return
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
         //endregion
     }
 }
