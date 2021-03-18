@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
+import axios from 'axios';
 
 class MaterialsContainer extends Component {
   constructor(props) {
@@ -8,13 +9,8 @@ class MaterialsContainer extends Component {
     this.receivedStatus = this.receivedStatus.bind(this);
   }
 
-  receivedStatus(e) {
-    e.preventDefault();
-    if (this.props.payType == "Bike Cost") {
-      //TODO: Update payment status for bike invoice
-      /////// Add amount to company's account
-      console.log(`${this.props.totalCost}$ has been added to the company's account.`);
-    }
+  receivedStatus() {
+    axios.put(`/PurchaseOrders/${this.props.invoiceID}/ReceiveMaterial`);
   }
 
 
@@ -22,11 +18,10 @@ class MaterialsContainer extends Component {
     return (
         <Container>
             <LeftHandside>
-              <Title>{this.props.title}</Title>
-              {/* {this.props.children} */}
+              <Title>INVOICE #{this.props.invoiceID}</Title>
               
               <GeneralInfoContainer>
-                {this.props.userType} {this.props.userID} <br/>
+                {this.props.userName} #{this.props.userID} <br/>
                 {this.props.rawMaterial} 
               </GeneralInfoContainer>
 
@@ -36,10 +31,10 @@ class MaterialsContainer extends Component {
             </LeftHandside>
             <RightHandside hidden={this.props.readOnly}>
               <StatusTitle>
-                {this.props.productStatus}
+                {this.props.paymentStatus}
               </StatusTitle>
               <form onSubmit={this.receivedStatus}>
-                <ReceiveButton type="submit" payAction={this.props.payAction} value={this.props.payAction} />
+                <ReceiveButton type="submit" receptionStatus={this.props.receptionStatus} value={this.props.receptionStatus} />
               </form>
             </RightHandside>
         </Container>
@@ -77,16 +72,16 @@ const RightHandside = styled.div`
 `
 
 const ReceiveButton = styled.input`
-  background-color: ${props => props.payAction == ("Received" || "Received") ? '#CCCCCC' : '#A6CEE3'};
+  background-color: ${props => props.receptionStatus == ("RECEIVED") ? '#CCCCCC' : '#A6CEE3'};
   color: white;
   font-family: Proxima Nova;
   font-size: 7pt;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   border-radius: 4px;
-  padding: 5px 20px;
-  margin-bottom: 5px;
-  pointer-events: ${props => props.payAction == ("Received" || "Received") ? 'auto' : 'none'};
+  padding: 5px 10px;
+  margin-top: 5px;
+  pointer-events: ${props => props.receptionStatus == ("RECEIVED") ? 'none' : 'auto'};
 
   background-repeat: no-repeat;
   border: none;
@@ -94,6 +89,10 @@ const ReceiveButton = styled.input`
   overflow: hidden;
   outline: none;
   transition: 250ms;
+
+  &:hover {
+    background-color: ${props => props.receptionStatus == ("NOT RECEIVED") ? '#588ca8' : '#CCCCCC'};
+  }
 `
 
 const StatusTitle = styled.div`

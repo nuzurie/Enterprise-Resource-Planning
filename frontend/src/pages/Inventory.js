@@ -9,7 +9,7 @@ import CustomRadioButton from "../components/CustomRadioButton";
 import FieldContainer from '../components/containers/FieldContainer.js';
 import GradientButton from '../components/GradientButton';
 
-import MatContainer from "../components/containers/MaterialsContainer.js";
+import MaterialsContainer from "../components/containers/MaterialsContainer.js";
 import axios from "axios";
 
 class Inventory extends Component {
@@ -21,6 +21,8 @@ class Inventory extends Component {
       showRawMatModal: false,
       materials: [],
       bikeParts: [],
+
+      materialInvoices: [],
     }
 
     this.toggleBikeModal = this.toggleBikeModal.bind(this);
@@ -46,6 +48,12 @@ class Inventory extends Component {
         bikeParts: res.data._embedded.plantList[0].parts, 
       }))
     .catch(err => console.log(err));
+
+    axios.get('/PurchaseOrders')
+    .then(res =>
+      this.setState({
+        materialInvoices: res.data }))
+    .catch(err => console.log(err))
   }
 
   toggleBikeModal() {
@@ -79,6 +87,7 @@ class Inventory extends Component {
     let materialList = <div></div>;
     let bikePartList = <div></div>;
     let materialsForParts = <div></div>;
+    let materialInvoices = <div></div>;
 
     if (this.state.materials.length !== 0) {
       materialsForParts = this.state.materials.map((element, index) => {
@@ -100,6 +109,22 @@ class Inventory extends Component {
       bikePartList = this.state.bikeParts.map((element, index) => {
         return (
           <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={element.part.cost} amount={element.quantity} />
+        );
+      });
+    }
+
+    if (this.state.materialInvoices.length !== 0) {
+      materialInvoices = this.state.materialInvoices.map((invoice, index) => {
+        return (
+          <MaterialsContainer
+            key={index}
+            invoiceID={invoice.id}
+            userName={invoice.supplier.name}
+            userID={invoice.supplier.id}
+            rawMaterial={invoice.purchaseOrderItems.length != 0 ? invoice.purchaseOrderItems[0].material.name : "untitled"}
+            totalCost={invoice.grandTotal}
+            receptionStatus={invoice.received ? "RECEIVED" : "NOT RECEIVED" }
+            paymentStatus={invoice.paid ? "PAID" : "NOT PAID"} />
         );
       });
     }
@@ -155,11 +180,6 @@ class Inventory extends Component {
 
       <InventoryContainer>
         <MainContainer title="Bike parts" createFeature={true} showModal={this.toggleBikeModal}>
-          {/* <RawMaterials title="road - 16x1 3/8in [iso 349]">
-          </RawMaterials>
-    
-          <RawMaterials title="handle - mountain/silver">
-          </RawMaterials> */}
           {bikePartList}
         </MainContainer>
       </InventoryContainer>
@@ -169,25 +189,13 @@ class Inventory extends Component {
             <div>Part</div>
           </Legend>
           {materialList}
-          {/* <RawMaterials title="rubber tire">
-          </RawMaterials>
-    
-          <RawMaterials title="rim 700c">
-          </RawMaterials> */}
         </MainContainer>
       </InventoryContainer>
 
       <InventoryContainer>
         <RawMaterialsContainer>
             <MainContainer title="Raw Material Orders">
-              <MatContainer
-                title="Bike Invoice ID"
-                userType="Client"
-                userID="123"
-                rawMaterial="Handle"
-                totalCost={200}
-                payAction="Received"
-                productStatus="Not paid" />
+              {materialInvoices}
             </MainContainer>
      
           <MainContainer title="Order Raw Material">
