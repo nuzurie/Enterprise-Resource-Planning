@@ -21,7 +21,7 @@ public class SupplierController {
     }
 
     @GetMapping
-    List<Supplier> getAllSuppliers() {
+    public List<Supplier> getAllSuppliers() {
         return supplierService.findAllSuppliers();
     }
 
@@ -40,9 +40,9 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addSupplier(@RequestBody Supplier client) {
+    public ResponseEntity<?> addSupplier(@RequestBody Supplier supplier) {
         try {
-            supplierService.saveSupplier(client);
+            supplierService.saveSupplier(supplier);
 
         } catch (InvalidSupplierException e) {
 
