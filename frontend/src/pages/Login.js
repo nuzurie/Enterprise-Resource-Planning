@@ -13,7 +13,7 @@ class Login extends Component {
     super(props);
   }
 
-  handleLogin = (e) => {
+  handleLogin(e){
       e.preventDefault();
 
       const form = new FormData(e.target);
@@ -21,17 +21,15 @@ class Login extends Component {
       const password = form.get("password");
 
       const credentials = window.btoa(email+":"+password)
-      const auth = 'Basic '+credentials
+      const auth = "Basic "+credentials
 
-      axios.get('http://localhost:8080/', {
+      axios.get('/', {
           headers: {
-              'authorization': auth
-
+              'Authorization': credentials
           }
       })
-    .then(() => this.props.history.push('/dashboard'))
+    .then(res => console.log(res.data))
     .catch(err => console.log(err))
-
 
     axios.get('/plants', {
         headers: {
@@ -40,7 +38,6 @@ class Login extends Component {
     })
     .then(res => console.log(res.data))
     .catch(err => console.log(err))
-
   }
 
   render() {

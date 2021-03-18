@@ -8,6 +8,8 @@ import CustomDropdown from "../components/CustomDropdown";
 import CustomRadioButton from "../components/CustomRadioButton";
 import FieldContainer from '../components/containers/FieldContainer.js';
 import GradientButton from '../components/GradientButton';
+
+import MatContainer from "../components/containers/MaterialsContainer.js";
 import axios from "axios";
 
 class Inventory extends Component {
@@ -96,15 +98,9 @@ class Inventory extends Component {
 
     if (this.state.bikeParts.length !== 0) {
       bikePartList = this.state.bikeParts.map((element, index) => {
-        if (element.part.partType === "frame") {
-          return (
-            <RawMaterials key={index} title={element.part.partType} type={`${element.part.size} | ${element.part.colour}`} cost={`${element.part.cost}$`} amount={element.quantity} />
-          );
-        } else {
-          return (
-            <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={`${element.part.cost}$`} amount={element.quantity} />
-          );
-        }
+        return (
+          <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={element.part.cost} amount={element.quantity} />
+        );
       });
     }
 
@@ -135,8 +131,6 @@ class Inventory extends Component {
            </form>
           </Popup>
         </AddBikeParts>
-        
-
         <AddRawMaterials isVisible={this.state.showRawMatModal}>
           <Popup showModal={this.toggleMaterialModal} title="Raw Material" buttonTitle="add bike(s)" > 
            <form onSubmit={this.addMaterial}>
@@ -159,17 +153,17 @@ class Inventory extends Component {
           </Popup>
         </AddRawMaterials>
 
-
+      <InventoryContainer>
         <MainContainer title="Bike parts" createFeature={true} showModal={this.toggleBikeModal}>
-          <Legend>
-            <div>Part</div>
-            <div>Type</div>
-            <div>Cost</div>
-            <div>Qty</div>
-          </Legend>
+          {/* <RawMaterials title="road - 16x1 3/8in [iso 349]">
+          </RawMaterials>
+    
+          <RawMaterials title="handle - mountain/silver">
+          </RawMaterials> */}
           {bikePartList}
         </MainContainer>
-        
+      </InventoryContainer>
+      <InventoryContainer>
         <MainContainer title="Raw Material" createFeature={true} showModal={this.toggleMaterialModal}>
           <Legend>
             <div>Part</div>
@@ -181,13 +175,56 @@ class Inventory extends Component {
           <RawMaterials title="rim 700c">
           </RawMaterials> */}
         </MainContainer>
-        
+      </InventoryContainer>
+
+      <InventoryContainer>
+        <RawMaterialsContainer>
+            <MainContainer title="Raw Material Orders">
+              <MatContainer
+                title="Bike Invoice ID"
+                userType="Client"
+                userID="123"
+                rawMaterial="Handle"
+                totalCost={200}
+                payAction="Received"
+                productStatus="Not paid" />
+            </MainContainer>
+     
+          <MainContainer title="Order Raw Material">
+            <br />
+            <form>
+            <CustomDropdown dropdownName="SupplierID" dropddownID="SupplierID">
+                <option value={"supplier id1"}>supplier id1</option>
+                <option value={"supplier id2"}>supplier id2</option>
+                <option value={"supplier id3"}>supplier id3</option>
+                <option value={"supplier id4"}>supplier id4</option>
+              </CustomDropdown>
+              <br />
+              <CustomDropdown dropdownName="MaterialID" dropddownID="MaterialID">
+                <option value={"Material id1"}>Material id1</option>
+                <option value={"Material id2"}>Material id2</option>
+                <option value={"Material id3"}>Material id3</option>
+                <option value={"Material id4"}>Material id4</option>
+              </CustomDropdown>
+              <br />
+              <Title>Quantity</Title>
+              <FieldContainer>
+                <TextInput type="quantity" id="rquantity" name="rquantity" placeholder="quantity" min ="0"/>
+              </FieldContainer>
+              <br></br>
+              <GradientButton type="submit" buttonValue="create order" />
+            </form>
+          </MainContainer>
+          </RawMaterialsContainer>
+        </InventoryContainer>
+
       </Container>
     );
   }
 }
 
 //STYLED-COMPONENTS
+
 const Container = styled.div`
 height: 100%;
 border-radius: 0px;
@@ -199,6 +236,37 @@ position: relative;
   margin-right: 20px;
 }
 `
+
+const InventoryContainer = styled.div`
+  flex-direction: row;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  // height: 100%;
+
+  & > div {
+    flex: 1;
+    margin-right: 20px;
+  }
+
+  & > div:nth-child(3) {
+    margin-right: 0;
+  }
+`
+
+const RawMaterialsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  & > div {
+    flex: 1;
+    width: calc(100% - 40px); // TODO: fix fixed-width (100% should work, probably not accessing the right div)
+  }
+  & > div:nth-child(2) {
+    margin-top: 20px;
+  }
+`
+
 const Title = styled.div`
     
     font-size: 8pt;
