@@ -4,10 +4,12 @@ import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.inventory.repository.SupplierOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Component
+@Service
 public class SupplierOrderService {
 
     SupplierOrderRepository repository;
@@ -17,15 +19,8 @@ public class SupplierOrderService {
         this.repository = repository;
     }
 
-    public ArrayList<SupplierOrder> getAllSupplierOrders(){
-        Iterable<SupplierOrder> supplierOrderList = repository.findAll();
-
-        ArrayList<SupplierOrder> result = new ArrayList<>();
-        for (SupplierOrder supplierorder : supplierOrderList) {
-            result.add(supplierorder);
-        }
-
-        return result;
+    public List<SupplierOrder> getAllSupplierOrders(){
+        return repository.findAll();
     }
 
     public boolean insertSupplierOrder(SupplierOrder supplierOrder) {
