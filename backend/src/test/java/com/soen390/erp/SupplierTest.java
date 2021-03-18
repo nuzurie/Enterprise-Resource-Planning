@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SupplierTest {
-    @Spy
+
     @InjectMocks
     private SupplierController supplierController;
 
