@@ -19,12 +19,17 @@ class Accounting extends Component {
 
       bikeInvoices: [],
       materialInvoices: [],
+
+      receivableBalance: 0,
+      payableBalance: 0,
+      payableInvoices: [],
+      receivableInvoices:[],
     }
 
     this.togglePaymentModal = this.togglePaymentModal.bind(this);
     this.getInvoiceDetails = this.getInvoiceDetails.bind(this);
     this.deductAmount = this.deductAmount.bind(this);
-    this.initializeMaterialInvoices = this.initializeMaterialInvoices.bind(this);
+    this.initializeAccountingData = this.initializeAccountingData.bind(this);
   }
 
   togglePaymentModal() {
@@ -49,7 +54,7 @@ class Accounting extends Component {
     console.log(this.state.invoiceID);
   }
 
-  initializeMaterialInvoices() {
+  initializeAccountingData() {
     axios.get('/PurchaseOrders')
     .then(res =>
       this.setState({
@@ -61,15 +66,73 @@ class Accounting extends Component {
       this.setState({
         bikeInvoices: res.data }))
     .catch(err => console.log(err))
+
+    axios.get('/account/10')
+    .then(res =>
+      this.setState({
+        receivableBalance: res.data.balance }))
+    .catch(err => console.log(err))
+
+    axios.get('/account/9')
+    .then(res =>
+      this.setState({
+        payableBalance: res.data.balance }))
+    .catch(err => console.log(err))
+
+    axios.get('/ledger')
+    .then(res =>
+      this.setState({
+        payableInvoices: res.data._embedded.ledgerList.filter(i => (i.debitAccount.name == "AccountPayable" || i.creditAccount.name == "AccountPayable") ),
+        receivableInvoices: res.data._embedded.ledgerList.filter(i => (i.debitAccount.name == "AccountReceivable" || i.creditAccount.name == "AccountReceivable") ),
+      }))
+    .catch(err => console.log(err))
   }
 
   componentDidMount() {
-    this.initializeMaterialInvoices();
+    this.initializeAccountingData();
   }
 
   render() {
     let materialInvoices = <div></div>;
     let bikeInvoices = <div></div>;
+    let payableInvoices = <div></div>;
+    let receivableInvoices = <div></div>;
+
+    console.log(this.state.receivableInvoices);
+
+    if (this.state.payableInvoices.length !== 0) {
+      payableInvoices = this.state.payableInvoices.map((invoice, index) => {
+        return (
+          <InvoiceContainer
+            key={index}
+            invoiceID={invoice.purchaseOrder.id}
+            userName={invoice.purchaseOrder.supplier.name}
+            userID={invoice.purchaseOrder.supplier.id}
+            amount={invoice.purchaseOrder.purchaseOrderItems.length != 0 ? invoice.purchaseOrder.purchaseOrderItems[0].quantity : 1}
+            productName={invoice.purchaseOrder.purchaseOrderItems.length != 0 ? invoice.purchaseOrder.purchaseOrderItems[0].material.name : "untitled"}
+            payType="OWE"
+            totalCost={invoice.purchaseOrder.grandTotal}
+            readOnly />
+        );
+      });
+    }
+
+    if (this.state.receivableInvoices.length !== 0) {
+      receivableInvoices = this.state.receivableInvoices.map((invoice, index) => {
+        return (
+          <InvoiceContainer
+            key={index}
+            invoiceID={invoice.saleOrder.id}
+            userName={invoice.saleOrder.client.name}
+            userID={invoice.saleOrder.client.id}
+            amount={invoice.saleOrder.saleOrderItems.length != 0 ? invoice.saleOrder.saleOrderItems[0].quantity : 1}
+            productName={invoice.saleOrder.saleOrderItems.length != 0 ? invoice.saleOrder.saleOrderItems[0].material.name : "untitled"}
+            payType="OWED"
+            totalCost={invoice.saleOrder.grandTotal}
+            readOnly />
+        );
+      });
+    }
 
     if (this.state.bikeInvoices.length !== 0) {
       bikeInvoices = this.state.bikeInvoices.map((invoice, index) => {
@@ -123,41 +186,15 @@ class Accounting extends Component {
         </PaymentPopup>
         <TopContainer>
           <MainContainer title="Accounts Payable">
-            <InvoiceContainer
-              title="Material Invoice ID"
-              userType="Supplier"
-              userID="321"
-              amount={100}
-              productName="brakes"
-              payType="OWE"
-              totalCost={200}
-              readOnly />
+            {payableInvoices}
           </MainContainer>
 
           <MainContainer title="Accounts Receivable">
-            <InvoiceContainer
-                title="Bike Invoice ID"
-                userType="Client"
-                userID="123"
-                amount={50}
-                productName="Yas' Bike"
-                payType="OWED"
-                totalCost={200}
-                readOnly />
+            {receivableInvoices}
           </MainContainer>
 
           <InvoicesContainer>
             <MainContainer title="Bike Invoice">
-              {/* <InvoiceContainer
-                title="Bike Invoice ID"
-                userType="Client"
-                userID="123"
-                amount={50}
-                productName="Yas' Bike"
-                payType="Bike Cost"
-                totalCost={200}
-                payAction="NOT PAID"
-                productStatus="In Progress" /> */}
               {bikeInvoices}
             </MainContainer>
             <MainContainer title="Material Invoice">
@@ -167,7 +204,9 @@ class Accounting extends Component {
         </TopContainer>
 
         <BottomContainer>
-          <MainContainer title="Raw Cost">
+          <MainContainer title="Accounts Balance">
+            <BalanceTitle>Account Receivable: ${this.state.receivableBalance}</BalanceTitle>
+            <BalanceTitle>Account Payable: ${this.state.payableBalance}</BalanceTitle>
           </MainContainer>
         </BottomContainer>
       </Container>
@@ -216,6 +255,18 @@ const InvoicesContainer = styled.div`
 const BottomContainer = styled.div`
   flex: 1;
   margin-top: 20px;
+  
+  & > div {
+    width: calc(100% - 40px);
+  }
+
+  & > div > div:nth-child(2) > div:nth-child(1) {
+    color: #3BC351;
+  }
+
+  & > div > div:nth-child(2) > div:nth-child(2) {
+    color: #FF7A67;
+  }
 `
 
 const Container = styled.div`
@@ -248,4 +299,12 @@ const InvoiceDetail = styled.div`
   color: #FF7A67;
   text-transform: uppercase;
   display: inline-block;
+`
+
+const BalanceTitle = styled.div`
+  font-weight: 500;
+  font-size: 26pt;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 `
