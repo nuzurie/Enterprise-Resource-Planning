@@ -1,6 +1,8 @@
 package com.soen390.erp.inventory.controller;
 
 
+import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
+import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
 import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.model.PlantBike;
@@ -8,6 +10,8 @@ import com.soen390.erp.inventory.model.PlantPart;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
 import com.soen390.erp.inventory.service.PlantService;
+import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
+import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.inventory.model.PlantMaterial;
@@ -67,14 +71,32 @@ public class PlantController {
     }
 
     @ResponseBody
-    @ExceptionHandler(PlantNotFoundException.class)
+    @ExceptionHandler(PartNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String partNotFoundException(PlantNotFoundException ex){
         return ex.getMessage();
     }
 
+    @ResponseBody
+    @ExceptionHandler(MaterialNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String materialNotFoundException(MaterialNotFoundException ex){
+        return ex.getMessage();
+    }
 
+    @ResponseBody
+    @ExceptionHandler(NotEnoughMaterialInPlantException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String notEnoughMaterialInPlantException(NotEnoughMaterialInPlantException ex){
+        return ex.getMessage();
+    }
 
+    @ResponseBody
+    @ExceptionHandler(NotEnoughPartsInPlantException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String notEnoughPartsInPlantException(NotEnoughPartsInPlantException ex){
+        return ex.getMessage();
+    }
 
     @PostMapping("/addMaterialToInventory")
     ResponseEntity<?> addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {

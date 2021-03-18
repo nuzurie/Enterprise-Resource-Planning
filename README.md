@@ -25,8 +25,8 @@
  * Jira
  * TravisCI
  
-  ## Sprints Documentation Submissions
-[Directory for Documentation Submissions](documentation/Sprint%201)
+## Link to Prototype
+https://drive.google.com/drive/u/0/folders/1YvjmH4TGypuI6dKMn3NDC_KnEV_9HNZt
 
 ## Link to Jira
 https://team-1610936365889.atlassian.net/jira/software/projects/ERPS/boards/3

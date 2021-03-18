@@ -11,7 +11,7 @@ class CustomRadioButton extends Component {
     return (
         <Container>
             <CheckboxContainer>
-                <input type="radio" checked="checked" name="radio" value={this.props.value} />
+                <input type="radio" name="radio" id={this.props.id} value={this.props.value} />
                 <Checkmark />
                 {this.props.children}
             </CheckboxContainer>

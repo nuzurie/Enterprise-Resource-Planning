@@ -22,30 +22,16 @@ public class ERPSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-        http.cors().configurationSource(new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest httpServletRequest) {
-                CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                config.setAllowedOrigins(Collections.singletonList("*"));
-                config.setAllowCredentials(true);
-                config.setAllowedHeaders(Collections.singletonList("*"));
-                config.setMaxAge(3600L);
-                return config;
-            }
-        }).and().csrf().disable() //todo: this will have to be changed later for additional security
+        http.csrf().disable() //todo: this will have to be changed later for additional security
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").authenticated()
+                .antMatchers(HttpMethod.OPTIONS, "/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().and()
+//                .formLogin().and()
                 .httpBasic();
+        http.cors();
     }
 
-//    @Bean
-//    public UserDetailsManager userDetailsService(DataSource dataSource){
-//        return new JdbcUserDetailsManager(dataSource);
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){

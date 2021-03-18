@@ -62,21 +62,29 @@ class Inventory extends Component {
     const ramount = form.get("ramount");
 
     let material = {
-        "material" :{
-            "name": materialName,
-            "cost": ramount
-        },
-        "quantity": 1
+      "name": materialName,
+      "cost": ramount
     }
 
-    axios.post('/addMaterialToInventory', material);
-    console.log(materialName + ": " + ramount);
+    axios.post('/materials', material)
+    .then(res =>
+      console.log(res.data))
+    .catch(err => console.log(err));
   }
 
 
   render() {
     let materialList = <div></div>;
     let bikePartList = <div></div>;
+    let materialsForParts = <div></div>;
+
+    if (this.state.materials.length !== 0) {
+      materialsForParts = this.state.materials.map((element, index) => {
+        return (
+          <CustomRadioButton key={index} id={element.name} value={element.name}>{element.name}</CustomRadioButton>
+        );
+      });
+    }
 
     if (this.state.materials.length !== 0) {
       materialList = this.state.materials.map((element, index) => {
@@ -88,9 +96,15 @@ class Inventory extends Component {
 
     if (this.state.bikeParts.length !== 0) {
       bikePartList = this.state.bikeParts.map((element, index) => {
-        return (
-          <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={element.part.cost} amount={element.quantity} />
-        );
+        if (element.part.partType === "frame") {
+          return (
+            <RawMaterials key={index} title={element.part.partType} type={`${element.part.size} | ${element.part.colour}`} cost={`${element.part.cost}$`} amount={element.quantity} />
+          );
+        } else {
+          return (
+            <RawMaterials key={index} title={element.part.partType} type={element.part.type} cost={`${element.part.cost}$`} amount={element.quantity} />
+          );
+        }
       });
     }
 
@@ -108,8 +122,9 @@ class Inventory extends Component {
               </CustomDropdown>
 
               <Title>Materials Needed</Title>
+
               <FieldContainer>
-                <CustomRadioButton value="gears">Gears</CustomRadioButton>
+                {materialsForParts}
               </FieldContainer>
 
               <Title>Amount</Title>
@@ -146,15 +161,19 @@ class Inventory extends Component {
 
 
         <MainContainer title="Bike parts" createFeature={true} showModal={this.toggleBikeModal}>
-          {/* <RawMaterials title="road - 16x1 3/8in [iso 349]">
-          </RawMaterials>
-    
-          <RawMaterials title="handle - mountain/silver">
-          </RawMaterials> */}
+          <Legend>
+            <div>Part</div>
+            <div>Type</div>
+            <div>Cost</div>
+            <div>Qty</div>
+          </Legend>
           {bikePartList}
         </MainContainer>
         
         <MainContainer title="Raw Material" createFeature={true} showModal={this.toggleMaterialModal}>
+          <Legend>
+            <div>Part</div>
+          </Legend>
           {materialList}
           {/* <RawMaterials title="rubber tire">
           </RawMaterials>
@@ -200,6 +219,10 @@ const AddBikeParts = styled.div`
   & > div > div > form > input {
     margin-top: 20px;
   }
+
+  & > div > div > form > div:nth-child(3) {
+    padding: 0 0 10px 10px;
+  }
 `
 
 const AddRawMaterials = styled.div`
@@ -234,7 +257,29 @@ width: 400px;
 }
 `
 
+const Legend = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  background: white;
 
+  div {
+    font-family: Proxima Nova;
+  }
+
+  div:nth-child(1), div:nth-child(2) {
+    min-width: 120px;
+  }
+
+  div:nth-child(3) {
+    width: 50px;
+  }
+
+  div:nth-child(4) {
+    width: 50px;
+  }
+`
 
 
 Inventory.propTypes = {
