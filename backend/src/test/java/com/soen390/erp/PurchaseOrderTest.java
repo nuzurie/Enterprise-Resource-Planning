@@ -62,17 +62,7 @@ public class PurchaseOrderTest {
 
         String pOrder;
         PurchaseOrder purchaseOrder = new PurchaseOrder();
-
-    @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
-    public void testGetPurchaseOrderById() throws Exception {
-        this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/purchaseOrder/{id}", 0) .with(csrf()))
-                .andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-                .andReturn();
     }
-
-
 
 
 }

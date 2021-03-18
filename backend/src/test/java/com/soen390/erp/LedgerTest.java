@@ -29,7 +29,6 @@ import java.util.Date;
 )
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@RunWith(MockitoJUnitRunner.class)
 public class LedgerTest {
 
     @Autowired
@@ -41,12 +40,6 @@ public class LedgerTest {
     @Autowired
     private LedgerRepository ledgerRepository;
 
-
-    public void setup()
-    {
-        // ledgerController = new LedgerController(ledgerRepository, ledgerModelAssembler);
-        //this.mockMvc = MockMvcBuilders.standaloneSetup(ledgerController).build();
-    }
 
 
     @Test
@@ -61,7 +54,7 @@ public class LedgerTest {
     @WithMockUser(authorities = "ROLE_ADMIN")
     @Transactional
     public void getOneLedgerTest() throws Exception {
-        Ledger ledger = ledgerRepository.findAll().get(1);
+        Ledger ledger = ledgerRepository.findAll().get(0);
         int ledgerId = ledger.getId();
         mockMvc.perform(MockMvcRequestBuilders.get("/ledger/" + ledgerId))
                 .andExpect(status().isOk());
@@ -88,7 +81,7 @@ public class LedgerTest {
                 .content(ledger)
                 .with(csrf())).
                 andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
+                .andExpect(status().isUnsupportedMediaType())
                 .andReturn();
 
 
