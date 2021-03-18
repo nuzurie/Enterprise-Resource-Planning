@@ -2,7 +2,7 @@ package com.soen390.erp.accounting.service;
 
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.PurchaseOrderItems;
-import com.soen390.erp.accounting.model.SaleOrderItems;
+
 import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import lombok.AllArgsConstructor;
@@ -27,6 +27,7 @@ public class PurchaseOrderService {
             totalPrice += purchaseOrderItem.getUnitPrice()*purchaseOrderItem.getQuantity();
             materialRepository.save(purchaseOrderItem.getMaterial());
         }
+        purchaseOrder.setTotalAmount(totalPrice);
 
         double tax = .15;
         purchaseOrder.setTax(tax);
