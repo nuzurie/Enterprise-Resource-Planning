@@ -82,8 +82,8 @@ class Accounting extends Component {
     axios.get('/ledger')
     .then(res =>
       this.setState({
-        payableInvoices: res.data._embedded.ledgerList.filter(i => (i.debitAccount.name == "AccountPayable" || i.creditAccount.name == "AccountPayable") ),
-        receivableInvoices: res.data._embedded.ledgerList.filter(i => (i.debitAccount.name == "AccountReceivable" || i.creditAccount.name == "AccountReceivable") ),
+        payableInvoices: res.data._embedded.ledgerList.filter(i => (i.debitAccount.name == "AccountPayable") ), //TODO (talk to zubair)
+        receivableInvoices: res.data._embedded.ledgerList.filter(i => (i.creditAccount.name == "AccountReceivable") ),
       }))
     .catch(err => console.log(err))
   }
@@ -245,6 +245,7 @@ const InvoicesContainer = styled.div`
   & > div {
     flex: 1;
     width: calc(100% - 40px); // TODO: fix fixed-width (100% should work, probably not accessing the right div)
+    max-height: 400px; //TODO: Quickfix
   }
 
   & > div:nth-child(2) {

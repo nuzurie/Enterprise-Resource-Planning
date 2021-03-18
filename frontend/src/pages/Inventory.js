@@ -28,6 +28,7 @@ class Inventory extends Component {
     this.toggleBikeModal = this.toggleBikeModal.bind(this);
     this.toggleMaterialModal = this.toggleMaterialModal.bind(this);
     this.addMaterial = this.addMaterial.bind(this);
+    this.createOrder = this.createOrder.bind(this);
   }
 
   componentDidMount() {
@@ -82,12 +83,42 @@ class Inventory extends Component {
     .catch(err => console.log(err));
   }
 
+  createOrder(e) {
+    const form = new FormData(e.target);
+    const supplierID = form.get("SupplierID");
+    const materialID = form.get("MaterialID");
+    const quantity = form.get("rquantity");
+    const cost = this.state.materials.filter(i => i.id == materialID)[0].cost;
+
+    let materialOrder = {
+      "supplier": {
+        "id": supplierID,
+        "name": "LSD Supplies"
+      },
+      "purchaseOrderItems": [
+        {
+          " quantity": quantity,
+          "unitPrice": cost,
+          "material": {
+              "id": materialID,
+              "name": this.state.materials.filter(i => i.id == materialID)[0].name,
+              "cost": cost
+          }
+        }
+      ]
+    }
+
+    axios.post('/PurchaseOrders', materialOrder);
+    // console.log(this.state.materials.filter(i => i.id == materialID)[0].name);
+  }
+
 
   render() {
     let materialList = <div></div>;
     let bikePartList = <div></div>;
     let materialsForParts = <div></div>;
     let materialInvoices = <div></div>;
+    let materialOptions = <option></option>;
 
     if (this.state.materials.length !== 0) {
       materialsForParts = this.state.materials.map((element, index) => {
@@ -125,6 +156,14 @@ class Inventory extends Component {
             totalCost={invoice.grandTotal}
             receptionStatus={invoice.received ? "RECEIVED" : "NOT RECEIVED" }
             paymentStatus={invoice.paid ? "PAID" : "NOT PAID"} />
+        );
+      });
+    }
+
+    if (this.state.materials.length !== 0) {
+      materialOptions = this.state.materials.map((material, index) => {
+        return (
+          <option key={index} value={material.id}>{material.name}</option>
         );
       });
     }
@@ -194,37 +233,31 @@ class Inventory extends Component {
 
       <InventoryContainer>
         <RawMaterialsContainer>
-            <MainContainer title="Raw Material Orders">
-              {materialInvoices}
-            </MainContainer>
+          <MainContainer title="Raw Material Orders">
+            {materialInvoices}
+          </MainContainer>
      
           <MainContainer title="Order Raw Material">
             <br />
-            <form>
-            <CustomDropdown dropdownName="SupplierID" dropddownID="SupplierID">
-                <option value={"supplier id1"}>supplier id1</option>
-                <option value={"supplier id2"}>supplier id2</option>
-                <option value={"supplier id3"}>supplier id3</option>
-                <option value={"supplier id4"}>supplier id4</option>
+            <form onSubmit={this.createOrder}>
+              <CustomDropdown dropdownName="SupplierID" dropddownID="SupplierID">
+                <option value={1}>LSD Supplier</option>
               </CustomDropdown>
               <br />
               <CustomDropdown dropdownName="MaterialID" dropddownID="MaterialID">
-                <option value={"Material id1"}>Material id1</option>
-                <option value={"Material id2"}>Material id2</option>
-                <option value={"Material id3"}>Material id3</option>
-                <option value={"Material id4"}>Material id4</option>
+                {materialOptions}
               </CustomDropdown>
               <br />
               <Title>Quantity</Title>
               <FieldContainer>
-                <TextInput type="quantity" id="rquantity" name="rquantity" placeholder="quantity" min ="0"/>
+                <TextInput type="number" id="rquantity" name="rquantity" placeholder="quantity" min ="0"/>
               </FieldContainer>
               <br></br>
               <GradientButton type="submit" buttonValue="create order" />
             </form>
           </MainContainer>
-          </RawMaterialsContainer>
-        </InventoryContainer>
+        </RawMaterialsContainer>
+      </InventoryContainer>
 
       </Container>
     );
@@ -251,15 +284,6 @@ const InventoryContainer = styled.div`
   flex: 1;
   width: 100%;
   // height: 100%;
-
-  & > div {
-    flex: 1;
-    margin-right: 20px;
-  }
-
-  & > div:nth-child(3) {
-    margin-right: 0;
-  }
 `
 
 const RawMaterialsContainer = styled.div`
