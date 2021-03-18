@@ -1,8 +1,10 @@
 package com.soen390.erp.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.model.PlantBike;
 import lombok.*;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,11 +23,12 @@ public class SaleOrder {
     private int id;
     private Date date;
 
-    @ManyToOne (optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_id")
+    @JsonBackReference
     private Plant plant;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "client_id")
     private Client client;
 
@@ -58,7 +61,8 @@ public class SaleOrder {
     private boolean paid;
     private boolean shipped;
 
-    @OneToMany(mappedBy = "saleOrder")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "sale_order_id")
     private Set<SaleOrderItems> saleOrderItems;
 
 }

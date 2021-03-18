@@ -24,10 +24,10 @@ public class SaleOrderItems {
     private double unitPrice;
 
 
-    @ManyToOne
-    @JoinColumn(name = "sale_order_id")
-    @JsonIgnore
-    private SaleOrder saleOrder;
+//    @ManyToOne
+//    @JoinColumn(name = "sale_order_id")
+//    @JsonIgnore
+//    private SaleOrder saleOrder;
 
     @ManyToOne
     @JoinColumn(name = "bike_id")
