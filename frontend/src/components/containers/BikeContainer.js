@@ -30,7 +30,10 @@ class BikeContainer extends Component {
     return (
         <Container isExpanded={this.state.showExpansion}>
             <Header>
-              <Title>{this.props.title}</Title>
+              <div>
+                <Title>{this.props.title}</Title>
+                <PaymentStatus> - NOT PAID</PaymentStatus>
+              </div>
               <ExpandButton onClick={this.toggleExpansion} isExpanded={this.state.showExpansion}>
                 <ExpandLessMore />                
               </ExpandButton>
@@ -88,6 +91,10 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  &  > div:nth-child(1) {
+    display: flex;
+  }
 `
 
 const Title = styled.div`
@@ -96,6 +103,10 @@ const Title = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.2em;
     font-weight: 500;
+`
+
+const PaymentStatus = styled(Title)`
+  color: grey;
 `
 
 const ExpandButton = styled.div`
