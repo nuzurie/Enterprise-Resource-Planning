@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
-
+import axios from 'axios';
 import MainContainer from '../components/containers/MainContainer.js';
 import Popup from "../components/Popup.js";
 import InvoiceContainer from "../components/containers/InvoiceContainer.js";
@@ -24,6 +24,7 @@ class Accounting extends Component {
     this.togglePaymentModal = this.togglePaymentModal.bind(this);
     this.getInvoiceDetails = this.getInvoiceDetails.bind(this);
     this.deductAmount = this.deductAmount.bind(this);
+    this.initializeMaterialInvoices = this.initializeMaterialInvoices.bind(this);
   }
 
   togglePaymentModal() {
@@ -31,9 +32,10 @@ class Accounting extends Component {
   }
 
   deductAmount(e) {
-    e.preventDefault();
     console.log(`Deduct ${this.state.invoiceCost}$ from account`);
     this.togglePaymentModal();
+
+    axios.put(`/PurchaseOrders/${this.state.invoiceID}/MakePayment`);
   }
 
   getInvoiceDetails(cost, id) {
@@ -43,7 +45,70 @@ class Accounting extends Component {
       invoiceID: id });
   }
 
+  makeBikePayment() {
+    console.log(this.state.invoiceID);
+  }
+
+  initializeMaterialInvoices() {
+    axios.get('/PurchaseOrders')
+    .then(res =>
+      this.setState({
+        materialInvoices: res.data }))
+    .catch(err => console.log(err))
+
+    axios.get('/SaleOrders')
+    .then(res =>
+      this.setState({
+        bikeInvoices: res.data }))
+    .catch(err => console.log(err))
+  }
+
+  componentDidMount() {
+    this.initializeMaterialInvoices();
+  }
+
   render() {
+    let materialInvoices = <div></div>;
+    let bikeInvoices = <div></div>;
+
+    if (this.state.bikeInvoices.length !== 0) {
+      bikeInvoices = this.state.bikeInvoices.map((invoice, index) => {
+        return (
+          <InvoiceContainer
+            key={index}
+            invoiceID={invoice.id}
+            userName={invoice.client.name}
+            userID={invoice.client.id}
+            amount={invoice.saleOrderItems.length != 0 ? invoice.saleOrderItems[0].quantity : 1}
+            productName={invoice.saleOrderItems.length != 0 ? invoice.saleOrderItems[0].bike.name : "untitled"}
+            payType="Bike Cost"
+            totalCost={invoice.grandTotal}
+            payAction={invoice.paid ? "PAID" : "PAY"}
+            productStatus={invoice.shipped ? "SHIPPED" : 'IN PROGRESS'} />
+        );
+      });
+    }
+    
+    if (this.state.materialInvoices.length !== 0) {
+      materialInvoices = this.state.materialInvoices.map((invoice, index) => {
+        return (
+          <InvoiceContainer
+            key={index}
+            invoiceID={invoice.id}
+            userName={invoice.supplier.name}
+            userID={invoice.supplier.id}
+            amount={invoice.purchaseOrderItems.length != 0 ? invoice.purchaseOrderItems[0].quantity : 1}
+            productName={invoice.purchaseOrderItems.length != 0 ? invoice.purchaseOrderItems[0].material.name : "untitled"}
+            payType="Material Cost"
+            totalCost={invoice.grandTotal}
+            payAction={invoice.paid ? "PAID" : "PAY"}
+            productStatus={invoice.received ? "RECEIVED" : "NOT RECEIVED"}
+            showModal={this.togglePaymentModal}
+            sendInvoiceCost={this.getInvoiceDetails} />
+        );
+      });
+    }
+
     return (
       <Container>
         <PaymentPopup isVisible={this.state.showModal}>
@@ -83,7 +148,7 @@ class Accounting extends Component {
 
           <InvoicesContainer>
             <MainContainer title="Bike Invoice">
-              <InvoiceContainer
+              {/* <InvoiceContainer
                 title="Bike Invoice ID"
                 userType="Client"
                 userID="123"
@@ -92,21 +157,11 @@ class Accounting extends Component {
                 payType="Bike Cost"
                 totalCost={200}
                 payAction="NOT PAID"
-                productStatus="In Progress" />
+                productStatus="In Progress" /> */}
+              {bikeInvoices}
             </MainContainer>
             <MainContainer title="Material Invoice">
-              <InvoiceContainer
-                title="Material Invoice ID"
-                userType="Supplier"
-                userID="321"
-                amount={100}
-                productName="brakes"
-                payType="Material Cost"
-                totalCost={200}
-                payAction="NOT PAID"
-                productStatus="Not Received"
-                showModal={this.togglePaymentModal}
-                sendInvoiceCost={this.getInvoiceDetails} />
+              {materialInvoices}
             </MainContainer>
           </InvoicesContainer>
         </TopContainer>

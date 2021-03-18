@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
+import axios from 'axios';
 
 class InvoiceContainer extends Component {
   constructor(props) {
@@ -14,10 +15,11 @@ class InvoiceContainer extends Component {
     if (this.props.payType == "Bike Cost") {
       //TODO: Update payment status for bike invoice
       /////// Add amount to company's account
+      axios.put(`/SaleOrders/${this.props.invoiceID}/ReceivePayment`);
       console.log(`${this.props.totalCost}$ has been added to the company's account.`);
     } else if (this.props.payType == "Material Cost") {
       this.props.showModal();
-      this.props.sendInvoiceCost(this.props.totalCost, this.props.title);
+      this.props.sendInvoiceCost(this.props.totalCost, this.props.invoiceID);
     }
   }
 
@@ -25,11 +27,11 @@ class InvoiceContainer extends Component {
     return (
         <Container>
             <LeftHandside>
-              <Title>{this.props.title}</Title>
+              <Title>INVOICE #{this.props.invoiceID}</Title>
               {/* {this.props.children} */}
               
               <GeneralInfoContainer>
-                {this.props.userType} {this.props.userID} <br/>
+                {this.props.userName} #{this.props.userID} <br/>
                 {this.props.amount} x {this.props.productName}
               </GeneralInfoContainer>
 
@@ -80,7 +82,7 @@ const RightHandside = styled.div`
 `
 
 const PayActionButton = styled.input`
-  background-color: ${props => props.payAction == ("PAID" || "PAY") ? '#3BC351' : '#FF7A67'};
+  background-color: ${props => props.payAction == ("PAID") ? '#3BC351' : '#FF7A67'};
   color: white;
   font-family: Proxima Nova;
   font-size: 7pt;
@@ -89,7 +91,7 @@ const PayActionButton = styled.input`
   border-radius: 4px;
   padding: 5px 20px;
   margin-bottom: 5px;
-  pointer-events: ${props => props.payAction == ("NOT PAID" || "PAY") ? 'auto' : 'none'};
+  pointer-events: ${props => props.payAction == ("PAY") ? 'auto' : 'none'};
 
   background-repeat: no-repeat;
   border: none;
@@ -99,7 +101,7 @@ const PayActionButton = styled.input`
   transition: 250ms;
 
   &:hover {
-    background-color: ${props => props.payAction == ("NOT PAID" || "PAY") ? '#F44A32' : '#3BC351'};
+    background-color: ${props => props.payAction == ("PAY") ? '#F44A32' : '#3BC351'};
   }
 `
 
