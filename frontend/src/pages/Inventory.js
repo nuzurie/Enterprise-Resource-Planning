@@ -263,6 +263,7 @@ const Legend = styled.div`
   justify-content: space-between;
   margin-top: 10px;
   background: white;
+  font-weight: 500;
 
   div {
     font-family: Proxima Nova;
