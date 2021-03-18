@@ -1,8 +1,6 @@
 package com.soen390.erp.accounting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soen390.erp.manufacturing.model.Bike;
-import com.soen390.erp.manufacturing.model.Material;
 import lombok.*;
 
 import javax.persistence.*;

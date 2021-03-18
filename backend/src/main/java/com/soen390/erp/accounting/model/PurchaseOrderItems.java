@@ -1,8 +1,5 @@
 package com.soen390.erp.accounting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.manufacturing.model.Material;
 import lombok.*;
 
