@@ -1,7 +1,6 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.soen390.erp.inventory.model.OrderItem;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
@@ -59,7 +58,8 @@ public class PurchaseOrder {
     private boolean paid;
     private boolean received;
 
-
-    @OneToMany(mappedBy = "purchaseOrder")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchase_order_id")
     private Set<PurchaseOrderItems> purchaseOrderItems;
+
 }
