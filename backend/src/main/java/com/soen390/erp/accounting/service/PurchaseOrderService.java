@@ -4,6 +4,8 @@ import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.PurchaseOrderItems;
 
 import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
+import com.soen390.erp.inventory.model.Plant;
+import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,12 @@ import java.util.Optional;
 public class PurchaseOrderService {
     private final PurchaseOrderRepository repository;
     private final MaterialRepository materialRepository;
+    private final PlantRepository plantRepository;
 
     public boolean addPurchaseOrder(PurchaseOrder purchaseOrder){
         purchaseOrder.setDate(new Date());
+        Plant plant = plantRepository.findAll().get(0);
+        purchaseOrder.setPlant(plant);
 
         double totalPrice = 0;
         for (PurchaseOrderItems purchaseOrderItem: purchaseOrder.getPurchaseOrderItems()
