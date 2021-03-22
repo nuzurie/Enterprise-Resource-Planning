@@ -43,10 +43,10 @@ public class PlantController {
     }
 
     @GetMapping("/plants")
-    public ResponseEntity<?> all(){
-        List<EntityModel<Plant>> plants = plantRepository.findAll().stream()
-                .map(pmAssembler::toModel)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> all()
+    {
+        List<EntityModel<Plant>> plants = pmAssembler.assembleToModel();
+
         return ResponseEntity.ok().body(
                 CollectionModel.of(plants, linkTo(methodOn(this.getClass()).all()).withSelfRel()));
     }
@@ -59,10 +59,11 @@ public class PlantController {
 
 
     @PostMapping("/addPartToInventory")
-    ResponseEntity<?> addPartToInventory(@RequestBody PlantPart plantPart) {
+    public ResponseEntity<?> addPartToInventory(@RequestBody PlantPart plantPart) {
 
         int plantId = 1;
-        Plant plant = plantRepository.findById(1).orElseThrow(()->new RuntimeException());
+        Plant plant =
+                plantRepository.findById(1).orElseThrow(()->new PlantNotFoundException(plantId));
         Part part = plantPart.getPart();
         int quantity = plantPart.getQuantity();
         plantService.addPlantPart(plant, part, quantity);
@@ -73,37 +74,38 @@ public class PlantController {
     @ResponseBody
     @ExceptionHandler(PartNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(PlantNotFoundException ex){
+    public String partNotFoundException(PlantNotFoundException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(MaterialNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String materialNotFoundException(MaterialNotFoundException ex){
+    public String materialNotFoundException(MaterialNotFoundException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(NotEnoughMaterialInPlantException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String notEnoughMaterialInPlantException(NotEnoughMaterialInPlantException ex){
+    public String notEnoughMaterialInPlantException(NotEnoughMaterialInPlantException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(NotEnoughPartsInPlantException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String notEnoughPartsInPlantException(NotEnoughPartsInPlantException ex){
+    public String notEnoughPartsInPlantException(NotEnoughPartsInPlantException ex){
         return ex.getMessage();
     }
 
     @PostMapping("/addMaterialToInventory")
-    ResponseEntity<?> addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {
+    public ResponseEntity<?> addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {
         //TODO: get from header?
         int plantId = 1;
 
-        Plant plant = plantRepository.findById(plantId).orElseThrow(()-> new RuntimeException());
+        Plant plant =
+                plantRepository.findById(plantId).orElseThrow(()-> new PlantNotFoundException(plantId));
         Material material = plantMaterial.getMaterial();
         int quantity = plantMaterial.getQuantity();
         plantService.addPlantMaterial(plant,material,quantity);
@@ -112,11 +114,12 @@ public class PlantController {
     }
 
     @PostMapping("/addBikeToInventory")
-    ResponseEntity<?> addBikeToInventory(@RequestBody PlantBike plantBike) {
+    public ResponseEntity<?> addBikeToInventory(@RequestBody PlantBike plantBike) {
         //TODO: get from header?
         int plantId = 1;
 
-        Plant plant = plantRepository.findById(plantId).orElseThrow(()-> new RuntimeException());
+        Plant plant =
+                plantRepository.findById(plantId).orElseThrow(()-> new PlantNotFoundException(plantId));
         Bike bike = plantBike.getBike();
         int quantity = plantBike.getQuantity();
         plantService.addPlantBike(plant,bike,quantity);

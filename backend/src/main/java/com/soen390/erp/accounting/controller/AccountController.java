@@ -4,6 +4,7 @@ import com.soen390.erp.accounting.exceptions.AccountNotFoundException;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.repository.AccountRepository;
 import com.soen390.erp.accounting.service.AccountModelAssembler;
+import com.soen390.erp.accounting.service.AccountService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -21,20 +22,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class AccountController {
 
+    private final AccountService accountService;
     private final AccountRepository accountRepository;
     private final AccountModelAssembler assembler;
 
-    public AccountController(AccountRepository accountRepository, AccountModelAssembler assembler){
+    public AccountController(AccountRepository accountRepository,
+                             AccountModelAssembler assembler,
+                             AccountService accountService)
+    {
         this.accountRepository = accountRepository;
         this.assembler = assembler;
+        this.accountService = accountService;
     }
 
     @GetMapping("/account")
     public ResponseEntity<?> all() {
 
-        List<EntityModel<Account>> account = accountRepository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
+        List<EntityModel<Account>> account = accountService.assembleToModel();
 
         return ResponseEntity.ok().body(
                 CollectionModel.of(account, linkTo(methodOn(AccountController.class).all()).withSelfRel()));
@@ -50,7 +54,7 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    ResponseEntity<?> newTransaction(@RequestBody Account account){
+    public ResponseEntity<?> newTransaction(@RequestBody Account account){
 
 
         EntityModel<Account> entityModel = assembler.toModel(accountRepository.save(account));
@@ -61,7 +65,7 @@ public class AccountController {
     @ResponseBody
     @ExceptionHandler(AccountNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(AccountNotFoundException ex){
+    public String partNotFoundException(AccountNotFoundException ex){
         return ex.getMessage();
     }
 

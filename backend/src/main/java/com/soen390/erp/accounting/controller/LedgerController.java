@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.exceptions.LedgerNotFoundException;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
+import com.soen390.erp.accounting.service.LedgerService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -23,18 +23,18 @@ public class LedgerController {
 
     private final LedgerRepository ledgerRepository;
     private final LedgerModelAssembler assembler;
+    private final LedgerService ledgerService;
 
-    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler) {
+    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService) {
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
+        this.ledgerService = ledgerService;
     }
 
     @GetMapping("/ledger")
     public ResponseEntity<?> all() {
 
-        List<EntityModel<Ledger>> ledger = ledgerRepository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
+        List<EntityModel<Ledger>> ledger = ledgerService.assembleToModel();
 
         return ResponseEntity.ok().body(
                 CollectionModel.of(ledger, linkTo(methodOn(LedgerController.class).all()).withSelfRel()));
@@ -50,7 +50,7 @@ public class LedgerController {
     }
 
     @PostMapping("/ledger")
-    ResponseEntity<?> newTransaction(@RequestBody Ledger ledger){
+    public ResponseEntity<?> newTransaction(@RequestBody Ledger ledger){
 
         // Todo add account transaction / add inventory updates
         EntityModel<Ledger> entityModel = assembler.toModel(ledgerRepository.save(ledger));
@@ -61,7 +61,7 @@ public class LedgerController {
     @ResponseBody
     @ExceptionHandler(LedgerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(LedgerNotFoundException ex){
+    public String partNotFoundException(LedgerNotFoundException ex){
         return ex.getMessage();
     }
 }

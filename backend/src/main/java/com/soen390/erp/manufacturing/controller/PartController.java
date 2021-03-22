@@ -26,7 +26,10 @@ public class PartController {
     private final MaterialRepository materialRepository;
     private final PartModelAssembler assembler;
 
-    public PartController(PartRepository partRepository, PartModelAssembler assembler, MaterialRepository materialRepository) {
+    public PartController(PartRepository partRepository,
+                          PartModelAssembler assembler,
+                          MaterialRepository materialRepository)
+    {
         this.partRepository = partRepository;
         this.assembler = assembler;
         this.materialRepository = materialRepository;
@@ -35,12 +38,11 @@ public class PartController {
     @GetMapping("/parts")
     public ResponseEntity<?> all() {
 
-        List<EntityModel<Part>> parts = partRepository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
+        List<EntityModel<Part>> parts = assembler.assembleToModel();
 
         return ResponseEntity.ok().body(
-                CollectionModel.of(parts, linkTo(methodOn(PartController.class).all()).withSelfRel()));
+                CollectionModel.of(parts, linkTo(methodOn(PartController.class)
+                        .all()).withSelfRel()));
     }
 
     @GetMapping(path = "/parts/{id}")
@@ -53,7 +55,7 @@ public class PartController {
     }
 
     @PostMapping("/parts")
-    ResponseEntity<?> newPart(@RequestBody Part part){
+    public ResponseEntity<?> newPart(@RequestBody Part part){
 
         Set<Material> materials = part.getMaterials()
                 .orElseGet(() -> new HashSet<>());
@@ -61,15 +63,18 @@ public class PartController {
                 .forEach(materialRepository::save);
         materials
                 .forEach(part::addMaterial);
-        EntityModel<Part> entityModel = assembler.toModel(partRepository.save(part));
+        EntityModel<Part> entityModel = assembler.toModel(partRepository
+                .save(part));
 
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        return ResponseEntity.created(entityModel
+                .getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @ResponseBody
     @ExceptionHandler(PartNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(PartNotFoundException ex){
+    public String partNotFoundException(PartNotFoundException ex){
         return ex.getMessage();
     }
 

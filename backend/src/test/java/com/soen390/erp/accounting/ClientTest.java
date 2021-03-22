@@ -1,39 +1,34 @@
-package com.soen390.erp;
+package com.soen390.erp.accounting;
 
 import com.soen390.erp.accounting.controller.ClientController;
+import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
+import com.soen390.erp.accounting.exceptions.InvalidClientException;
 import com.soen390.erp.accounting.model.Client;
 import com.soen390.erp.accounting.service.ClientService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@SpringBootTest
 public class ClientTest {
 
-    @InjectMocks
+    @Autowired
     private ClientController clientController;
 
-    @Mock
+    @MockBean
     ClientService clientService;
-
-    @Before
-    public void setup()
-    {
-        clientController = new ClientController(clientService);
-    }
-
 
     @Test
     public void getAllClientsTest()
@@ -50,7 +45,6 @@ public class ClientTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
-
     @Test
     public void findClientByIdTest()
     {
@@ -61,6 +55,21 @@ public class ClientTest {
         ResponseEntity<?> result = clientController.findClientById(id);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void findClientByIdForbiddenTest()
+    {
+        int id = 1;
+        String errorMessage = "Could not find client " + id;
+
+        doThrow(new ClientNotFoundException(id)).when(clientService).findClientById(id);
+
+        ResponseEntity<?> result = clientController.findClientById(id);
+
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+
+        assertEquals(errorMessage, result.getBody());
     }
 
     @Test
@@ -75,6 +84,18 @@ public class ClientTest {
     }
 
     @Test
+    public void addClientForbiddenTest()
+    {
+        Client s1 = new Client();
+
+        doThrow(new InvalidClientException()).when(clientService).saveClient(s1);
+
+        ResponseEntity<?> result = clientController.addClient(s1);
+
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
     public void deleteClientByIdTest()
     {
         int id = 1;
@@ -85,5 +106,14 @@ public class ClientTest {
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
+    @Test
+    public void deleteClientByIdNotFoundTest()
+    {
+        int id = 1;
+        doReturn(false).when(clientService).deleteClientById(id);
 
+        ResponseEntity<?> result = clientController.deleteClientById(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
 }
