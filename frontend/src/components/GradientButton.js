@@ -23,7 +23,6 @@ const CustomButton = styled.input`
     justify-content: center;
     border: 0;
     color: white;
-    font-family: Proxima Nova;
     font-size: 10pt;
     color: white;
     text-transform: uppercase;
