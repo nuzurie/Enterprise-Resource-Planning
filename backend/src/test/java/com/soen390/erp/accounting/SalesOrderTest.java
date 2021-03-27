@@ -111,7 +111,7 @@ public class SalesOrderTest {
 
         ResponseEntity<?> result = saleOrderController.receivePayment(id);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
     }
 
     @Test

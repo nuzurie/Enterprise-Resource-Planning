@@ -136,7 +136,7 @@ public class PurchaseOrderTest {
 
         ResponseEntity<?> result = purchaseOrderController.receiveMaterial(id);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
     }
 
     @Test
