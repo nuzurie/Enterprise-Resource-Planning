@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "account")
 public class Account {
     enum AccountName {AccountPayable, AccountReceivable, Cash, Inventory}
 
