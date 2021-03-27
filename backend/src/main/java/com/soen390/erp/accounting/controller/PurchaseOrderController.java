@@ -65,9 +65,11 @@ public class PurchaseOrderController {
             return ResponseEntity.badRequest().build();
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(purchaseOrder.isPaid()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if bank balance is more than grand total
-        //TODO check if new status is valid
         //endregion
 
         //get amount from po
@@ -118,9 +120,11 @@ public class PurchaseOrderController {
             return ResponseEntity.badRequest().build();
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(purchaseOrder.isReceived()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if inventory balance is more than grand total
-        //TODO check if new status is valid
         //endregion
 
         //get amount from po

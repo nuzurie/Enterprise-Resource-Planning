@@ -66,9 +66,10 @@ public class SaleOrderController {
             return ResponseEntity.badRequest().build();
         }
         SaleOrder saleOrder = saleOrderOptional.get();
-        //TODO check if transaction valid
-        //TODO check if bank balance is more than grand total
-        //TODO check if new status is valid
+        //check if transaction valid
+        if(saleOrder.isPaid()){
+            return ResponseEntity.badRequest().build();
+        }
         //endregion
 
 
@@ -129,9 +130,10 @@ public class SaleOrderController {
             return ResponseEntity.badRequest().build();
         }
         SaleOrder saleOrder = saleOrderOptional.get();
-        //TODO check if transaction valid
-        //TODO check if bank balance is more than grand total
-        //TODO check if new status is valid
+        //check if transaction valid
+        if(saleOrder.isShipped()){
+            return ResponseEntity.badRequest().build();
+        }
         //endregion
 
 
