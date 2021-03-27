@@ -72,40 +72,7 @@ public class PurchaseOrderController {
         //TODO check if bank balance is more than grand total
         //endregion
 
-        //get amount from po
-        double amount = purchaseOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch bank and inventory accounts using enum and not id.
-        int bankAccountId = 12; //wrong assumption
-        int accountPayableAccountId = 9; //wrong assumption
-
-        //FIXME Account gets infinite reference with Ledger
-        Account bank = accountService.getAccount(bankAccountId).get();
-        Account accountPayable = accountService.getAccount(accountPayableAccountId).get();
-
-        bank.setBalance(bank.getBalance() - amount);
-        accountPayable.setBalance(accountPayable.getBalance() - amount);
-        //endregion
-
-        //region purchase order
-        //update status
-        purchaseOrder.setPaid(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(accountPayable);
-        ledgerEntry.setCreditAccount(bank);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setPurchaseOrder(purchaseOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        purchaseOrderService.makePaymentTransactions(purchaseOrder);
 
         //region return
         return ResponseEntity.ok().build();
@@ -127,40 +94,7 @@ public class PurchaseOrderController {
         //TODO check if inventory balance is more than grand total
         //endregion
 
-        //get amount from po
-        double amount = purchaseOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch inventory and inventory accounts using enum and not id.
-        int inventoryAccountId = 13; //wrong assumption
-        int accountPayableAccountId = 9; //wrong assumption
-
-        //FIXME Account gets infinite reference with Ledger
-        Account inventory = accountService.getAccount(inventoryAccountId).get();
-        Account accountPayable = accountService.getAccount(accountPayableAccountId).get();
-
-        inventory.setBalance(inventory.getBalance() + amount);
-        accountPayable.setBalance(accountPayable.getBalance() + amount);
-        //endregion
-
-        //region purchase order
-        //update status
-        purchaseOrder.setReceived(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(inventory);
-        ledgerEntry.setCreditAccount(accountPayable);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setPurchaseOrder(purchaseOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        purchaseOrderService.receiveMaterialTransactions(purchaseOrder);
 
         //region return
         return ResponseEntity.status(HttpStatus.CREATED).build();

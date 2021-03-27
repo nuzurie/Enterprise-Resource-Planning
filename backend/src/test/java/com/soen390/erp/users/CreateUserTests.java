@@ -1,4 +1,4 @@
-package com.soen390.erp;
+package com.soen390.erp.users;
 
 import com.soen390.erp.users.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;

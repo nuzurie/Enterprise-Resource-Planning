@@ -21,7 +21,9 @@ public class MaterialController {
     private final MaterialRepository materialRepository;
     private final MaterialModelAssembler assembler;
 
-    public MaterialController(MaterialRepository materialRepository, MaterialModelAssembler assembler) {
+    public MaterialController(MaterialRepository materialRepository,
+                              MaterialModelAssembler assembler)
+    {
         this.materialRepository = materialRepository;
         this.assembler = assembler;
     }
@@ -29,12 +31,11 @@ public class MaterialController {
     @GetMapping("/materials")
     public ResponseEntity<?> all() {
 
-        List<EntityModel<Material>> materials = materialRepository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
+        List<EntityModel<Material>> materials = assembler.assembleToModel();
 
         return ResponseEntity.ok().body(
-                CollectionModel.of(materials, linkTo(methodOn(MaterialController.class).all()).withSelfRel()));
+                CollectionModel.of(materials, linkTo(methodOn(MaterialController
+                        .class).all()).withSelfRel()));
     }
 
     @GetMapping(path = "/materials/{id}")
@@ -47,18 +48,20 @@ public class MaterialController {
     }
 
     @PostMapping("/materials")
-    ResponseEntity<?> newMaterial(@RequestBody Material material){
+    public ResponseEntity<?> newMaterial(@RequestBody Material material){
 
+        EntityModel<Material> entityModel = assembler
+                .toModel(materialRepository.save(material));
 
-        EntityModel<Material> entityModel = assembler.toModel(materialRepository.save(material));
-
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        return ResponseEntity.created(entityModel
+                .getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @ResponseBody
     @ExceptionHandler(MaterialNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(MaterialNotFoundException ex){
+    public String partNotFoundException(MaterialNotFoundException ex){
         return ex.getMessage();
     }
 

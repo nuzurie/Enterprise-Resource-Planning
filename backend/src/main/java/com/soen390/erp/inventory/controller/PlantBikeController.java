@@ -20,7 +20,7 @@ public class PlantBikeController {
     }
 
     @GetMapping
-    List<PlantBike> getAllPlantBikes() {
+    public List<PlantBike> getAllPlantBikes() {
         return plantBikeService.findAllPlantBikes();
     }
 
