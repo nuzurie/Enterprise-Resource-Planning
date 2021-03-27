@@ -19,6 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table( name = "ledger")
 public class Ledger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,7 @@ public class Ledger {
     @ManyToOne(optional = false)
     @JoinColumn(name = "debit_account_id")
     private Account debitAccount;
+
 
     /**
      * the account where we gained something in (e.g. we gained material because we received it in the inventory)
