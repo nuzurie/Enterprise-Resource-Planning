@@ -4,17 +4,23 @@ import com.soen390.erp.accounting.exceptions.PurchaseNotFoundException;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
+import com.soen390.erp.accounting.report.GeneratePDFReport;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -41,6 +47,27 @@ public class PurchaseOrderController {
         logService.addLog("Retrieved purchase order with id "+id+".", category);
         return ResponseEntity.ok().body(purchaseOrder);
 
+    }
+
+    @GetMapping(value = "/PurchaseOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportPdf() {
+
+        List<PurchaseOrder> purchaseOrders =
+                purchaseOrderService.getAllPurchaseOrders();
+
+        ByteArrayInputStream bis =
+                GeneratePDFReport.purchaseOrderReport(purchaseOrders);
+
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; " +
+                "filename=purchaseOrderReport" +
+                ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
     }
 
     @PostMapping(path = "/PurchaseOrders")

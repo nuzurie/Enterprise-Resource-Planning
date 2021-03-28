@@ -17,7 +17,11 @@ public class LedgerService {
 
     public void addLedger(Ledger ledgerEntry) {
         ledgerRepository.save(ledgerEntry);
+    }
 
+    public List<Ledger> findAllLedgers() {
+
+        return ledgerRepository.findAll();
     }
 
 
