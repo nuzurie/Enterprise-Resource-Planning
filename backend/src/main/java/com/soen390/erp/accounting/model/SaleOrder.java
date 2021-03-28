@@ -62,4 +62,8 @@ public class SaleOrder {
     @JoinColumn(name = "sale_order_id")
     private Set<SaleOrderItems> saleOrderItems;
 
+    public String toString() {
+        return id+"" ;
+    }
+
 }

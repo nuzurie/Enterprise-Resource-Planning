@@ -153,6 +153,7 @@ public class LedgerController {
 
         List<Ledger> ledgers = ledgerRepository.findAll();
 
+
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
                 CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Ledger ID", "Amount", "date", "debit_amount_id",
@@ -161,20 +162,9 @@ public class LedgerController {
                 "creditAccount", "purchaseOrder","saleOrder" };
 
         csvWriter.writeHeader(csvHeader);
-        Account debita, credita;
-        PurchaseOrder purchaseO;
-        SaleOrder saleO;
 
         for (Ledger ledger : ledgers) {
             csvWriter.write(ledger, nameMapping);
-//            debita = ledger.getDebitAccount();
-//            credita = ledger.getCreditAccount();
-//            purchaseO = ledger.getPurchaseOrder();
-//            saleO = ledger.getSaleOrder();
-//            csvWriter.write(debita.getId(), "debit_amount_id");
-//            csvWriter.write(credita.getId(), "credit_amount_id");
-//            csvWriter.write(purchaseO.getId(), "Purchase_oderer_id");
-//            csvWriter.write(saleO.getId(), "sale_order_id");
         }
 
         csvWriter.close();

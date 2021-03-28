@@ -2,8 +2,11 @@ package com.soen390.erp.accounting.controller;
 
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
+import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.report.GeneratePDFReport;
+import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
+import com.soen390.erp.accounting.repository.SaleOrderRepository;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
@@ -16,6 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +37,7 @@ public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final AccountService accountService;
     private final LedgerService ledgerService;
+    private final SaleOrderRepository saleOrderRepository;
 
 
     @GetMapping(path = "/SaleOrders")
@@ -131,5 +143,35 @@ public class SaleOrderController {
         //region return
         return ResponseEntity.ok().build();
         //endregion
+    }
+
+    @GetMapping("/SaleOrders/export")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<SaleOrder> listSales = saleOrderRepository.findAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"Sale Oder ID",  "Plant", "date", "Client",
+                "Total Amount", "Discount", "Discount Amount", "Tax",
+                "Tax Amount", "Total", "Paid", "Shipped" , "Sale Items"};
+        String[] nameMapping = {"id", "plant", "date", "client",  "totalAmount",
+                "discount","discountAmount", "tax", "taxAmount", "grandTotal",
+                "paid", "shipped", "saleOrderItems" };
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (SaleOrder sale : listSales) {
+            csvWriter.write(sale, nameMapping);
+        }
+
+        csvWriter.close();
+
     }
 }
