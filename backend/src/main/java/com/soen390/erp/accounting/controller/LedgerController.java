@@ -1,18 +1,29 @@
 package com.soen390.erp.accounting.controller;
 
 
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.soen390.erp.accounting.exceptions.LedgerNotFoundException;
 import com.soen390.erp.accounting.model.Ledger;
+import com.soen390.erp.accounting.report.GeneratePDFReport;
+import com.soen390.erp.accounting.report.WriteCSVToResponse;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
 import com.soen390.erp.accounting.service.LedgerService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -25,7 +36,11 @@ public class LedgerController {
     private final LedgerModelAssembler assembler;
     private final LedgerService ledgerService;
 
-    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService) {
+    public LedgerController(LedgerRepository ledgerRepository,
+                            LedgerModelAssembler assembler,
+                            LedgerService ledgerService)
+    {
+
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
         this.ledgerService = ledgerService;
@@ -47,6 +62,53 @@ public class LedgerController {
                 .orElseThrow(() -> new LedgerNotFoundException(id));
 
         return ResponseEntity.ok().body(assembler.toModel(ledger));
+    }
+
+    @GetMapping(value = "/ledgers/report/pdf")
+    public ResponseEntity<InputStreamResource> exportPdf() {
+
+        List<Ledger> ledgers = ledgerService.findAllLedgers();
+
+        ByteArrayInputStream bis = GeneratePDFReport.ledgerReport(ledgers);
+
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=ledgersReport" +
+                ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+    }
+
+    @GetMapping("/ledgers/report/csv")
+    public void exportCSV(HttpServletResponse response) throws Exception {
+
+        //set file name and content type
+        String filename = "ledgers.csv";
+
+        List<Ledger> ledgers = ledgerService.findAllLedgers();
+
+        response.setContentType("text/csv");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"");
+
+
+        WriteCSVToResponse.writeLedgers(response.getWriter(), ledgers);
+
+
+
+////        create a csv writer
+//        StatefulBeanToCsv<Ledger> writer = new StatefulBeanToCsvBuilder<Ledger>(response.getWriter())
+//                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+//                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+//                .withOrderedResults(false)
+//                .build();
+//
+////        write all users to csv file
+//        writer.write(ledgers);
+
     }
 
     @PostMapping("/ledger")
