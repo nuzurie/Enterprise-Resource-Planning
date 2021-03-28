@@ -8,27 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class SupplierOrderController {
 
     @Autowired
-    private SupplierOrderService service;
+    private SupplierOrderService supplierOrderservice;
 
     @GetMapping(path = "/SupplierOrders")
-    public ArrayList<SupplierOrder> getAllSupplierOrders(){
-        return service.getAllSupplierOrders();
+    public List<SupplierOrder> getAllSupplierOrders(){
+        return supplierOrderservice.getAllSupplierOrders();
     }
 
     @PostMapping(path = "/SupplierOrders")
     public ResponseEntity<?> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
         //TODO: validate input
-        boolean isSuccessful = service.insertSupplierOrder(supplierOrder);
+        boolean isSuccessful = supplierOrderservice.insertSupplierOrder(supplierOrder);
         if (isSuccessful == true){
-            return ResponseEntity.status(HttpStatus.OK).body(supplierOrder.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(supplierOrder.getId());
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
 }

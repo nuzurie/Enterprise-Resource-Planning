@@ -24,7 +24,10 @@ public class BikeController {
     private final BikeModelAssembler assembler;
     private final PartRepository partRepository;
 
-    public BikeController(BikeRepository bikeRepository, BikeModelAssembler assembler, PartRepository partRepository) {
+    public BikeController(BikeRepository bikeRepository,
+                          BikeModelAssembler assembler,
+                          PartRepository partRepository)
+    {
         this.bikeRepository = bikeRepository;
         this.assembler = assembler;
         this.partRepository = partRepository;
@@ -33,9 +36,7 @@ public class BikeController {
     @GetMapping("/bikes")
     public ResponseEntity<?> all() {
 
-        List<EntityModel<Bike>> bikes = bikeRepository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+        List<EntityModel<Bike>> bikes = assembler.assembleToModel();
 
         return ResponseEntity.ok().body(
                 CollectionModel.of(bikes, linkTo(methodOn(BikeController.class).all()).withSelfRel()));
@@ -51,7 +52,7 @@ public class BikeController {
     }
 
     @PostMapping("/bikes")
-    ResponseEntity<?> newBike(@RequestBody Bike bike){
+    public ResponseEntity<?> newBike(@RequestBody Bike bike){
 
         Handlebar handlebar = bike.getHandlebar();
         partRepository.save(handlebar);

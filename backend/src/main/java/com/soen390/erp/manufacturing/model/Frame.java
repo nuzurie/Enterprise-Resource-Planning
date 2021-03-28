@@ -13,10 +13,16 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("frame")
 public class Frame extends Part{
+    @Override
+    public Part createPart() {
+        return new Frame();
+    }
+
     enum Colour {RED, BLUE, GREEN, ORANGE, SILVER, BLACK}
     enum Finish {MATTE, CHROME}
 
     protected Colour colour;
     protected double size;
     protected Finish finish;
+
 }

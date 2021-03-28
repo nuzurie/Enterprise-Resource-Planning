@@ -1,5 +1,8 @@
 package com.soen390.erp.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.soen390.erp.accounting.model.PurchaseOrder;
+import com.soen390.erp.accounting.model.SaleOrder;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,8 +37,13 @@ public class Plant {
     @JoinColumn(name = "plantbike_id")
     private Set<PlantBike> bikes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "plant")
-    private List<SupplierOrder> supplierOrders;
+    private List<PurchaseOrder> purchaseOrders;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "plant")
+    private List<SaleOrder> saleOrders;
 
     public Optional<Set<PlantPart>> getParts() {
         return Optional.ofNullable(parts);

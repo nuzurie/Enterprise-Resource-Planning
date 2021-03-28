@@ -13,7 +13,7 @@ class Login extends Component {
     super(props);
   }
 
-  handleLogin = (e) => {
+  handleLogin(e){
       e.preventDefault();
 
       const form = new FormData(e.target);
@@ -21,24 +21,16 @@ class Login extends Component {
       const password = form.get("password");
 
       const credentials = window.btoa(email+":"+password)
-      const auth = 'Basic '+credentials
+      const auth = "Basic "+credentials
 
-      axios.get('http://localhost:8080/', {
+      axios.get('/', {
           headers: {
               'authorization': auth
-
           }
       })
-    .then(() => this.props.history.push('/dashboard'))
+    .then(res => console.log(res.data))
     .catch(err => console.log(err))
 
-    // axios.get('/asd', {
-    //     headers: {
-    //         'authorization': credentials
-    //     }
-    // })
-    // .then(res => console.log(res.data))
-    // .catch(err => console.log(err))
   }
 
   render() {
@@ -73,7 +65,7 @@ const LoginForm = styled.form`
 
 const TextInput = styled.input`
     border: 0;
-    font-family: Proxima Nova;
+    
     font-size: 9pt;
     color: #556C99;
     text-transform: uppercase;
@@ -91,7 +83,7 @@ const TextInput = styled.input`
     }
 `
 const Title = styled.div`
-    font-family: Proxima Nova;
+    
     font-size: 10pt;
     color: black;
     text-transform: uppercase;

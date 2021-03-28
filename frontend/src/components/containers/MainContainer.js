@@ -17,7 +17,9 @@ class MainContainer extends Component {
               <AddIcon />
             </AddButton>
           </Header>
-          {this.props.children}
+          <Content>
+            {this.props.children}
+          </Content>
         </Container>
     );
   }
@@ -31,27 +33,33 @@ const Container = styled.div`
   height: calc(100% - 40px);
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
   position: relative;
+  width: fit-content;
 
   button {
-    background-color: transparent;
+    // background-color: transparent;
     background-repeat: no-repeat;
     border: none;
     cursor: pointer;
     overflow: hidden;
     outline: none;
-    color: #FF7A67;;
+    // color: #FF7A67;
     transition: 250ms;
-    padding: 0;
+    // padding: 0;
 
-    &:hover, &::selection {
-      color: #BBC8E3;
-    }
+    // &:hover, &::selection {
+    //   color: #BBC8E3;
+    // }
 
-    svg {
-      width: 1.2em;
-      height: 1.2em;
-    }
+    // svg {
+    //   width: 1.2em;
+    //   height: 1.2em;
+    // }
 }
+`
+
+const Content = styled.div`
+  overflow-y: auto;
+  height: calc(100% - 20px);
 `
 
 const Header = styled.div`
@@ -60,10 +68,11 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background: white;
 `
 
 const Title = styled.div`
-    font-family: Proxima Nova;
+    // font-family: Proxima Nova;
     font-size: 12pt;
     color: black;
     text-transform: uppercase;
@@ -91,7 +100,6 @@ const AddButton = styled.div`
 MainContainer.propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
-    createFeature: PropTypes.bool.isRequired,
 };
 
 export default MainContainer;

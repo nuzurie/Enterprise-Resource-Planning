@@ -13,7 +13,13 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("pedal")
 public class Pedal extends Part{
+
     enum Type {STRAP, CLIP}
 
     protected Type type;
+
+    @Override
+    public Part createPart() {
+        return new Pedal();
+    }
 }

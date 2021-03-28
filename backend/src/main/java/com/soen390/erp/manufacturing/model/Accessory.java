@@ -12,4 +12,8 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("accessory")
 public class Accessory extends Part{
+    @Override
+    public Part createPart() {
+        return new Accessory();
+    }
 }

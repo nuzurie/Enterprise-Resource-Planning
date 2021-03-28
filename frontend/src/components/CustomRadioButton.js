@@ -11,7 +11,7 @@ class CustomRadioButton extends Component {
     return (
         <Container>
             <CheckboxContainer>
-                <input type="radio" checked="checked" name="radio" value={this.props.value} />
+                <input type="radio" name="radio" id={this.props.id} value={this.props.value} />
                 <Checkmark />
                 {this.props.children}
             </CheckboxContainer>
@@ -22,7 +22,7 @@ class CustomRadioButton extends Component {
 
 //STYLED-COMPONENTS
 const Container = styled.div`
-    font-family: Proxima Nova;
+    
     font-size: 10pt;
     color: #556C99;
     text-transform: uppercase;
