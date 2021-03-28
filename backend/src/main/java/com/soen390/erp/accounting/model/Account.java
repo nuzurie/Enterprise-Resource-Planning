@@ -29,4 +29,9 @@ public class Account {
     @OneToMany(mappedBy = "creditAccount")
     @JsonBackReference
     private Set<Ledger> creditLedgerEntries;
+
+    @Override
+    public String toString() {
+        return id+"" ;
+    }
 }

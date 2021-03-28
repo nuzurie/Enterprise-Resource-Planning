@@ -30,4 +30,8 @@ public class SaleOrderItems {
     @ManyToOne
     @JoinColumn(name = "bike_id")
     private Bike bike;
+
+    public String toString() {
+        return bike+"" ;
+    }
 }

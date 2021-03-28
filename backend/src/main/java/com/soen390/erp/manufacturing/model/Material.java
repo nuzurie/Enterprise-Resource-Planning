@@ -52,10 +52,6 @@ public class Material {
 
     @Override
     public String toString() {
-        return "Material{" +
-                "name='" + name + '\'' +
-                ", cost=" + cost +
-                ", parts=" + parts +
-                '}';
+        return name;
     }
 }
