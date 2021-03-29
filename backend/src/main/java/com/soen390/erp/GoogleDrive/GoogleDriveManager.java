@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +30,19 @@ public class GoogleDriveManager {
             "Technicalsand.com - Google Drive API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
+
+    /**
+     * Global instance of the scopes required by this quickstart.
+     * If modifying these scopes, delete your previously saved tokens/ folder.
+     */
+    private static final List<String> SCOPES =
+            Arrays.asList(
+                    DriveScopes.DRIVE_APPDATA,
+                    DriveScopes.DRIVE,
+                    DriveScopes.DRIVE_METADATA,
+                    DriveScopes.DRIVE_FILE,
+                    DriveScopes.DRIVE_SCRIPTS);
+
     private static final String CREDENTIALS_FILE_PATH = "/keys/credentials.json";
 
     /**
@@ -49,7 +62,6 @@ public class GoogleDriveManager {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         return service;
-
     }
 
     /**
