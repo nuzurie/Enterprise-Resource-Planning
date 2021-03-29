@@ -64,7 +64,7 @@ public class LedgerController {
         return ResponseEntity.ok().body(assembler.toModel(ledger));
     }
 
-    @GetMapping(value = "/ledgers/report/pdf")
+    @GetMapping(value = "/ledger/report/pdf")
     public ResponseEntity<InputStreamResource> exportPdf() {
 
         List<Ledger> ledgers = ledgerService.findAllLedgers();
@@ -72,7 +72,8 @@ public class LedgerController {
         ByteArrayInputStream bis = GeneratePDFReport.ledgerReport(ledgers);
 
         var headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename=ledgersReport" +
+        headers.add("Content-Disposition",
+                "inline; filename=ledgersReport" +
                 ".pdf");
 
         return ResponseEntity
@@ -82,7 +83,7 @@ public class LedgerController {
                 .body(new InputStreamResource(bis));
     }
 
-    @GetMapping("/ledgers/report/csv")
+    @GetMapping("/ledger/report/csv")
     public void exportCSV(HttpServletResponse response) throws Exception {
 
         //set file name and content type

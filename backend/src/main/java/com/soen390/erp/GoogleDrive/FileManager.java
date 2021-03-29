@@ -16,8 +16,10 @@ public class FileManager {
 
     GoogleDriveManager googleDriveManager;
 
-    public String uploadFile(MultipartFile file, String filePath) {
-        try {
+    public String uploadFile(MultipartFile file, String filePath)
+    {
+        try
+        {
 //            String folderId = getFolderId(filePath);
             if (null != file) {
                 File fileMetadata = new File();
@@ -32,17 +34,20 @@ public class FileManager {
                         .setFields("id").execute();
                 return uploadFile.getId();
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             System.out.println("Error: " + e);
         }
         return null;
     }
 
-    public void downloadFile(String id, OutputStream outputStream) throws IOException, GeneralSecurityException
+    public void downloadFile(String id, OutputStream outputStream)
+            throws IOException, GeneralSecurityException
     {
         if (id != null) {
             String fileId = id;
-            googleDriveManager.getInstance().files().get(fileId).executeMediaAndDownloadTo(outputStream);
+            googleDriveManager.getInstance().files().get(fileId)
+                    .executeMediaAndDownloadTo(outputStream);
         }
     }
 }
