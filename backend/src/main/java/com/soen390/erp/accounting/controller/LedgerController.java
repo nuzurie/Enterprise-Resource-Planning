@@ -163,20 +163,21 @@ public class LedgerController {
         String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<Ledger> listLedgers = ledgerRepository.findAll();
+        List<Ledger> ledgers = ledgerRepository.findAll();
 
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+                CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Ledger ID", "Amount", "date", "debit_amount_id",
                 "credit_account_id", "Purchase_oderer_id", "sale_order_id"};
-        String[] nameMapping = {"id", "amount", "date", "debitAccount_Id", "creditAccount",
-                "purchaseOrder","saleOrder" };
+        String[] nameMapping = {"id", "amount", "date", "debitAccount",
+                "creditAccount", "purchaseOrder","saleOrder" };
 
         csvWriter.writeHeader(csvHeader);
         Account debita, credita;
         PurchaseOrder purchaseO;
         SaleOrder saleO;
 
-        for (Ledger ledger : listLedgers) {
+        for (Ledger ledger : ledgers) {
             csvWriter.write(ledger, nameMapping);
 //            debita = ledger.getDebitAccount();
 //            credita = ledger.getCreditAccount();
