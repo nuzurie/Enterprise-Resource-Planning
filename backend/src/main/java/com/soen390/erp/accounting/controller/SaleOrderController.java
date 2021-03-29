@@ -1,7 +1,5 @@
 package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.accounting.model.Account;
-import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.report.CsvReportGenerator;
 import com.soen390.erp.accounting.report.IReportGenerator;
@@ -17,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.ByteArrayInputStream;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -53,22 +49,6 @@ public class SaleOrderController {
             return ResponseEntity.notFound().build();
         }
     }
-
-<<<<<<< HEAD
-    @GetMapping(value = "/SaleOrders/report/pdf")
-    public ResponseEntity<InputStreamResource> exportPdf() {
-
-        List<SaleOrder> saleOrders = saleOrderService.getAllSaleOrders();
-
-        ByteArrayInputStream bis =
-                GeneratePDFReport.saleOrderReport(saleOrders);
-
-        var headers = new HttpHeaders();
-        headers.add("Content-Disposition",
-                "inline; filename=saleOrderReport" +
-                ".pdf");
-=======
->>>>>>> 8b0d6e6 (merge with Adam's csv report and implemented visitor pattern for report generation)
 
 
     @PostMapping(path = "/SaleOrders")

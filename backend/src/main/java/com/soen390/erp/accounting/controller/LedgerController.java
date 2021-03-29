@@ -67,7 +67,7 @@ public class LedgerController {
     }
 
     @PostMapping("/ledger")
-    ResponseEntity<?> newTransaction(@RequestBody Ledger ledger){
+    public ResponseEntity<?> newTransaction(@RequestBody Ledger ledger){
 
         // Todo add account transaction / add inventory updates
         EntityModel<Ledger> entityModel = assembler.toModel(
@@ -80,7 +80,7 @@ public class LedgerController {
     @ResponseBody
     @ExceptionHandler(LedgerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String partNotFoundException(LedgerNotFoundException ex){
+    public String partNotFoundException(LedgerNotFoundException ex){
         return ex.getMessage();
     }
 
