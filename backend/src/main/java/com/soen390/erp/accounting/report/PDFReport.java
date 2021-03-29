@@ -20,7 +20,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
+/**
+ * For PDF table design examples only
+ * For when we want to prettify the PDF report
+ */
 public class PDFReport {
     private static String FILE = "PDFReport.pdf";
     private static Font header1Font = new Font(Font.FontFamily.UNDEFINED, 18,
@@ -73,7 +76,8 @@ public class PDFReport {
         addEmptyLine(preface, 8);
 
         preface.add(new Paragraph(
-                "This document is a preliminary version and not subject to your license agreement or any other agreement with vogella.com ;-).",
+                "This document is a preliminary version and not subject to " +
+                        "your license agreement or any other agreement with vogella.com ;-).",
                 redFont));
 
         document.add(preface);

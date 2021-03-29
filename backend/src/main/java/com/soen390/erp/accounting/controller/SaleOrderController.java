@@ -138,22 +138,6 @@ public class SaleOrderController {
         //endregion
     }
 
-    @GetMapping("/SaleOrders/report/csv")
-    public void exportToCSV(HttpServletResponse response) throws IOException
-    {
-        response.setContentType("text/csv");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        IReportGenerator csvReportGenerator = new CsvReportGenerator();
-        csvReportGenerator.setResponse(response);
-        saleOrderService.accept(csvReportGenerator);
-    }
-
     @GetMapping(value = "/SaleOrders/report/pdf")
     public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
     {
@@ -172,4 +156,23 @@ public class SaleOrderController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(inputStream));
     }
+
+    @GetMapping("/SaleOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException
+    {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue =
+                "attachment; filename=saleOrdersReport_" + currentDateTime +
+                ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
+        csvReportGenerator.setResponse(response);
+        saleOrderService.accept(csvReportGenerator);
+    }
+
 }

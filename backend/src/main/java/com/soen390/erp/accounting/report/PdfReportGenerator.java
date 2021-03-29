@@ -243,149 +243,59 @@ public class PdfReportGenerator implements IReportGenerator {
             table.setWidthPercentage(98);
             table.setWidths(new int[]{1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
 
-            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            addPdfCell(table, "id", tableTitleFont);
 
-            PdfPCell hcell;
-            hcell = new PdfPCell(new Phrase("Id", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Date", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Date", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Discount", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Discount", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Discount Amount", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Discount Amount", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Grand Total", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Grand Total", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Tax", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Tax", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Tax Amount", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Tax Amount", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Total Amount", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Total Amount", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Plant", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Plant", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Supplier", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Supplier", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            addPdfCell(table, "Paid", tableTitleFont);
 
-            hcell = new PdfPCell(new Phrase("Paid", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
-
-            hcell = new PdfPCell(new Phrase("Received", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
-
+            addPdfCell(table, "Received", tableTitleFont);
 
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
 
                 PdfPCell cell;
 
-                cell =
-                        new PdfPCell(new Phrase(Integer.toString(purchaseOrder.getId())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                addPdfCell(table, Integer.toString(purchaseOrder.getId()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getDate())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getDate()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(Double.toString(purchaseOrder.getDiscount())));
-                cell.setPaddingLeft(5);
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                table.addCell(cell);
+                addPdfCell(table, Double.toString(purchaseOrder.getDiscount()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getDiscountAmount())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getDiscountAmount()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getGrandTotal())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getGrandTotal()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getTax())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getTax()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getTaxAmount())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getTaxAmount()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.getTotalAmount())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.getTotalAmount()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(
-                                Integer.toString(purchaseOrder.getPlant().getId())
-                                        + ", " + purchaseOrder.getPlant().getName()));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, Integer.toString(purchaseOrder.getPlant().getId())
+                        + ", " + purchaseOrder.getPlant().getName(), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(
-                                Integer.toString(purchaseOrder.getSupplier().getId())
-                                        + ", " + purchaseOrder.getSupplier().getName()));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, Integer.toString(purchaseOrder.getSupplier().getId())
+                        + ", " + purchaseOrder.getSupplier().getName(), regularFont);
 
+                addPdfCell(table, String.valueOf(purchaseOrder.isPaid()), regularFont);
 
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.isPaid())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
-
-                cell =
-                        new PdfPCell(new Phrase(String.valueOf(purchaseOrder.isReceived())));
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell.setPaddingRight(5);
-                table.addCell(cell);
+                addPdfCell(table, String.valueOf(purchaseOrder.isReceived()), regularFont);
 
             }
 
