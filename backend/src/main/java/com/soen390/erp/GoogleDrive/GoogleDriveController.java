@@ -12,7 +12,6 @@ import java.security.GeneralSecurityException;
 @RestController
 public class GoogleDriveController {
 
-
     private final FileManager fileManager;
 
     public GoogleDriveController(FileManager fileManager)
@@ -72,7 +71,8 @@ public class GoogleDriveController {
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteReport(@PathVariable String id) throws Exception
+    public ResponseEntity<?> deleteReport(@PathVariable String id)
+            throws Exception
     {
         fileManager.deleteFile(id);
         return ResponseEntity.ok().body("File Deleted Successfully");
