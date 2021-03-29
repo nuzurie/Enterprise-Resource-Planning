@@ -4,8 +4,13 @@ import com.soen390.erp.accounting.exceptions.PurchaseNotFoundException;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
-import com.soen390.erp.accounting.report.GeneratePDFReport;
+
 import com.soen390.erp.accounting.repository.LedgerRepository;
+
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
 import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
@@ -60,27 +65,6 @@ public class PurchaseOrderController {
         logService.addLog("Retrieved purchase order with id "+id+".", category);
         return ResponseEntity.ok().body(purchaseOrder);
 
-    }
-
-    @GetMapping(value = "/PurchaseOrders/report/pdf")
-    public ResponseEntity<InputStreamResource> exportPdf() {
-
-        List<PurchaseOrder> purchaseOrders =
-                purchaseOrderService.getAllPurchaseOrders();
-
-        ByteArrayInputStream bis =
-                GeneratePDFReport.purchaseOrderReport(purchaseOrders);
-
-        var headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; " +
-                "filename=purchaseOrderReport" +
-                ".pdf");
-
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(bis));
     }
 
     @PostMapping(path = "/PurchaseOrders")
@@ -152,33 +136,41 @@ public class PurchaseOrderController {
         //endregion
     }
 
-    @GetMapping("/PurchaseOrders/export")
-    public void exportToCSV(HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/PurchaseOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
+    {
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; " +
+                "filename=purchaseOrderReport" +
+                ".pdf");
+
+        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
+        purchaseOrderService.accept(pdfReportGenerator);
+        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
+    }
+
+    @GetMapping("/PurchaseOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response)
+            throws IOException
+    {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
+        String headerValue =
+                "attachment; filename=purchaseOrdersReport_" + currentDateTime +
+                        ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<PurchaseOrder> listPurchases = purchaseOrderRepository.findAll();
-
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Purchase Oder ID", "Plant", "date", "Supplier",
-                "Total Amount", "discount", "Discount Amount", "Tax",
-                "Tax Amount", "Paid", "Received" , "Purchased Items"};
-        String[] nameMapping = {"id", "plant", "date", "supplier", "totalAmount",
-                "discount","discountAmount", "tax", "taxAmount", "grandTotal",
-                "paid", "received", "purchaseOrderItems" };
-
-        csvWriter.writeHeader(csvHeader);
-
-        for (PurchaseOrder purchase : listPurchases) {
-            csvWriter.write(purchase, nameMapping);
-        }
-
-        csvWriter.close();
-
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
+        csvReportGenerator.setResponse(response);
+        purchaseOrderService.accept(csvReportGenerator);
     }
 }

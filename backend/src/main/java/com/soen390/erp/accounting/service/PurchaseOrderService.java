@@ -1,10 +1,12 @@
 package com.soen390.erp.accounting.service;
 
+import com.soen390.erp.accounting.model.IReport;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.PurchaseOrderItems;
 
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
@@ -14,13 +16,15 @@ import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class PurchaseOrderService {
+public class PurchaseOrderService implements IReport
+{
     private final PurchaseOrderRepository repository;
     private final MaterialRepository materialRepository;
     private final PlantRepository plantRepository;
@@ -36,7 +40,7 @@ public class PurchaseOrderService {
 
         double totalPrice = 0;
         for (PurchaseOrderItems purchaseOrderItem: purchaseOrder.getPurchaseOrderItems()
-             ) {
+        ) {
             totalPrice += purchaseOrderItem.getUnitPrice()*purchaseOrderItem.getQuantity();
             materialRepository.save(purchaseOrderItem.getMaterial());
         }
@@ -154,5 +158,11 @@ public class PurchaseOrderService {
         emailService.sendMail(email);
         ledgerService.addLedger(ledgerEntry);
         //endregion
+    }
+
+    @Override
+    public void accept(IReportGenerator reportGenerator) throws IOException
+    {
+        reportGenerator.generatePurchaseOrderReport(this);
     }
 }
