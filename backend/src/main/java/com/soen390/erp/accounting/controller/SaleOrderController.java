@@ -53,7 +53,8 @@ public class SaleOrderController {
                 GeneratePDFReport.saleOrderReport(saleOrders);
 
         var headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename=saleOrderReport" +
+        headers.add("Content-Disposition",
+                "inline; filename=saleOrderReport" +
                 ".pdf");
 
         return ResponseEntity
