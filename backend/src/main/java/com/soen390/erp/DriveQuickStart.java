@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -15,12 +16,16 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.soen390.erp.GoogleDrive.FileManager;
+import com.soen390.erp.GoogleDrive.GoogleDriveController;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,11 +34,20 @@ public class DriveQuickStart {
     private static final JsonFactory JSON_FACTORY = new GsonFactory();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
+//    FileManager fileManager = new FileManager();
+    public static GoogleDriveController googleDriveController =
+        new GoogleDriveController();
+
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY);
+    private static final List<String> SCOPES =
+            Arrays.asList(DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE,
+                    DriveScopes.DRIVE_METADATA, DriveScopes.DRIVE_FILE,
+                    DriveScopes.DRIVE_READONLY, DriveScopes.DRIVE_SCRIPTS);
+
+
     private static final String CREDENTIALS_FILE_PATH = "keys/credentials.json";
 
 
@@ -63,12 +77,23 @@ public class DriveQuickStart {
     }
 
     public static void main(String... args) throws IOException, GeneralSecurityException {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+
+//        File fileMetadata = new File();
+//        fileMetadata.setName("saleOrderReport.pdf");
+//        java.io.File filePath = new java.io.File("C:\\Users\\owner\\Downloads" +
+//                "/saleOrderReport.pdf");
+//        FileContent mediaContent = new FileContent("application/pdf", filePath);
+//        File file = service.files().create(fileMetadata, mediaContent)
+//                .setFields("id")
+//                .execute();
+//        System.out.println("File ID: " + file.getId());
+
 
         // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()

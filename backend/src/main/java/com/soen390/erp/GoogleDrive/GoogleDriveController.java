@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+@RestController
 public class GoogleDriveController {
 
     FileManager fileManager;

@@ -150,33 +150,8 @@ public class SaleOrderController {
         response.setHeader(headerKey, headerValue);
 
         IReportGenerator csvReportGenerator = new CsvReportGenerator();
-
-//        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
-//                CsvPreference.STANDARD_PREFERENCE);
-
         csvReportGenerator.setResponse(response);
-
         saleOrderService.accept(csvReportGenerator);
-
-//        return ResponseEntity.ok().body("Sale Orders CSV Report Generated.");
-
-//        List<SaleOrder> listSales = saleOrderService.getAllSaleOrders();
-//
-//        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-//        String[] csvHeader = {"Sale Oder ID",  "Plant", "date", "Client",
-//                "Total Amount", "Discount", "Discount Amount", "Tax",
-//                "Tax Amount", "Total", "Paid", "Shipped" , "Sale Items"};
-//        String[] nameMapping = {"id", "plant", "date", "client",  "totalAmount",
-//                "discount","discountAmount", "tax", "taxAmount", "grandTotal",
-//                "paid", "shipped", "saleOrderItems" };
-//
-//        csvWriter.writeHeader(csvHeader);
-//
-//        for (SaleOrder sale : listSales) {
-//            csvWriter.write(sale, nameMapping);
-//        }
-//
-//        csvWriter.close();
     }
 
     @GetMapping(value = "/SaleOrders/report/pdf")
