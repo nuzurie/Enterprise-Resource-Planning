@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
 import com.soen390.erp.accounting.exceptions.InvalidClientException;
 import com.soen390.erp.accounting.model.Client;
 import com.soen390.erp.accounting.service.ClientService;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.controller;
 
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.inventory.exceptions.InvalidClientOrderException;
 import com.soen390.erp.inventory.model.ClientOrder;
 import com.soen390.erp.inventory.service.ClientOrderService;
@@ -33,6 +34,6 @@ public class ClientOrderController {
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Client Order");
+        return ResponseEntity.status(HttpStatus.CREATED).body("The Client Order was successfully created with id " + clientOrder.getId());
     }
 }

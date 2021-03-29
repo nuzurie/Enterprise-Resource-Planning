@@ -6,6 +6,9 @@ import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
 import com.soen390.erp.accounting.service.LedgerService;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -24,11 +27,12 @@ public class LedgerController {
     private final LedgerRepository ledgerRepository;
     private final LedgerModelAssembler assembler;
     private final LedgerService ledgerService;
-
-    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService) {
+    private final EmailService emailService;
+    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService, EmailService emailService) {
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
         this.ledgerService = ledgerService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/ledger")
@@ -50,12 +54,16 @@ public class LedgerController {
     }
 
     @PostMapping("/ledger")
-    public ResponseEntity<?> newTransaction(@RequestBody Ledger ledger){
+    public ResponseEntityWrapper newTransaction(@RequestBody Ledger ledger){
 
         // Todo add account transaction / add inventory updates
         EntityModel<Ledger> entityModel = assembler.toModel(ledgerRepository.save(ledger));
 
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Ledger").body("A new ledger has been created with id " + ledger.getId()).build();
+        emailService.sendMail(email);
+
+        return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
+                , "The ledger was successfully created with id " + ledger.getId());
     }
 
     @ResponseBody

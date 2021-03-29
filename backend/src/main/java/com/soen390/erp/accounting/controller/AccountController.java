@@ -5,6 +5,9 @@ import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.repository.AccountRepository;
 import com.soen390.erp.accounting.service.AccountModelAssembler;
 import com.soen390.erp.accounting.service.AccountService;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -25,14 +28,16 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
     private final AccountModelAssembler assembler;
-
+    private final EmailService emailService;
     public AccountController(AccountRepository accountRepository,
                              AccountModelAssembler assembler,
-                             AccountService accountService)
+                             AccountService accountService,
+                             EmailService emailService)
     {
         this.accountRepository = accountRepository;
         this.assembler = assembler;
         this.accountService = accountService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/account")
@@ -54,12 +59,17 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public ResponseEntity<?> newTransaction(@RequestBody Account account){
+    public ResponseEntityWrapper newTransaction(@RequestBody Account account){
 
 
         EntityModel<Account> entityModel = assembler.toModel(accountRepository.save(account));
 
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Account").body("A new account has been created with id " + account.getId()).build();
+        emailService.sendMail(email);
+
+        //return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
+                , "The account was successfully created with id " + account.getId());
     }
 
     @ResponseBody

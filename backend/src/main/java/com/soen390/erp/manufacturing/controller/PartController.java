@@ -1,11 +1,14 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.PartModelAssembler;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -17,7 +20,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 public class PartController {
@@ -25,14 +27,18 @@ public class PartController {
     private final PartRepository partRepository;
     private final MaterialRepository materialRepository;
     private final PartModelAssembler assembler;
+    private final EmailService emailService;
+
 
     public PartController(PartRepository partRepository,
                           PartModelAssembler assembler,
-                          MaterialRepository materialRepository)
+                          MaterialRepository materialRepository,
+                          EmailService emailService)
     {
         this.partRepository = partRepository;
         this.assembler = assembler;
         this.materialRepository = materialRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/parts")
@@ -55,7 +61,7 @@ public class PartController {
     }
 
     @PostMapping("/parts")
-    public ResponseEntity<?> newPart(@RequestBody Part part){
+    public ResponseEntityWrapper newPart(@RequestBody Part part){
 
         Set<Material> materials = part.getMaterials()
                 .orElseGet(() -> new HashSet<>());
@@ -66,9 +72,11 @@ public class PartController {
         EntityModel<Part> entityModel = assembler.toModel(partRepository
                 .save(part));
 
-        return ResponseEntity.created(entityModel
-                .getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+        EmailToSend email = EmailToSend.builder().to("part.manager@msn.com").subject("Added Part").body("A new part has been added with id " + part.getId()).build();
+        emailService.sendMail(email);
+        return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
+                , "The material was successfully created with id " + part.getId());
+
     }
 
     @ResponseBody

@@ -16,6 +16,7 @@ import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.inventory.model.PlantMaterial;
 import com.soen390.erp.manufacturing.model.Material;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -59,7 +59,7 @@ public class PlantController {
 
 
     @PostMapping("/addPartToInventory")
-    public ResponseEntity<?> addPartToInventory(@RequestBody PlantPart plantPart) {
+    public ResponseEntityWrapper addPartToInventory(@RequestBody PlantPart plantPart) {
 
         int plantId = 1;
         Plant plant =
@@ -67,8 +67,9 @@ public class PlantController {
         Part part = plantPart.getPart();
         int quantity = plantPart.getQuantity();
         plantService.addPlantPart(plant, part, quantity);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        //return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build()
+                , "The Part with id "+ part.getId() + " was successfully added to the plant with id " + plantId);
     }
 
     @ResponseBody
@@ -100,7 +101,7 @@ public class PlantController {
     }
 
     @PostMapping("/addMaterialToInventory")
-    public ResponseEntity<?> addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {
+    public ResponseEntityWrapper addMaterialToInventory(@RequestBody PlantMaterial plantMaterial) {
         //TODO: get from header?
         int plantId = 1;
 
@@ -110,11 +111,12 @@ public class PlantController {
         int quantity = plantMaterial.getQuantity();
         plantService.addPlantMaterial(plant,material,quantity);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build()
+                , "The Material with id "+ material.getId() + " was successfully added to the plant with id " + plantId);
     }
 
     @PostMapping("/addBikeToInventory")
-    public ResponseEntity<?> addBikeToInventory(@RequestBody PlantBike plantBike) {
+    public ResponseEntityWrapper addBikeToInventory(@RequestBody PlantBike plantBike) {
         //TODO: get from header?
         int plantId = 1;
 
@@ -124,7 +126,8 @@ public class PlantController {
         int quantity = plantBike.getQuantity();
         plantService.addPlantBike(plant,bike,quantity);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build()
+                , "The Bike with id "+ bike.getId() + " was successfully added to the plant with id " + plantId);
     }
 
 }

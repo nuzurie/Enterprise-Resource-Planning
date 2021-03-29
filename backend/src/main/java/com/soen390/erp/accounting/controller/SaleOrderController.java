@@ -6,6 +6,7 @@ import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class SaleOrderController {
     }
 
     @PostMapping(path = "/SaleOrders")
-    public ResponseEntity<?> createSaleOrder(@RequestBody SaleOrder saleOrder){
+    public ResponseEntityWrapper createSaleOrder(@RequestBody SaleOrder saleOrder){
         //TODO: validate input
 
         saleOrder.setPaid(false);
@@ -50,25 +51,25 @@ public class SaleOrderController {
         boolean isSuccessful = saleOrderService.addSaleOrder(saleOrder);
         if (isSuccessful == true){
             //TODO: debug if id has value
-            return ResponseEntity.ok().body(saleOrder.getId());
+            return new ResponseEntityWrapper(ResponseEntity.ok().body(saleOrder.getId()), "Created Sale Order with id " + saleOrder.getId() + ".");
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+            return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null), "Unable to created new Sale Order.");
         }
     }
 
     @PutMapping(path = "/SaleOrders/{id}/ReceivePayment")
-    public ResponseEntity<?> receivePayment(@PathVariable int id){
+    public ResponseEntityWrapper receivePayment(@PathVariable int id){
 
         //region validation
         //check if sale order exists
         Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
         if (saleOrderOptional.isEmpty()){
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " could not be found.");
         }
         SaleOrder saleOrder = saleOrderOptional.get();
         //check if transaction valid
         if(saleOrder.isPaid()){
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been paid.");
         }
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
@@ -78,23 +79,23 @@ public class SaleOrderController {
         saleOrderService.receivePaymentTransactions(saleOrder);
 
         //region return
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build(), "Sale Order with id " + id + " is now paid.");
         //endregion
     }
 
     @PutMapping(path = "/SaleOrders/{id}/ShipBike")
-    public ResponseEntity<?> shipBike(@PathVariable int id){
+    public ResponseEntityWrapper shipBike(@PathVariable int id){
 
         //region validation
         //check if sale order exists
         Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
         if (saleOrderOptional.isEmpty()){
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Unable to find Sale Order with id " + id + ".");
         }
         SaleOrder saleOrder = saleOrderOptional.get();
         //check if transaction valid
         if(saleOrder.isShipped()){
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been shipped.");
         }
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
@@ -103,7 +104,7 @@ public class SaleOrderController {
         saleOrderService.shipBikeTransactions(saleOrder);
 
         //region return
-        return ResponseEntity.ok().build();
+        return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " is now shipped.");
         //endregion
     }
 }

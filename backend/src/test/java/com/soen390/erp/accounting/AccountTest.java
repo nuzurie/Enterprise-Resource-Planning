@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.exceptions.AccountNotFoundException;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.repository.AccountRepository;
 import com.soen390.erp.accounting.service.*;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,9 +95,9 @@ public class AccountTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = accountController.newTransaction(a1);
+        ResponseEntityWrapper result = accountController.newTransaction(a1);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

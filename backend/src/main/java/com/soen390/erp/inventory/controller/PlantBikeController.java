@@ -33,6 +33,6 @@ public class PlantBikeController {
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Plant Bike");
+        return ResponseEntity.status(HttpStatus.CREATED).body("The Plant Bike was successfully added with id " + plantBike.getId());
     }
 }

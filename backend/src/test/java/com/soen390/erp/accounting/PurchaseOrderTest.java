@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,9 +83,9 @@ public class PurchaseOrderTest {
 
         doReturn(true).when(purchaseOrderService).addPurchaseOrder(p1);
 
-        ResponseEntity<?> result = purchaseOrderController.createPurchaseOrder(p1);
+        ResponseEntityWrapper result = purchaseOrderController.createPurchaseOrder(p1);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -94,9 +95,9 @@ public class PurchaseOrderTest {
 
         doReturn(false).when(purchaseOrderService).addPurchaseOrder(p1);
 
-        ResponseEntity<?> result = purchaseOrderController.createPurchaseOrder(p1);
+        ResponseEntityWrapper result = purchaseOrderController.createPurchaseOrder(p1);
 
-        assertEquals(HttpStatus.NOT_MODIFIED, result.getStatusCode());
+        assertEquals(HttpStatus.NOT_MODIFIED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -108,9 +109,9 @@ public class PurchaseOrderTest {
 
         doReturn(purchaseOrder).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.makePayment(id);
+        ResponseEntityWrapper result = purchaseOrderController.makePayment(id);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -120,9 +121,9 @@ public class PurchaseOrderTest {
 
         doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.makePayment(id);
+        ResponseEntityWrapper result = purchaseOrderController.makePayment(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -134,9 +135,9 @@ public class PurchaseOrderTest {
 
         doReturn(purchaseOrder).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.receiveMaterial(id);
+        ResponseEntityWrapper result = purchaseOrderController.receiveMaterial(id);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -146,8 +147,8 @@ public class PurchaseOrderTest {
 
         doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.receiveMaterial(id);
+        ResponseEntityWrapper result = purchaseOrderController.receiveMaterial(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 }
