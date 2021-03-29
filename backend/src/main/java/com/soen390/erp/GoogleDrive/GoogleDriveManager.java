@@ -25,14 +25,16 @@ import java.util.List;
 @Service
 public class GoogleDriveManager {
 
-    private static final String APPLICATION_NAME = "Technicalsand.com - Google Drive API Java Quickstart";
+    private static final String APPLICATION_NAME =
+            "Technicalsand.com - Google Drive API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
     private static final String CREDENTIALS_FILE_PATH = "/keys/credentials.json";
 
     /**
-     * returns the instance of Drive. We will use this class in all examples to get the drive connection.
+     * returns the instance of Drive. We will use this class in all examples
+     * to get the drive connection.
      * @return
      * @throws GeneralSecurityException
      * @throws IOException
@@ -40,8 +42,10 @@ public class GoogleDriveManager {
     public Drive getInstance() throws GeneralSecurityException, IOException
     {
         // Build a new authorized API client service.
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        final NetHttpTransport HTTP_TRANSPORT =
+                GoogleNetHttpTransport.newTrustedTransport();
+        Drive service = new Drive.Builder(
+                HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         return service;
@@ -55,21 +59,27 @@ public class GoogleDriveManager {
      * @return An authorized Credential object.
      * @throws IOException If the credentials.json file cannot be found.
      */
-    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
+            throws IOException {
         // Load client secrets.
-        InputStream in = GoogleDriveManager.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = GoogleDriveManager.class.getResourceAsStream(
+                CREDENTIALS_FILE_PATH);
         if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+            throw new FileNotFoundException("Resource not found: " +
+                    CREDENTIALS_FILE_PATH);
         }
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
+                JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(
+                        new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("127.0.0.1").setPort(8089).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder()
+                .setHost("127.0.0.1").setPort(8089).build();
 
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }

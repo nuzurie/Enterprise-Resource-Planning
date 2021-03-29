@@ -1,7 +1,6 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.soen390.erp.manufacturing.model.Frame;
 import lombok.*;
 
 import javax.persistence.*;
