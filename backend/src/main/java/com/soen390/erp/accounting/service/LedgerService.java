@@ -1,15 +1,12 @@
 package com.soen390.erp.accounting.service;
 
-import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.IReport;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.report.IReportGenerator;
-import com.soen390.erp.accounting.repository.AccountRepository;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -76,9 +76,6 @@ public class LedgerController {
     }
 
 
-
-
-
     @GetMapping(value = "/ledger/report/pdf")
     public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
     {
