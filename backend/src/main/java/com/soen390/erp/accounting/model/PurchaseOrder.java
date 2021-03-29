@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 

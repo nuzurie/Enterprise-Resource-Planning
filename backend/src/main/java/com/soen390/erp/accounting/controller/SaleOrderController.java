@@ -2,10 +2,10 @@ package com.soen390.erp.accounting.controller;
 
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
-import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.SaleOrder;
-import com.soen390.erp.accounting.report.GeneratePDFReport;
-import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
 import com.soen390.erp.accounting.repository.SaleOrderRepository;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
@@ -19,16 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -58,6 +54,7 @@ public class SaleOrderController {
         }
     }
 
+<<<<<<< HEAD
     @GetMapping(value = "/SaleOrders/report/pdf")
     public ResponseEntity<InputStreamResource> exportPdf() {
 
@@ -70,13 +67,9 @@ public class SaleOrderController {
         headers.add("Content-Disposition",
                 "inline; filename=saleOrderReport" +
                 ".pdf");
+=======
+>>>>>>> 8b0d6e6 (merge with Adam's csv report and implemented visitor pattern for report generation)
 
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(bis));
-    }
 
     @PostMapping(path = "/SaleOrders")
     public ResponseEntity<?> createSaleOrder(@RequestBody SaleOrder saleOrder){
@@ -145,8 +138,9 @@ public class SaleOrderController {
         //endregion
     }
 
-    @GetMapping("/SaleOrders/export")
-    public void exportToCSV(HttpServletResponse response) throws IOException {
+    @GetMapping("/SaleOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException
+    {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -155,23 +149,52 @@ public class SaleOrderController {
         String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<SaleOrder> listSales = saleOrderRepository.findAll();
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
 
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Sale Oder ID",  "Plant", "date", "Client",
-                "Total Amount", "Discount", "Discount Amount", "Tax",
-                "Tax Amount", "Total", "Paid", "Shipped" , "Sale Items"};
-        String[] nameMapping = {"id", "plant", "date", "client",  "totalAmount",
-                "discount","discountAmount", "tax", "taxAmount", "grandTotal",
-                "paid", "shipped", "saleOrderItems" };
+//        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+//                CsvPreference.STANDARD_PREFERENCE);
 
-        csvWriter.writeHeader(csvHeader);
+        csvReportGenerator.setResponse(response);
 
-        for (SaleOrder sale : listSales) {
-            csvWriter.write(sale, nameMapping);
-        }
+        saleOrderService.accept(csvReportGenerator);
 
-        csvWriter.close();
+//        return ResponseEntity.ok().body("Sale Orders CSV Report Generated.");
 
+//        List<SaleOrder> listSales = saleOrderService.getAllSaleOrders();
+//
+//        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+//        String[] csvHeader = {"Sale Oder ID",  "Plant", "date", "Client",
+//                "Total Amount", "Discount", "Discount Amount", "Tax",
+//                "Tax Amount", "Total", "Paid", "Shipped" , "Sale Items"};
+//        String[] nameMapping = {"id", "plant", "date", "client",  "totalAmount",
+//                "discount","discountAmount", "tax", "taxAmount", "grandTotal",
+//                "paid", "shipped", "saleOrderItems" };
+//
+//        csvWriter.writeHeader(csvHeader);
+//
+//        for (SaleOrder sale : listSales) {
+//            csvWriter.write(sale, nameMapping);
+//        }
+//
+//        csvWriter.close();
+    }
+
+    @GetMapping(value = "/SaleOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
+    {
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition",
+                "inline; filename=saleOrderReport" +
+                        ".pdf");
+
+        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
+        saleOrderService.accept(pdfReportGenerator);
+        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
     }
 }

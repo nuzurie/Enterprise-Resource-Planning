@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import lombok.*;
 
 import javax.persistence.*;
@@ -53,4 +54,6 @@ public class Ledger {
     @ManyToOne(optional = true)
     @JoinColumn(name = "sale_order_id")
     private SaleOrder saleOrder;
+
+
 }
