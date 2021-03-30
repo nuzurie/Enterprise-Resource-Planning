@@ -7,7 +7,6 @@ import com.soen390.erp.GoogleDrive.FileManager;
 import com.soen390.erp.GoogleDrive.GoogleDriveController;
 import com.soen390.erp.GoogleDrive.GoogleDriveManager;
 import org.apache.http.entity.ContentType;
-import org.apache.tika.Tika;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
