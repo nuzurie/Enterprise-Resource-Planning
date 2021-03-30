@@ -4,6 +4,7 @@ import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
 import com.soen390.erp.accounting.exceptions.InvalidClientException;
 import com.soen390.erp.accounting.model.Client;
 import com.soen390.erp.accounting.service.ClientService;
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,17 @@ public class ClientController {
 
     private final ClientService clientService;
     private final EmailService emailService;
-    public ClientController(ClientService clientService, EmailService emailService) {
+    private final LogService logService;
+    public ClientController(ClientService clientService, EmailService emailService, LogService logService) {
         this.clientService = clientService;
         this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping
     public List<Client> getAllClients() {
+
+        logService.addLog("Retrieved all client.");
         return clientService.findAllClients();
     }
 
@@ -34,9 +39,10 @@ public class ClientController {
         Client c;
         try {
             c = clientService.findClientById(id);
+            logService.addLog("Retrieved client with id "+id+".");
 
         } catch (ClientNotFoundException e) {
-
+            logService.addLog("Failed to retrieve client with id "+id+". No client exists with that id.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         return ResponseEntity.ok().body(c);
@@ -45,7 +51,8 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<?> addClient(@RequestBody Client client) {
         try {
-            clientService.saveClient(client);
+            Client saveClient = clientService.saveClient(client);
+            logService.addLog("Created client with id "+saveClient.getId()+".");
 
         } catch (InvalidClientException e) {
 
@@ -62,9 +69,10 @@ public class ClientController {
         boolean isRemoved = clientService.deleteClientById(id);
 
         if (!isRemoved) {
+            logService.addLog("Failed to delete client with id "+id+".");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client Not Found by ID " + id);
         }
-
+        logService.addLog("Deleted client with id "+id+".");
         return ResponseEntity.status(HttpStatus.OK).body("Client with id: " + id +" has been deleted");
     }
 

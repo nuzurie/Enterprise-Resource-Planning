@@ -7,6 +7,7 @@ import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import org.springframework.hateoas.CollectionModel;
@@ -28,18 +29,21 @@ public class LedgerController {
     private final LedgerModelAssembler assembler;
     private final LedgerService ledgerService;
     private final EmailService emailService;
-    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService, EmailService emailService) {
+    private final LogService logService;
+
+    public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService, EmailService emailService, LogService logService) {
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
         this.ledgerService = ledgerService;
         this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping("/ledger")
     public ResponseEntity<?> all() {
 
         List<EntityModel<Ledger>> ledger = ledgerService.assembleToModel();
-
+        logService.addLog("Retrieved all ledgers.");
         return ResponseEntity.ok().body(
                 CollectionModel.of(ledger, linkTo(methodOn(LedgerController.class).all()).withSelfRel()));
     }
@@ -49,7 +53,7 @@ public class LedgerController {
 
         Ledger ledger = ledgerRepository.findById(id)
                 .orElseThrow(() -> new LedgerNotFoundException(id));
-
+        logService.addLog("Retrieved ledger with id "+id+".");
         return ResponseEntity.ok().body(assembler.toModel(ledger));
     }
 
@@ -59,8 +63,10 @@ public class LedgerController {
         // Todo add account transaction / add inventory updates
         EntityModel<Ledger> entityModel = assembler.toModel(ledgerRepository.save(ledger));
 
-        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Ledger").body("A new ledger has been created with id " + ledger.getId()).build();
+        String message = "A new ledger has been created with id " + ledger.getId();
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Ledger").body(message).build();
         emailService.sendMail(email);
+        logService.addLog(message);
 
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
                 , "The ledger was successfully created with id " + ledger.getId());

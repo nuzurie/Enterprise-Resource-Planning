@@ -4,6 +4,8 @@ import com.soen390.erp.accounting.exceptions.SupplierNotFoundException;
 import com.soen390.erp.accounting.exceptions.InvalidSupplierException;
 import com.soen390.erp.accounting.model.Supplier;
 import com.soen390.erp.accounting.service.SupplierService;
+import com.soen390.erp.configuration.repository.LogRepository;
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import org.springframework.http.HttpStatus;
@@ -18,14 +20,18 @@ public class SupplierController {
 
     private final SupplierService supplierService;
     private final EmailService emailService;
-    public SupplierController(SupplierService supplierService, EmailService emailService) {
+    private final LogService logService;
+
+    public SupplierController(SupplierService supplierService, EmailService emailService, LogService logRepository) {
         this.supplierService = supplierService;
         this.emailService = emailService;
+        this.logService = logRepository;
     }
 
     @GetMapping
     public List<Supplier> getAllSuppliers() {
 
+        logService.addLog("Retrieved all suppliers.");
         return supplierService.findAllSuppliers();
     }
 
@@ -35,9 +41,10 @@ public class SupplierController {
         Supplier c;
         try {
             c = supplierService.findSupplierById(id);
+            logService.addLog("Retrieved supplier with id "+id+".");
 
         } catch (SupplierNotFoundException e) {
-
+            logService.addLog("Failed to retrieved supplier with id "+id+". No such supplier exists.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         return ResponseEntity.ok().body(c);
@@ -49,11 +56,14 @@ public class SupplierController {
             supplierService.saveSupplier(supplier);
 
         } catch (InvalidSupplierException e) {
-
+            logService.addLog("Failed to create supplier.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-        EmailToSend email = EmailToSend.builder().to("warehouse.manager@msn.com").subject("New Supplier").body("A new Supplier has been found with id " + supplier.getId() + ".").build();
+        String message = "A new Supplier has been found with id " + supplier.getId() + ".";
+        EmailToSend email = EmailToSend.builder().to("warehouse.manager@msn.com").subject("New Supplier").body(message).build();
         emailService.sendMail(email);
+        logService.addLog(message);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Supplier with id " + supplier.getId() + ".");
     }
 
@@ -63,9 +73,11 @@ public class SupplierController {
         boolean isRemoved = supplierService.deleteSupplierById(id);
 
         if (!isRemoved) {
+            logService.addLog("Failed to delete supplier with id "+id+".");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Supplier Not Found by ID " + id);
         }
 
+        logService.addLog("Deleted supplier with id "+id+".");
         return ResponseEntity.status(HttpStatus.OK).body("Supplier Deleted");
     }
 

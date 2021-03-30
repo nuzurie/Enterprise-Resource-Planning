@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogService {
 
-    public final LogRepository logRepository;
+    private final LogRepository logRepository;
 
     @Autowired
     public LogService(LogRepository logRepository) {

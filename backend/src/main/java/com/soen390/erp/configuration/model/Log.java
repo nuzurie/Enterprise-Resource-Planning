@@ -26,7 +26,8 @@ public class Log {
 
     public Log(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        this.user = authentication.getName();
+        if (authentication != null)
+            this.user = authentication.getName();
         this.timestamp = new Date();
     }
 
