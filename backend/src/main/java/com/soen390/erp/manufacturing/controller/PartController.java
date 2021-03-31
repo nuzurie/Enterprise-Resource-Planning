@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
@@ -28,23 +29,26 @@ public class PartController {
     private final MaterialRepository materialRepository;
     private final PartModelAssembler assembler;
     private final EmailService emailService;
+    private final LogService logService;
 
 
     public PartController(PartRepository partRepository,
                           PartModelAssembler assembler,
                           MaterialRepository materialRepository,
-                          EmailService emailService)
+                          EmailService emailService, LogService logService)
     {
         this.partRepository = partRepository;
         this.assembler = assembler;
         this.materialRepository = materialRepository;
         this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping("/parts")
     public ResponseEntity<?> all() {
 
         List<EntityModel<Part>> parts = assembler.assembleToModel();
+        logService.addLog("Retrieve all the parts.");
 
         return ResponseEntity.ok().body(
                 CollectionModel.of(parts, linkTo(methodOn(PartController.class)
@@ -56,7 +60,7 @@ public class PartController {
 
         Part part = partRepository.findById(id)
                 .orElseThrow(() -> new PartNotFoundException(id));
-
+        logService.addLog("Retrieve the part with id "+id+".");
         return ResponseEntity.ok().body(assembler.toModel(part));
     }
 
@@ -72,7 +76,9 @@ public class PartController {
         EntityModel<Part> entityModel = assembler.toModel(partRepository
                 .save(part));
 
-        EmailToSend email = EmailToSend.builder().to("part.manager@msn.com").subject("Added Part").body("A new part has been added with id " + part.getId()).build();
+        String message = "A new part has been added with id " + part.getId();
+        logService.addLog(message);
+        EmailToSend email = EmailToSend.builder().to("part.manager@msn.com").subject("Added Part").body(message).build();
         emailService.sendMail(email);
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
                 , "The material was successfully created with id " + part.getId());

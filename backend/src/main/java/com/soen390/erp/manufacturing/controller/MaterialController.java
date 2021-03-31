@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
@@ -23,21 +24,23 @@ public class MaterialController {
     private final MaterialRepository materialRepository;
     private final MaterialModelAssembler assembler;
     private final EmailService emailService;
+    private final LogService logService;
 
     public MaterialController(MaterialRepository materialRepository,
                               MaterialModelAssembler assembler,
-                              EmailService emailService)
+                              EmailService emailService, LogService logService)
     {
         this.materialRepository = materialRepository;
         this.assembler = assembler;
         this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping("/materials")
     public ResponseEntity<?> all() {
 
         List<EntityModel<Material>> materials = assembler.assembleToModel();
-
+        logService.addLog("Retrieved all materials.");
         return ResponseEntity.ok().body(
                 CollectionModel.of(materials, linkTo(methodOn(MaterialController
                         .class).all()).withSelfRel()));
@@ -46,6 +49,7 @@ public class MaterialController {
     @GetMapping(path = "/materials/{id}")
     public ResponseEntity<?> one(@PathVariable int id) {
 
+        logService.addLog("Retrieved material with id "+id+".");
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new MaterialNotFoundException(id));
 
@@ -58,7 +62,9 @@ public class MaterialController {
         EntityModel<Material> entityModel = assembler
                 .toModel(materialRepository.save(material));
 
-        EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Added Material").body("A new material has been added with id " + material.getId()).build();
+        String message = "A new material has been added with id " + material.getId();
+        logService.addLog(message);
+        EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Added Material").body(message).build();
         emailService.sendMail(email);
 
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)

@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
@@ -25,23 +26,25 @@ public class BikeController {
     private final BikeModelAssembler assembler;
     private final PartRepository partRepository;
     private final EmailService emailService;
+    private final LogService logService;
 
     public BikeController(BikeRepository bikeRepository,
                           BikeModelAssembler assembler,
                           PartRepository partRepository,
-                          EmailService emailService)
+                          EmailService emailService, LogService logService)
     {
         this.bikeRepository = bikeRepository;
         this.assembler = assembler;
         this.partRepository = partRepository;
         this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping("/bikes")
     public ResponseEntity<?> all() {
 
         List<EntityModel<Bike>> bikes = assembler.assembleToModel();
-
+        logService.addLog("Retrived all bikes.");
         return ResponseEntity.ok().body(
                 CollectionModel.of(bikes, linkTo(methodOn(BikeController.class).all()).withSelfRel()));
     }
@@ -52,6 +55,7 @@ public class BikeController {
         Bike bike = bikeRepository.findById(id)
                 .orElseThrow(() -> new BikeNotFoundException(id));
 
+        logService.addLog("Retrieve all bikes with id "+id+".");
         return ResponseEntity.ok().body(assembler.toModel(bike));
     }
 
