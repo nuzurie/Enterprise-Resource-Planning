@@ -50,6 +50,7 @@ public class SupplierController {
         return ResponseEntity.ok().body(c);
     }
 
+
     @PostMapping
     public ResponseEntity<?> addSupplier(@RequestBody Supplier supplier) {
         try {

@@ -1,6 +1,7 @@
 package com.soen390.erp.inventory.controller;
 
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
 import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
@@ -36,17 +37,20 @@ public class PlantController {
     private final PlantRepository plantRepository;
     private final PlantModelAssembler pmAssembler;
     private final PlantService plantService;
-    public PlantController(PlantRepository plantRepository, PlantModelAssembler pmAssembler, PlantService plantService){
+    private final LogService logService;
+
+    public PlantController(PlantRepository plantRepository, PlantModelAssembler pmAssembler, PlantService plantService, LogService logService){
         this.plantRepository = plantRepository;
         this.pmAssembler = pmAssembler;
         this.plantService = plantService;
+        this.logService = logService;
     }
 
     @GetMapping("/plants")
     public ResponseEntity<?> all()
     {
         List<EntityModel<Plant>> plants = pmAssembler.assembleToModel();
-
+        logService.addLog("Retrieved all plants.");
         return ResponseEntity.ok().body(
                 CollectionModel.of(plants, linkTo(methodOn(this.getClass()).all()).withSelfRel()));
     }
@@ -54,6 +58,7 @@ public class PlantController {
     @GetMapping("/plants/{id}")
     public ResponseEntity<?> one(@PathVariable int id){
         Plant plant = plantRepository.findById(id).orElseThrow(() -> new PlantNotFoundException(id));
+        logService.addLog("Retrieved plant with id "+plant.getId()+".");
         return ResponseEntity.ok().body(pmAssembler.toModel(plant));
     }
 

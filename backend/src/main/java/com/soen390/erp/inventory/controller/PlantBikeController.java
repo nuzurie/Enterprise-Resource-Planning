@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.controller;
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.InvalidPlantBikeException;
 import com.soen390.erp.inventory.model.PlantBike;
 import com.soen390.erp.inventory.service.PlantBikeService;
@@ -14,13 +15,16 @@ import java.util.List;
 public class PlantBikeController {
 
     private final PlantBikeService plantBikeService;
+    private final LogService logService;
 
-    public PlantBikeController(PlantBikeService plantBikeService) {
+    public PlantBikeController(PlantBikeService plantBikeService, LogService logService) {
         this.plantBikeService = plantBikeService;
+        this.logService = logService;
     }
 
     @GetMapping
     public List<PlantBike> getAllPlantBikes() {
+        logService.addLog("Retrieved all plant bikes.");
         return plantBikeService.findAllPlantBikes();
     }
 
@@ -30,9 +34,11 @@ public class PlantBikeController {
             plantBikeService.addPlantBike(plantBike);
 
         } catch (InvalidPlantBikeException e) {
-
+            logService.addLog("Failed to create plantBike.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("The Plant Bike was successfully added with id " + plantBike.getId());
+        String message = "The Plant Bike was successfully added with id " + plantBike.getId();
+        logService.addLog(message);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 }
