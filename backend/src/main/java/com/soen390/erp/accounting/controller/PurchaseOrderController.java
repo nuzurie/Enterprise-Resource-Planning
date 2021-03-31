@@ -22,11 +22,12 @@ import java.util.Optional;
 public class PurchaseOrderController {
     private final PurchaseOrderService purchaseOrderService;
     private final LogService logService;
+    private static final String category = "accounting";
 
     @GetMapping(path = "/PurchaseOrders")
     public ResponseEntity<?> all(){
 
-        logService.addLog("Retrieved all purchase orders.");
+        logService.addLog("Retrieved all purchase orders.", category);
         //TODO: use stream and return a mapped collection or use assembler
         return ResponseEntity.ok().body(purchaseOrderService.getAllPurchaseOrders());
     }
@@ -37,7 +38,7 @@ public class PurchaseOrderController {
         PurchaseOrder purchaseOrder = purchaseOrderService.getPurchaseOrder(id)
                 .orElseThrow(() -> new PurchaseNotFoundException("No order with id " + id));
 
-        logService.addLog("Retrieved purchase order with id "+id+".");
+        logService.addLog("Retrieved purchase order with id "+id+".", category);
         return ResponseEntity.ok().body(purchaseOrder);
 
     }
@@ -51,7 +52,7 @@ public class PurchaseOrderController {
 
         boolean isSuccessful = purchaseOrderService.addPurchaseOrder(purchaseOrder);
         if (isSuccessful == true){
-            logService.addLog("Created purchase order.");
+            logService.addLog("Created purchase order.", category);
             //TODO: debug if id has value
             return new ResponseEntityWrapper(ResponseEntity.ok().body(purchaseOrder.getId()), "The Purchase Order has been created with id " + purchaseOrder.getId());
         }else{
@@ -66,20 +67,20 @@ public class PurchaseOrderController {
         //check if purchase order exists
         Optional<PurchaseOrder> purchaseOrderOptional = purchaseOrderService.getPurchaseOrder(id);
         if (purchaseOrderOptional.isEmpty()){
-            logService.addLog("Failed to make payment for purchase order with id "+id+". No such purchase order exists.");
+            logService.addLog("Failed to make payment for purchase order with id "+id+". No such purchase order exists.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Could not find Purchase Order with id: " + id + ".");
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
         //check if transaction valid
         if(purchaseOrder.isPaid()){
-            logService.addLog("Failed to make payment for purchase order with id "+id+". Already paid for.");
+            logService.addLog("Failed to make payment for purchase order with id "+id+". Already paid for.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Purchase Order has already been paid.");
         }
         //TODO check if bank balance is more than grand total
         //endregion
 
         purchaseOrderService.makePaymentTransactions(purchaseOrder);
-        logService.addLog("Paid for purchase order with id "+id+".");
+        logService.addLog("Paid for purchase order with id "+id+".", category);
         //region return
         return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Purchase Order with id " + id + " has been paid.");
         //endregion
@@ -90,21 +91,21 @@ public class PurchaseOrderController {
         //check if purchase order exists
         Optional<PurchaseOrder> purchaseOrderOptional = purchaseOrderService.getPurchaseOrder(id);
         if (purchaseOrderOptional.isEmpty()){
-            logService.addLog("Failed to receive materials for purchase order with id "+id+". No such purchase order exists.");
+            logService.addLog("Failed to receive materials for purchase order with id "+id+". No such purchase order exists.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Could not find Purchase Order with id: " + id + ".");
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
         //check if transaction valid
         if(purchaseOrder.isReceived()){
 
-            logService.addLog("Failed to receive material for purchase order with id "+id+". Already received.");
+            logService.addLog("Failed to receive material for purchase order with id "+id+". Already received.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Purchase Order has already been received.");
         }
         //TODO check if inventory balance is more than grand total
         //endregion
 
         purchaseOrderService.receiveMaterialTransactions(purchaseOrder);
-        logService.addLog("Successfully received material for purchase order with id "+id+".");
+        logService.addLog("Successfully received material for purchase order with id "+id+".", category);
         //region return
 
         return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build(), "Receiving materials from Purchase Order with id" + id + ".");

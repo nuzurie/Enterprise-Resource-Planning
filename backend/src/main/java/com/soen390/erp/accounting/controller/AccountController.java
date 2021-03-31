@@ -29,6 +29,8 @@ public class AccountController {
     private final AccountModelAssembler assembler;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "accounting";
+
     public AccountController(AccountRepository accountRepository,
                              AccountModelAssembler assembler,
                              AccountService accountService,
@@ -40,11 +42,14 @@ public class AccountController {
         this.emailService = emailService;
         this.logService = logService;
     }
+    {
+        String category = "accounting";
+    }
 
     @GetMapping("/account")
     public ResponseEntity<?> all() {
 
-        logService.addLog("Retrieved all the accounts.");
+        logService.addLog("Retrieved all the accounts.", category);
 
         List<EntityModel<Account>> account = accountService.assembleToModel();
 
@@ -58,7 +63,7 @@ public class AccountController {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException(id));
 
-        logService.addLog("Retrieved account with id "+id);
+        logService.addLog("Retrieved account with id "+id, category);
 
         return ResponseEntity.ok().body(assembler.toModel(account));
     }
@@ -69,7 +74,7 @@ public class AccountController {
 
         EntityModel<Account> entityModel = assembler.toModel(accountRepository.save(account));
 
-        logService.addLog("Retrieved account with id "+entityModel.getContent().getId());
+        logService.addLog("Retrieved account with id "+entityModel.getContent().getId(), category);
 
         EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Account").body("A new account has been created with id " + account.getId()).build();
         emailService.sendMail(email);

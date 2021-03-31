@@ -30,6 +30,7 @@ public class LedgerController {
     private final LedgerService ledgerService;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "accounting";
 
     public LedgerController(LedgerRepository ledgerRepository, LedgerModelAssembler assembler, LedgerService ledgerService, EmailService emailService, LogService logService) {
         this.ledgerRepository=ledgerRepository;
@@ -43,7 +44,7 @@ public class LedgerController {
     public ResponseEntity<?> all() {
 
         List<EntityModel<Ledger>> ledger = ledgerService.assembleToModel();
-        logService.addLog("Retrieved all ledgers.");
+        logService.addLog("Retrieved all ledgers.", category);
         return ResponseEntity.ok().body(
                 CollectionModel.of(ledger, linkTo(methodOn(LedgerController.class).all()).withSelfRel()));
     }
@@ -53,7 +54,7 @@ public class LedgerController {
 
         Ledger ledger = ledgerRepository.findById(id)
                 .orElseThrow(() -> new LedgerNotFoundException(id));
-        logService.addLog("Retrieved ledger with id "+id+".");
+        logService.addLog("Retrieved ledger with id "+id+".", category);
         return ResponseEntity.ok().body(assembler.toModel(ledger));
     }
 
@@ -66,7 +67,7 @@ public class LedgerController {
         String message = "A new ledger has been created with id " + ledger.getId();
         EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Ledger").body(message).build();
         emailService.sendMail(email);
-        logService.addLog(message);
+        logService.addLog(message, category);
 
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
                 , "The ledger was successfully created with id " + ledger.getId());

@@ -21,6 +21,7 @@ public class SupplierController {
     private final SupplierService supplierService;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "accounting";
 
     public SupplierController(SupplierService supplierService, EmailService emailService, LogService logRepository) {
         this.supplierService = supplierService;
@@ -31,7 +32,7 @@ public class SupplierController {
     @GetMapping
     public List<Supplier> getAllSuppliers() {
 
-        logService.addLog("Retrieved all suppliers.");
+        logService.addLog("Retrieved all suppliers.", category);
         return supplierService.findAllSuppliers();
     }
 
@@ -41,10 +42,10 @@ public class SupplierController {
         Supplier c;
         try {
             c = supplierService.findSupplierById(id);
-            logService.addLog("Retrieved supplier with id "+id+".");
+            logService.addLog("Retrieved supplier with id "+id+".", category);
 
         } catch (SupplierNotFoundException e) {
-            logService.addLog("Failed to retrieved supplier with id "+id+". No such supplier exists.");
+            logService.addLog("Failed to retrieved supplier with id "+id+". No such supplier exists.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         return ResponseEntity.ok().body(c);
@@ -57,13 +58,13 @@ public class SupplierController {
             supplierService.saveSupplier(supplier);
 
         } catch (InvalidSupplierException e) {
-            logService.addLog("Failed to create supplier.");
+            logService.addLog("Failed to create supplier.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         String message = "A new Supplier has been found with id " + supplier.getId() + ".";
         EmailToSend email = EmailToSend.builder().to("warehouse.manager@msn.com").subject("New Supplier").body(message).build();
         emailService.sendMail(email);
-        logService.addLog(message);
+        logService.addLog(message, category);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Supplier with id " + supplier.getId() + ".");
     }
@@ -74,11 +75,11 @@ public class SupplierController {
         boolean isRemoved = supplierService.deleteSupplierById(id);
 
         if (!isRemoved) {
-            logService.addLog("Failed to delete supplier with id "+id+".");
+            logService.addLog("Failed to delete supplier with id "+id+".", category);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Supplier Not Found by ID " + id);
         }
 
-        logService.addLog("Deleted supplier with id "+id+".");
+        logService.addLog("Deleted supplier with id "+id+".", category);
         return ResponseEntity.status(HttpStatus.OK).body("Supplier Deleted");
     }
 

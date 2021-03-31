@@ -25,6 +25,7 @@ public class MaterialController {
     private final MaterialModelAssembler assembler;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "manufacturing";
 
     public MaterialController(MaterialRepository materialRepository,
                               MaterialModelAssembler assembler,
@@ -40,7 +41,7 @@ public class MaterialController {
     public ResponseEntity<?> all() {
 
         List<EntityModel<Material>> materials = assembler.assembleToModel();
-        logService.addLog("Retrieved all materials.");
+        logService.addLog("Retrieved all materials.", category);
         return ResponseEntity.ok().body(
                 CollectionModel.of(materials, linkTo(methodOn(MaterialController
                         .class).all()).withSelfRel()));
@@ -49,7 +50,7 @@ public class MaterialController {
     @GetMapping(path = "/materials/{id}")
     public ResponseEntity<?> one(@PathVariable int id) {
 
-        logService.addLog("Retrieved material with id "+id+".");
+        logService.addLog("Retrieved material with id "+id+".", category);
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new MaterialNotFoundException(id));
 
@@ -63,7 +64,7 @@ public class MaterialController {
                 .toModel(materialRepository.save(material));
 
         String message = "A new material has been added with id " + material.getId();
-        logService.addLog(message);
+        logService.addLog(message, category);
         EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Added Material").body(message).build();
         emailService.sendMail(email);
 

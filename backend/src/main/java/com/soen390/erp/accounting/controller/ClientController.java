@@ -20,6 +20,8 @@ public class ClientController {
     private final ClientService clientService;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "accounting";
+
     public ClientController(ClientService clientService, EmailService emailService, LogService logService) {
         this.clientService = clientService;
         this.emailService = emailService;
@@ -29,7 +31,7 @@ public class ClientController {
     @GetMapping
     public List<Client> getAllClients() {
 
-        logService.addLog("Retrieved all client.");
+        logService.addLog("Retrieved all client.", category);
         return clientService.findAllClients();
     }
 
@@ -39,10 +41,10 @@ public class ClientController {
         Client c;
         try {
             c = clientService.findClientById(id);
-            logService.addLog("Retrieved client with id "+id+".");
+            logService.addLog("Retrieved client with id "+id+".", category);
 
         } catch (ClientNotFoundException e) {
-            logService.addLog("Failed to retrieve client with id "+id+". No client exists with that id.");
+            logService.addLog("Failed to retrieve client with id "+id+". No client exists with that id.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         return ResponseEntity.ok().body(c);
@@ -52,7 +54,7 @@ public class ClientController {
     public ResponseEntity<?> addClient(@RequestBody Client client) {
         try {
             Client saveClient = clientService.saveClient(client);
-            logService.addLog("Created client with id "+saveClient.getId()+".");
+            logService.addLog("Created client with id "+saveClient.getId()+".", category);
 
         } catch (InvalidClientException e) {
 
@@ -69,10 +71,10 @@ public class ClientController {
         boolean isRemoved = clientService.deleteClientById(id);
 
         if (!isRemoved) {
-            logService.addLog("Failed to delete client with id "+id+".");
+            logService.addLog("Failed to delete client with id "+id+".", category);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client Not Found by ID " + id);
         }
-        logService.addLog("Deleted client with id "+id+".");
+        logService.addLog("Deleted client with id "+id+".", category);
         return ResponseEntity.status(HttpStatus.OK).body("Client with id: " + id +" has been deleted");
     }
 

@@ -16,6 +16,7 @@ public class ClientOrderController {
 
     private final ClientOrderService clientOrderService;
     private final LogService logService;
+    private static final String category = "inventory";
 
     public ClientOrderController(ClientOrderService clientOrderService, LogService logService) {
         this.clientOrderService = clientOrderService;
@@ -24,7 +25,7 @@ public class ClientOrderController {
 
     @GetMapping
     public List<ClientOrder> getAllClientOrders() {
-        logService.addLog("Retrieved all client order");
+        logService.addLog("Retrieved all client order", category);
         return clientOrderService.findAllClientOrders();
     }
 
@@ -34,11 +35,11 @@ public class ClientOrderController {
             clientOrderService.addClientOrder(clientOrder);
 
         } catch (InvalidClientOrderException e) {
-            logService.addLog("Failed to create client.");
+            logService.addLog("Failed to create client.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         String message = "The Client Order was successfully created with id " + clientOrder.getId();
-        logService.addLog(message);
+        logService.addLog(message, category);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 }

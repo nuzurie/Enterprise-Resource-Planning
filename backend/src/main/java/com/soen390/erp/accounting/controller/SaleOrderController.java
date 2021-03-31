@@ -1,10 +1,6 @@
 package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.accounting.model.Account;
-import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
-import com.soen390.erp.accounting.service.AccountService;
-import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
@@ -21,7 +17,7 @@ import java.util.Optional;
 public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final LogService logService;
-
+    private static final String category = "accounting";
 
     @GetMapping(path = "/SaleOrders")
     public ResponseEntity<?> all(){
@@ -35,10 +31,10 @@ public class SaleOrderController {
         Optional<SaleOrder> saleOrder = saleOrderService.getSaleOrder(id);
 
         if (saleOrder.isPresent()){
-            logService.addLog("Retrieved sale order with id "+id+".");
+            logService.addLog("Retrieved sale order with id "+id+".", category);
             return ResponseEntity.ok().body(saleOrder.get());
         }else{
-            logService.addLog("Failed to retrieved client with id "+id+". Doesn't exist.");
+            logService.addLog("Failed to retrieved client with id "+id+". Doesn't exist.", category);
             return ResponseEntity.notFound().build();
         }
     }
@@ -54,10 +50,10 @@ public class SaleOrderController {
         if (isSuccessful == true){
             //TODO: debug if id has value
             String message = "Created Sale Order with id " + saleOrder.getId() + ".";
-            logService.addLog(message);
+            logService.addLog(message, category);
             return new ResponseEntityWrapper(ResponseEntity.ok().body(saleOrder.getId()), message);
         }else{
-            logService.addLog("Failed to create sale order with id "+saleOrder.getId()+".");
+            logService.addLog("Failed to create sale order with id "+saleOrder.getId()+".", category);
             return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null), "Unable to created new Sale Order.");
         }
     }
@@ -69,13 +65,13 @@ public class SaleOrderController {
         //check if sale order exists
         Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
         if (saleOrderOptional.isEmpty()){
-            logService.addLog("Failed to receive payment for sale order with id "+id+". No such sale order exists.");
+            logService.addLog("Failed to receive payment for sale order with id "+id+". No such sale order exists.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " could not be found.");
         }
         SaleOrder saleOrder = saleOrderOptional.get();
         //check if transaction valid
         if(saleOrder.isPaid()){
-            logService.addLog("Failed to receive payment for sale order with id "+id+". Already paid for.");
+            logService.addLog("Failed to receive payment for sale order with id "+id+". Already paid for.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been paid.");
         }
         //TODO check if bank balance is more than grand total
@@ -83,7 +79,7 @@ public class SaleOrderController {
         //endregion
 
         saleOrderService.receivePaymentTransactions(saleOrder);
-        logService.addLog("Received payment for sale order with id "+id+".");
+        logService.addLog("Received payment for sale order with id "+id+".", category);
 
         //region return
         return new ResponseEntityWrapper(ResponseEntity.status(HttpStatus.CREATED).build(), "Sale Order with id " + id + " is now paid.");
@@ -97,13 +93,13 @@ public class SaleOrderController {
         //check if sale order exists
         Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
         if (saleOrderOptional.isEmpty()){
-            logService.addLog("Failed to ship bike for sale order with id "+id+". No such sale order exists.");
+            logService.addLog("Failed to ship bike for sale order with id "+id+". No such sale order exists.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Unable to find Sale Order with id " + id + ".");
         }
         SaleOrder saleOrder = saleOrderOptional.get();
         //check if transaction valid
         if(saleOrder.isShipped()){
-            logService.addLog("Failed to ship bike for sale order with id "+id+". Already shipped.");
+            logService.addLog("Failed to ship bike for sale order with id "+id+". Already shipped.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been shipped.");
         }
         //TODO check if bank balance is more than grand total
@@ -111,7 +107,7 @@ public class SaleOrderController {
         //endregion
 
         saleOrderService.shipBikeTransactions(saleOrder);
-        logService.addLog("Shipped bike for sale order with id "+id+".");
+        logService.addLog("Shipped bike for sale order with id "+id+".", category);
         //region return
         return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " is now shipped.");
         //endregion

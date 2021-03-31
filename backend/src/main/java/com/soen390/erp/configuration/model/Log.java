@@ -22,6 +22,7 @@ public class Log {
     int id;
     String message;
     String user;
+    String category;
     Date timestamp;
 
     public Log(){
@@ -31,8 +32,9 @@ public class Log {
         this.timestamp = new Date();
     }
 
-    public Log(String message){
+    public Log(String message, String category){
         this();
         this.message = message;
+        this.category = category;
     }
 }

@@ -38,6 +38,7 @@ public class PlantController {
     private final PlantModelAssembler pmAssembler;
     private final PlantService plantService;
     private final LogService logService;
+    private static final String category = "inventory";
 
     public PlantController(PlantRepository plantRepository, PlantModelAssembler pmAssembler, PlantService plantService, LogService logService){
         this.plantRepository = plantRepository;
@@ -50,7 +51,7 @@ public class PlantController {
     public ResponseEntity<?> all()
     {
         List<EntityModel<Plant>> plants = pmAssembler.assembleToModel();
-        logService.addLog("Retrieved all plants.");
+        logService.addLog("Retrieved all plants.", category);
         return ResponseEntity.ok().body(
                 CollectionModel.of(plants, linkTo(methodOn(this.getClass()).all()).withSelfRel()));
     }
@@ -58,7 +59,7 @@ public class PlantController {
     @GetMapping("/plants/{id}")
     public ResponseEntity<?> one(@PathVariable int id){
         Plant plant = plantRepository.findById(id).orElseThrow(() -> new PlantNotFoundException(id));
-        logService.addLog("Retrieved plant with id "+plant.getId()+".");
+        logService.addLog("Retrieved plant with id "+plant.getId()+".", category);
         return ResponseEntity.ok().body(pmAssembler.toModel(plant));
     }
 

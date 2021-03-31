@@ -27,6 +27,7 @@ public class BikeController {
     private final PartRepository partRepository;
     private final EmailService emailService;
     private final LogService logService;
+    private static final String category = "manufacturing";
 
     public BikeController(BikeRepository bikeRepository,
                           BikeModelAssembler assembler,
@@ -44,7 +45,7 @@ public class BikeController {
     public ResponseEntity<?> all() {
 
         List<EntityModel<Bike>> bikes = assembler.assembleToModel();
-        logService.addLog("Retrived all bikes.");
+        logService.addLog("Retrived all bikes.", category);
         return ResponseEntity.ok().body(
                 CollectionModel.of(bikes, linkTo(methodOn(BikeController.class).all()).withSelfRel()));
     }
@@ -55,7 +56,7 @@ public class BikeController {
         Bike bike = bikeRepository.findById(id)
                 .orElseThrow(() -> new BikeNotFoundException(id));
 
-        logService.addLog("Retrieve all bikes with id "+id+".");
+        logService.addLog("Retrieve all bikes with id "+id+".", category);
         return ResponseEntity.ok().body(assembler.toModel(bike));
     }
 
@@ -69,7 +70,9 @@ public class BikeController {
 
         //return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 
-        EmailToSend email = EmailToSend.builder().to("bike.manager@msn.com").subject("Created Bike").body("A new bike has been created with id " + bike.getId()).build();
+        String message = "A new bike has been created with id " + bike.getId();
+        logService.addLog(message, category);
+        EmailToSend email = EmailToSend.builder().to("bike.manager@msn.com").subject("Created Bike").body(message).build();
         emailService.sendMail(email);
 
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)

@@ -16,6 +16,7 @@ public class PlantBikeController {
 
     private final PlantBikeService plantBikeService;
     private final LogService logService;
+    private static final String category = "inventory";
 
     public PlantBikeController(PlantBikeService plantBikeService, LogService logService) {
         this.plantBikeService = plantBikeService;
@@ -24,7 +25,7 @@ public class PlantBikeController {
 
     @GetMapping
     public List<PlantBike> getAllPlantBikes() {
-        logService.addLog("Retrieved all plant bikes.");
+        logService.addLog("Retrieved all plant bikes.", category);
         return plantBikeService.findAllPlantBikes();
     }
 
@@ -34,11 +35,11 @@ public class PlantBikeController {
             plantBikeService.addPlantBike(plantBike);
 
         } catch (InvalidPlantBikeException e) {
-            logService.addLog("Failed to create plantBike.");
+            logService.addLog("Failed to create plantBike.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         String message = "The Plant Bike was successfully added with id " + plantBike.getId();
-        logService.addLog(message);
+        logService.addLog(message, category);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 }

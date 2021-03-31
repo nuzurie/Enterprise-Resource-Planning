@@ -30,7 +30,7 @@ public class PartController {
     private final PartModelAssembler assembler;
     private final EmailService emailService;
     private final LogService logService;
-
+    private static final String category = "manufacturing";
 
     public PartController(PartRepository partRepository,
                           PartModelAssembler assembler,
@@ -48,7 +48,7 @@ public class PartController {
     public ResponseEntity<?> all() {
 
         List<EntityModel<Part>> parts = assembler.assembleToModel();
-        logService.addLog("Retrieve all the parts.");
+        logService.addLog("Retrieve all the parts.", category);
 
         return ResponseEntity.ok().body(
                 CollectionModel.of(parts, linkTo(methodOn(PartController.class)
@@ -60,7 +60,7 @@ public class PartController {
 
         Part part = partRepository.findById(id)
                 .orElseThrow(() -> new PartNotFoundException(id));
-        logService.addLog("Retrieve the part with id "+id+".");
+        logService.addLog("Retrieve the part with id "+id+".", category);
         return ResponseEntity.ok().body(assembler.toModel(part));
     }
 
@@ -77,7 +77,7 @@ public class PartController {
                 .save(part));
 
         String message = "A new part has been added with id " + part.getId();
-        logService.addLog(message);
+        logService.addLog(message, category);
         EmailToSend email = EmailToSend.builder().to("part.manager@msn.com").subject("Added Part").body(message).build();
         emailService.sendMail(email);
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
