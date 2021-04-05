@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
@@ -11,6 +12,8 @@ import java.util.Set;
 /**
  * this gets created and one record gets inserted everytime we order material from a supplier
  */
+
+
 @Getter
 @Setter
 @Builder
@@ -62,4 +65,7 @@ public class PurchaseOrder {
     @JoinColumn(name = "purchase_order_id")
     private Set<PurchaseOrderItems> purchaseOrderItems;
 
+    public String toString() {
+        return id+"" ;
+    }
 }

@@ -15,5 +15,10 @@ import javax.persistence.Entity;
 @DiscriminatorValue("seat")
 public class Seat extends Part{
     protected int size;
+
+    @Override
+    public Part createPart() {
+        return new Seat();
+    }
 }
 

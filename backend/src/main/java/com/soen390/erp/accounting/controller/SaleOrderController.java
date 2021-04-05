@@ -1,16 +1,25 @@
 package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.accounting.model.Account;
-import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
+import com.soen390.erp.accounting.repository.SaleOrderRepository;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.io.ByteArrayInputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -20,6 +29,7 @@ public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final AccountService accountService;
     private final LedgerService ledgerService;
+    private final SaleOrderRepository saleOrderRepository;
 
 
     @GetMapping(path = "/SaleOrders")
@@ -39,6 +49,7 @@ public class SaleOrderController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @PostMapping(path = "/SaleOrders")
     public ResponseEntity<?> createSaleOrder(@RequestBody SaleOrder saleOrder){
@@ -66,53 +77,16 @@ public class SaleOrderController {
             return ResponseEntity.badRequest().build();
         }
         SaleOrder saleOrder = saleOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(saleOrder.isPaid()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
         //endregion
 
 
-
-
-
-
-
-
-
-
-        //get amount from po
-        double amount = saleOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch bank and inventory accounts using enum and not id.
-        int bankAccountId = 12; //wrong assumption
-        int accountReceivableAccountId = 10; //wrong assumption
-
-        Account bank = accountService.getAccount(bankAccountId).get();
-        Account accountReceivable = accountService.getAccount(accountReceivableAccountId).get();
-
-        bank.setBalance(bank.getBalance() + amount);
-        accountReceivable.setBalance(accountReceivable.getBalance() - amount);
-        //endregion
-
-        //region sale order
-        //update status
-        saleOrder.setPaid(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(bank);
-        ledgerEntry.setCreditAccount(accountReceivable);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setSaleOrder(saleOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        saleOrderService.receivePaymentTransactions(saleOrder);
 
         //region return
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -129,56 +103,56 @@ public class SaleOrderController {
             return ResponseEntity.badRequest().build();
         }
         SaleOrder saleOrder = saleOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(saleOrder.isShipped()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
         //endregion
 
-
-
-
-
-
-
-
-
-
-        //get amount from po
-        double amount = saleOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch bank and inventory accounts using enum and not id.
-        int inventoryId = 13; //wrong assumption
-        int accountReceivableAccountId = 10; //wrong assumption
-
-        Account inventory = accountService.getAccount(inventoryId).get();
-        Account accountReceivable = accountService.getAccount(accountReceivableAccountId).get();
-
-        inventory.setBalance(inventory.getBalance() - amount);
-        accountReceivable.setBalance(accountReceivable.getBalance() + amount);
-        //endregion
-
-        //region sale order
-        //update status
-        saleOrder.setShipped(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(accountReceivable);
-        ledgerEntry.setCreditAccount(inventory);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setSaleOrder(saleOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        saleOrderService.shipBikeTransactions(saleOrder);
 
         //region return
         return ResponseEntity.ok().build();
         //endregion
     }
+
+    @GetMapping(value = "/SaleOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
+    {
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition",
+                "inline; filename=saleOrderReport" +
+                        ".pdf");
+
+        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
+        saleOrderService.accept(pdfReportGenerator);
+        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
+    }
+
+    @GetMapping("/SaleOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException
+    {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue =
+                "attachment; filename=saleOrdersReport_" + currentDateTime +
+                ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
+        csvReportGenerator.setResponse(response);
+        saleOrderService.accept(csvReportGenerator);
+    }
+
 }

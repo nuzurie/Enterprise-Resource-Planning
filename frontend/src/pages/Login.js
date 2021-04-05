@@ -25,19 +25,12 @@ class Login extends Component {
 
       axios.get('/', {
           headers: {
-              'Authorization': credentials
+              'authorization': auth
           }
       })
     .then(res => console.log(res.data))
     .catch(err => console.log(err))
 
-    axios.get('/plants', {
-        headers: {
-            'Authorization': credentials
-        }
-    })
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
   }
 
   render() {

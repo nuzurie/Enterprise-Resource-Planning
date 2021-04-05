@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.opencsv.bean.CsvBindByName;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,17 +10,22 @@ import java.util.Date;
 /**
  * in the ledger you record accounting entries
  */
+
+
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table( name = "ledger")
 public class Ledger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @CsvBindByName(column = "Date")
     private Date date;
+    @CsvBindByName(column = "Amount")
     private double amount;
     /**
      * the account where we lost something from (e.g. we lost money because we paid for material)
@@ -27,6 +33,7 @@ public class Ledger {
     @ManyToOne(optional = false)
     @JoinColumn(name = "debit_account_id")
     private Account debitAccount;
+
 
     /**
      * the account where we gained something in (e.g. we gained material because we received it in the inventory)
@@ -47,4 +54,6 @@ public class Ledger {
     @ManyToOne(optional = true)
     @JoinColumn(name = "sale_order_id")
     private SaleOrder saleOrder;
+
+
 }

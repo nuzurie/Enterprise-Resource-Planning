@@ -1,16 +1,25 @@
 package com.soen390.erp.accounting.controller;
 
-import com.soen390.erp.accounting.model.Account;
-import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
+import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.io.ByteArrayInputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -20,6 +29,7 @@ public class PurchaseOrderController {
     private final PurchaseOrderService purchaseOrderService;
     private final AccountService accountService;
     private final LedgerService ledgerService;
+    private final PurchaseOrderRepository purchaseOrderRepository;
 
     @GetMapping(path = "/PurchaseOrders")
     public ResponseEntity<?> all(){
@@ -65,45 +75,14 @@ public class PurchaseOrderController {
             return ResponseEntity.badRequest().build();
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(purchaseOrder.isPaid()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if bank balance is more than grand total
-        //TODO check if new status is valid
         //endregion
 
-        //get amount from po
-        double amount = purchaseOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch bank and inventory accounts using enum and not id.
-        int bankAccountId = 12; //wrong assumption
-        int accountPayableAccountId = 9; //wrong assumption
-
-        //FIXME Account gets infinite reference with Ledger
-        Account bank = accountService.getAccount(bankAccountId).get();
-        Account accountPayable = accountService.getAccount(accountPayableAccountId).get();
-
-        bank.setBalance(bank.getBalance() - amount);
-        accountPayable.setBalance(accountPayable.getBalance() - amount);
-        //endregion
-
-        //region purchase order
-        //update status
-        purchaseOrder.setPaid(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(accountPayable);
-        ledgerEntry.setCreditAccount(bank);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setPurchaseOrder(purchaseOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        purchaseOrderService.makePaymentTransactions(purchaseOrder);
 
         //region return
         return ResponseEntity.ok().build();
@@ -118,48 +97,55 @@ public class PurchaseOrderController {
             return ResponseEntity.badRequest().build();
         }
         PurchaseOrder purchaseOrder = purchaseOrderOptional.get();
-        //TODO check if transaction valid
+        //check if transaction valid
+        if(purchaseOrder.isReceived()){
+            return ResponseEntity.badRequest().build();
+        }
         //TODO check if inventory balance is more than grand total
-        //TODO check if new status is valid
         //endregion
 
-        //get amount from po
-        double amount = purchaseOrder.getGrandTotal();
-
-
-        //region accounts
-        //FIXME fetch inventory and inventory accounts using enum and not id.
-        int inventoryAccountId = 13; //wrong assumption
-        int accountPayableAccountId = 9; //wrong assumption
-
-        //FIXME Account gets infinite reference with Ledger
-        Account inventory = accountService.getAccount(inventoryAccountId).get();
-        Account accountPayable = accountService.getAccount(accountPayableAccountId).get();
-
-        inventory.setBalance(inventory.getBalance() + amount);
-        accountPayable.setBalance(accountPayable.getBalance() + amount);
-        //endregion
-
-        //region purchase order
-        //update status
-        purchaseOrder.setReceived(true);
-        //endregion
-
-        //region ledger
-        //TODO insert a ledger entry
-        Ledger ledgerEntry = new Ledger();
-        ledgerEntry.setDebitAccount(inventory);
-        ledgerEntry.setCreditAccount(accountPayable);
-        ledgerEntry.setDate(new Date());
-        ledgerEntry.setAmount(amount);
-        ledgerEntry.setPurchaseOrder(purchaseOrder);
-
-        //save
-        ledgerService.addLedger(ledgerEntry);
-        //endregion
+        purchaseOrderService.receiveMaterialTransactions(purchaseOrder);
 
         //region return
         return ResponseEntity.status(HttpStatus.CREATED).build();
         //endregion
+    }
+
+    @GetMapping(value = "/PurchaseOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
+    {
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; " +
+                "filename=purchaseOrderReport" +
+                ".pdf");
+
+        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
+        purchaseOrderService.accept(pdfReportGenerator);
+        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
+    }
+
+    @GetMapping("/PurchaseOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response)
+            throws IOException
+    {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue =
+                "attachment; filename=purchaseOrdersReport_" + currentDateTime +
+                        ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
+        csvReportGenerator.setResponse(response);
+        purchaseOrderService.accept(csvReportGenerator);
     }
 }

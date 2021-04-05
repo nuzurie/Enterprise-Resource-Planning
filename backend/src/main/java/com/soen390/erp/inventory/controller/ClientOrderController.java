@@ -20,7 +20,7 @@ public class ClientOrderController {
     }
 
     @GetMapping
-    List<ClientOrder> getAllClientOrders() {
+    public List<ClientOrder> getAllClientOrders() {
         return clientOrderService.findAllClientOrders();
     }
 

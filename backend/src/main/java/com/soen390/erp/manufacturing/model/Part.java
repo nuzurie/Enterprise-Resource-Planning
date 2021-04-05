@@ -30,7 +30,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="product_type",
         discriminatorType = DiscriminatorType.STRING)
-public class Part {
+public abstract class Part implements PartFactory{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
@@ -79,12 +79,4 @@ public class Part {
         material.setParts(parts);
     }
 
-    @Override
-    public String toString() {
-        return "Part{" +
-                "name='" + name + '\'' +
-                ", cost=" + cost +
-                ", materials=" + materials +
-                '}';
-    }
 }

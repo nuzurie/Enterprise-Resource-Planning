@@ -15,4 +15,9 @@ import javax.persistence.Entity;
 public class Wheel extends Part{
     protected double diameter;
     protected boolean gear;
+
+    @Override
+    public Part createPart() {
+        return new Wheel();
+    }
 }

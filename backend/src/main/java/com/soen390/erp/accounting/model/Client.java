@@ -12,4 +12,8 @@ public class Client  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    public String toString() {
+        return name ;
+    }
 }
