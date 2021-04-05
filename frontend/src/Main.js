@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Dashboard from './pages/Dashboard.js';
+import Reports from './pages/Reports.js';
 import BikeProduction from './pages/BikeProduction.js';
 import Inventory from './pages/Inventory.js';
 import Infrastructure from './pages/Infrastructure.js';
@@ -14,7 +14,7 @@ import Login from './pages/Login.js';
 const Main = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-        <Route exact path='/dashboard' component={Dashboard}></Route>
+        <Route exact path='/reports' component={Reports}></Route>
         <Route exact path='/bikeproduction' component={BikeProduction}></Route>
         <Route exact path='/inventory' component={Inventory}></Route>
         <Route exact path='/infrastructure' component={Infrastructure}></Route>
