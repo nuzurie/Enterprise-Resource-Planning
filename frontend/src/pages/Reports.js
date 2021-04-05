@@ -5,13 +5,102 @@ import MainContainer from '../components/containers/MainContainer.js';
 import GradientButton from "../components/GradientButton.js"
 import CustomDropdown from "../components/CustomDropdown";
 import CustomRadioButton from "../components/CustomRadioButton";
+import axios from "axios";
 
 class Reports extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      cloudReports: [],
+    }
+
+    this.initializeCloudReports = this.initializeCloudReports.bind(this);
+  }
+
+  componentDidMount() {
+    this.initializeCloudReports();
+  }
+
+  initializeCloudReports() {
+    axios.get('/files')
+    .then(res =>
+      this.setState({
+        cloudReports: res.data, 
+      }))
+    .catch(err => console.log(err));
+  }
+
+  downloadDocument(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    const documentID = form.get("docToDownload");
+
+    axios({
+      url: `/download/${documentID}`, //your url
+      method: 'GET',
+      responseType: 'blob', // important
+    }).then((response) => {
+       const url = window.URL.createObjectURL(new Blob([response.data]));
+       const link = document.createElement('a');
+       link.href = url;
+       link.setAttribute('download', 'file.pdf');
+       document.body.appendChild(link);
+       link.click();
+    });
+  }
+
+  uploadDocument(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    const filePath = form.get("fileToUpload");
+
+    console.log(filePath);
+
+    form.append('file', filePath);
+
+    axios.post("/upload", form, { // receive two parameter endpoint url ,form data 
+      })
+    .then(res => { // then print response status
+      console.log(res.statusText)
+    })
+  }
+
+  generateDocument(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    const documentType = form.get("documentType");
+    const documentFormat = form.get("documentFormat");
+
+    console.log(`/${documentType}/report/${documentFormat}`);
+    
+    axios({
+      url: `/${documentType}/report/${documentFormat}`, //your url
+      method: 'GET',
+      responseType: 'blob', // important
+    }).then((response) => {
+       const url = window.URL.createObjectURL(new Blob([response.data]));
+       const link = document.createElement('a');
+       link.href = url;
+
+       let file = `file.${documentFormat}`
+       link.setAttribute('download', file);
+       document.body.appendChild(link);
+       link.click();
+    });
   }
 
   render() {
+    let reportsOptions = <option>No files found</option>;
+
+    if (this.state.cloudReports.length !== 0) {
+      reportsOptions = this.state.cloudReports.map((report, index) => {
+        return (
+          <option key={index} id={report.name} value={report.id}>{report.name}</option>
+        );
+      });
+    }
+
     return (
       <Container>
         <MainContainer title="Quality Data">
@@ -20,39 +109,37 @@ class Reports extends Component {
         <ReportsContainer>
           <TopContainer>
             <Report title="Download">
-              <DocumentForm>
+              <DocumentForm onSubmit={this.downloadDocument}>
                 <div>
                   <Caption>Select the document you wish to download from the cloud.</Caption>
-                  <CustomDropdown dropdownName="bikeSize" dropddownID="bikeSize">
-                    <option value={24.0}>small</option>
-                    <option value={26.0}>medium</option>
-                    <option value={28.0}>large</option>
+                  <CustomDropdown key="docToDownload" dropdownName="docToDownload" dropddownID="docToDownload">
+                    {reportsOptions}
                   </CustomDropdown>
                 </div>
-                <GradientButton GradientButton type="submit" buttonValue="download document"/>
+                <GradientButton type="submit" buttonValue="download document"/>
               </DocumentForm>
             </Report>
             <Report title="Upload">
-              <DocumentForm>
+              <DocumentForm onSubmit={this.uploadDocument}>
                 <div>
                   <Caption>Choose the file you wish to upload to the cloud.</Caption>
-                  <input type="file"  />
+                  <input type="file" name="fileToUpload"/>
                 </div>
                 <GradientButton GradientButton type="submit" buttonValue="upload document"/>
               </DocumentForm>
             </Report>
           </TopContainer>
           <Report title="Generate">
-            <DocumentForm>
+            <DocumentForm onSubmit={this.generateDocument}>
               <div>
                 <Caption>Generate an updated document directly from the records.</Caption>
                 <Title>Document Type</Title>
-                <CustomRadioButton value="ledger" name="documentType">Ledger (all)</CustomRadioButton>
-                <CustomRadioButton value="saleOrders" name="documentType">Sale Orders</CustomRadioButton>
-                <CustomRadioButton value="purchaseOrders" name="documentType">Purchase Orders</CustomRadioButton>
+                <CustomRadioButton value="ledger" name="documentType" defaultChecked={true}>Ledger (all)</CustomRadioButton>
+                <CustomRadioButton value="SaleOrders" name="documentType">Sale Orders</CustomRadioButton>
+                <CustomRadioButton value="PurchaseOrders" name="documentType">Purchase Orders</CustomRadioButton>
                 
                 <Title>Document Format</Title>
-                <CustomRadioButton value="pdf" name="documentFormat">PDF</CustomRadioButton>
+                <CustomRadioButton value="pdf" name="documentFormat" defaultChecked={true}>PDF</CustomRadioButton>
                 <CustomRadioButton value="csv" name="documentFormat">CSV</CustomRadioButton>
               </div>
               <GradientButton GradientButton type="submit" buttonValue="generate document"/>
