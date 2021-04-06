@@ -223,7 +223,6 @@ const TopContainer = styled.div`
   display: flex;
   flex: 2;
   width: 100%;
-  // height: 100%;
 
   & > div {
     flex: 1;
@@ -232,6 +231,9 @@ const TopContainer = styled.div`
 
   & > div:nth-child(3) {
     margin-right: 0;
+     & > div {
+       height: 0;
+     }
   }
 `
 
