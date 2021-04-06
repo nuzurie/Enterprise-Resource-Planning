@@ -19,18 +19,11 @@ public class GoogleDriveController {
         this.fileManager = fileManager;
     }
 
-    /**
-     * example pathname : C:\\Users\\owner\\Downloads\\purchaseOrderReport.pdf
-     * @param pathName
-     * @return
-     * @throws IOException
-     */
+
     @PostMapping(value = "/upload")
-    public ResponseEntity<String> uploadSingleFile(@RequestBody String pathName)
+    public ResponseEntity<String> uploadSingleFile(@RequestBody MultipartFile file)
             throws IOException
     {
-        MultipartFile file = fileManager.createMultipartFile(pathName);
-
         String fileId = fileManager.uploadFile(file);
 
         if(fileId == null){
@@ -39,6 +32,27 @@ public class GoogleDriveController {
         return ResponseEntity.ok("Uploaded FileId : "+ fileId + " " +
                 "Successfully");
     }
+
+    /**
+     * example pathname : C:\\Users\\owner\\Downloads\\purchaseOrderReport.pdf
+     * @param pathName
+     * @return
+     * @throws IOException
+     */
+//    @PostMapping(value = "/upload")
+//    public ResponseEntity<String> uploadSingleFile(@RequestBody String pathName)
+//            throws IOException
+//    {
+//        MultipartFile file = fileManager.createMultipartFile(pathName);
+//
+//        String fileId = fileManager.uploadFile(file);
+//
+//        if(fileId == null){
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//        return ResponseEntity.ok("Uploaded FileId : "+ fileId + " " +
+//                "Successfully");
+//    }
 
     /**
      * for frontend : can loop through Files and call
@@ -53,6 +67,14 @@ public class GoogleDriveController {
             throws IOException, GeneralSecurityException
     {
         return ResponseEntity.ok().body(fileManager.getAllFiles());
+    }
+
+    @GetMapping("/files/{id}")
+    public ResponseEntity<?> getFile(@PathVariable String id,
+                                     HttpServletResponse response)
+            throws IOException, GeneralSecurityException
+    {
+        return ResponseEntity.ok().body(fileManager.getFile(id));
     }
 
     @GetMapping("/download/{id}")
