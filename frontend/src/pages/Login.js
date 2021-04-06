@@ -23,12 +23,19 @@ class Login extends Component {
       const credentials = window.btoa(email+":"+password)
       const auth = "Basic "+credentials
 
-      axios.get('/', {
+      axios.get('/login', {
           headers: {
               'authorization': auth
           }
       })
-    .then(res => console.log(res.data))
+    .then(res =>
+        {
+            const role = res.data;
+            localStorage.setItem("role", role);
+            localStorage.setItem("user", email); // TODO: set expirty
+            localStorage.setItem("password", password); // TODO: set expirty
+        }
+    )
     .catch(err => console.log(err))
 
   }
