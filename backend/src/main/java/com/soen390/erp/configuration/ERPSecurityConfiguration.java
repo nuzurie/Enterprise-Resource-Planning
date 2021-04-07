@@ -28,7 +28,13 @@ public class ERPSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
 //                .formLogin().and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .logout()
+                .logoutUrl("/perform_logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/");
         http.cors();
     }
 

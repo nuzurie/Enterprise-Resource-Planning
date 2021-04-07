@@ -11,6 +11,8 @@ import axios from "axios";
 class Login extends Component {
   constructor(props) {
     super(props);
+
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin(e){
@@ -34,6 +36,7 @@ class Login extends Component {
             localStorage.setItem("role", role);
             localStorage.setItem("user", email); // TODO: set expirty
             localStorage.setItem("password", password); // TODO: set expirty
+            this.props.history.push('/');
         }
     )
     .catch(err => console.log(err))
