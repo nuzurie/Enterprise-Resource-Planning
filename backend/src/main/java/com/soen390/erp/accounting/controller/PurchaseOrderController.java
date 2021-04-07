@@ -46,6 +46,7 @@ public class PurchaseOrderController {
     @PostMapping(path = "/PurchaseOrders")
     public ResponseEntityWrapper createPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
         //TODO: validate input
+        //TODO: validate po items has quantity > 0
 
         purchaseOrder.setPaid(false);
         purchaseOrder.setReceived(false);
