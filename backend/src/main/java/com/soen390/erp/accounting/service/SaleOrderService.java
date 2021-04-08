@@ -113,21 +113,19 @@ public class SaleOrderService {
         //endregion
     }
 
+    public void makePlantBike(SaleOrder saleOrder){
+        Plant plant = plantRepository.findById(saleOrder.getPlant().getId()).get();
+        //because we only sell one bike at a time we can safely take the first bike on the sale order items
+        SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
+        plantService.addPlantBike(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+
+        EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
+        emailService.sendMail(email);
+    }
+
     public void shipBikeTransactions(SaleOrder saleOrder) {
-
-
-
-
-
-
-
-
-
-
-
         //get amount from po
         double amount = saleOrder.getGrandTotal();
-
 
         //region accounts
         //FIXME fetch bank and inventory accounts using enum and not id.
