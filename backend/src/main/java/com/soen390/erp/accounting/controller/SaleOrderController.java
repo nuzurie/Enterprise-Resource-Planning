@@ -57,25 +57,6 @@ public class SaleOrderController {
         }
     }
 
-
-
-//    @GetMapping(value = "/SaleOrders/report/pdf")
-//    public ResponseEntity<InputStreamResource> exportPdf()
-//    {
-//
-//        List<SaleOrder> saleOrders = saleOrderService.getAllSaleOrders();
-//
-////        ByteArrayInputStream bis =
-////                GeneratePDFReport.saleOrderReport(saleOrders);
-//
-//        var headers = new HttpHeaders();
-//        headers.add("Content-Disposition",
-//                "inline; filename=saleOrderReport" +
-//                        ".pdf");
-//
-//    }
-
-
     @PostMapping(path = "/SaleOrders")
     public ResponseEntityWrapper createSaleOrder(@RequestBody SaleOrder saleOrder){
         //TODO: validate input
