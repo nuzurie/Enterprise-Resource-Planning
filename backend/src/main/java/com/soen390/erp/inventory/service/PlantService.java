@@ -196,7 +196,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getHandlebar().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 handlebarCheck = true;
                 continue;
@@ -204,7 +204,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getFrame().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " frames with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " frames with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 frameCheck = true;
                 continue;
@@ -212,7 +212,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getFrontwheel().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 frontwheelCheck = true;
                 continue;
@@ -220,7 +220,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getRearwheel().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 rearwheelCheck = true;
                 continue;
@@ -228,7 +228,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getPedal().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " pedals with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " pedals with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 pedalCheck = true;
                 continue;
@@ -236,7 +236,7 @@ public class PlantService {
             if(pps.getPart().getId() == bike.getSeat().getId()){
                 if(pps.getQuantity() < quantity){
                     int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " seats with id " + pps.getId() + " to complete the order.");
+                    return new BooleanWrapper(false, "Missing " + result + " seats with id " + pps.getPart().getId() + " to complete the order.");
                 }
                 seatCheck = true;
                 continue;
@@ -248,52 +248,7 @@ public class PlantService {
         else{
             return new BooleanWrapper(false, "At least one of the parts are missing.");
         }
-//        while (parts.iterator().hasNext()) {
-//           parts.iterator().next();
-//            if (pp.getPart().getId() == bike.getHandlebar().getId()) { //bike handlebar id = 84
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " handlebars with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            if (pp.getPart().getId() == bike.getFrame().getId()){ //bike frame id = 85
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " frames with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            if (pp.getPart().getId() == bike.getFrontwheel().getId()){ // bike frontwheel id = 80
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            if (pp.getPart().getId() == bike.getRearwheel().getId()){
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            if (pp.getPart().getId() == bike.getPedal().getId()){
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " pedals with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            if (pp.getPart().getId() == bike.getSeat().getId()){
-//                if (pp.getQuantity() < quantity) {
-//                    int result = quantity - pp.getQuantity();
-//                    return new BooleanWrapper(false, "Missing " + result + " seats with " + pp.getId() + " to complete the order.");
-//                }
-//                pp = parts.iterator().next();
-//            }
-//            pp = parts.iterator().next();
-//        }
+//
 
 
     }

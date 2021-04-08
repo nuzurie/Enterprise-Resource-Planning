@@ -114,24 +114,7 @@ public class SaleOrderService {
         //endregion
     }
 
-    public BooleanWrapper makePlantBike(SaleOrder saleOrder){
-        Plant plant = plantRepository.findById(saleOrder.getPlant().getId()).get();
-        //because we only sell one bike at a time we can safely take the first bike on the sale order items
-        SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
-        BooleanWrapper result = plantService.checkSufficientParts(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
-        if(result.isResult()) {
-
-            plantService.addPlantBike(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
-
-            EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
-            emailService.sendMail(email);
-            return new BooleanWrapper(true, "");
-        }
-        return new BooleanWrapper(false, result.getMessage());
-
-    }
-
-    public void gatherBikeParts(SaleOrder saleOrder){
+    public void makePlantBike(SaleOrder saleOrder){
         Plant plant = plantRepository.findById(saleOrder.getPlant().getId()).get();
         //because we only sell one bike at a time we can safely take the first bike on the sale order items
         SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
@@ -139,6 +122,22 @@ public class SaleOrderService {
 
         EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
         emailService.sendMail(email);
+
+    }
+
+    public BooleanWrapper gatherBikeParts(SaleOrder saleOrder){
+        Plant plant = plantRepository.findById(saleOrder.getPlant().getId()).get();
+        //because we only sell one bike at a time we can safely take the first bike on the sale order items
+        SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
+        BooleanWrapper result = plantService.checkSufficientParts(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+        if(result.isResult()) {
+            // plantService.addPlantBike(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+
+            EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
+            emailService.sendMail(email);
+            return new BooleanWrapper(true, "");
+        }
+        return new BooleanWrapper(false, result.getMessage());
     }
 
     public void shipBikeTransactions(SaleOrder saleOrder) {

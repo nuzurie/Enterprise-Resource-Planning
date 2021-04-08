@@ -137,14 +137,12 @@ public class SaleOrderController {
         //endregion
 
         //deduct parts from plant and add bike to plant
-        BooleanWrapper result = saleOrderService.makePlantBike(saleOrder);
-        if(result.isResult()) {
-            logService.addLog("Made bike for sale order with id " + id + ".", category);
-            //region return
-            return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
-        }
-        return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), result.getMessage());
+        saleOrderService.makePlantBike(saleOrder);
+        logService.addLog("Made bike for sale order with id "+id+".", category);
+        //region return
+        return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
         //endregion
+
     }
 
     @PostMapping(path = "/SaleOrders/{id}/GatherBikeParts")
@@ -167,10 +165,13 @@ public class SaleOrderController {
         //endregion
 
         //deduct parts from plant and add bike to plant
-        saleOrderService.gatherBikeParts(saleOrder);
-        logService.addLog("Made bike for sale order with id "+id+".", category);
-        //region return
-        return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
+        BooleanWrapper result = saleOrderService.gatherBikeParts(saleOrder);
+        if(result.isResult()) {
+            logService.addLog("Gather bike for sale order with id " + id + ".", category);
+            //region return
+            return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its parts to make the bikes.");
+        }
+        return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), result.getMessage());
         //endregion
     }
 
