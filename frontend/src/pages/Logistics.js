@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 import MainContainer from '../components/containers/MainContainer.js';
+import LogisticsContainer from '../components/containers/LogisticsContainer.js';
 import InnerContainer from '../components/containers/InnerContainer.js';
 import CustomRadioButton from '../components/CustomRadioButton.js';
 
@@ -12,7 +13,7 @@ class Logistics extends Component {
 
   render() {
     return (
-        <MainContainer title="Logistics">
+        <LogisticsContainer title="Logistics">
             <InnerContainer>
               <CustomRadioButton value="Inventory">Inventory</CustomRadioButton>
               <CustomRadioButton value="Manufacturing">Manufacturing</CustomRadioButton>
@@ -20,7 +21,7 @@ class Logistics extends Component {
               <CustomRadioButton value="All">All</CustomRadioButton>
             </InnerContainer>
             
-        </MainContainer>
+        </LogisticsContainer>
         
     );
   }
