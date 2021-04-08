@@ -185,4 +185,28 @@ public class PlantService {
         plantRepository.save(plantInDb);
     }
 
+    public boolean checkSufficientParts(Plant plant, Bike bike, int quantity) {
+
+        //FIXME
+        if (plant.getParts().get().contains(bike.getHandlebar())){
+//            if (){
+//
+//            }
+        }
+
+        Set<PlantPart> parts = plant.getParts().get();
+
+        while (parts.iterator().hasNext()) {
+            PlantPart pp = parts.iterator().next();
+            if (pp.getPart().getId() == bike.getHandlebar().getId()) {
+                if (pp.getQuantity() < quantity) {
+                    return false;
+                }
+                pp = parts.iterator().next();
+            }
+        }
+
+        return true;
+    }
+
 }
