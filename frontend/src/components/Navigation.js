@@ -26,45 +26,45 @@ class Navigation extends Component {
     return (
         <NavigationContainer>
           <div>
-            <div>
+            <div title="Login">
               <Link to="/login">
                 <button><AccountCircleOutlinedIcon /></button>
               </Link>
             </div>
-            <div>
+            <div title="Management">
               <Link to="/dashboard">
                 <button><DashboardOutlinedIcon /></button>
               </Link>
             </div>
-            <Link to="/bikeproduction">
+            <Link title="BikeProduction" to="/bikeproduction">
               <button><DirectionsBikeIcon /></button>
             </Link>
 
-            <div>
+            <div title="Inventory">
               <Link to="/inventory">
                 <button><CardTravelOutlinedIcon /></button>
               </Link>
             </div>
             
-            <div>
+            <div title="Logistics">
               <Link to="/infrastructure">
                 <button><SettingsIcon /></button>
               </Link>
             </div>
 
-            <div>
+            <div title="Manufacturing">
               <Link to="/manufacturing">
                 <button><DateRangeOutlinedIcon /></button>
               </Link>
             </div>
 
-            <div>
+            <div title="Accounting">
               <Link to="/accounting">
                 <button><DescriptionOutlinedIcon /></button>
               </Link>
             </div>
 
-            <Link to="/createuser">
+            <Link title="Create User" to="/createuser">
               <button><AddUser /></button>
             </Link>
           </div>
