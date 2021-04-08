@@ -3,6 +3,7 @@ package com.soen390.erp.accounting.controller;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.service.SaleOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.model.BooleanWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.service.PlantService;
 import lombok.AllArgsConstructor;
@@ -136,10 +137,13 @@ public class SaleOrderController {
         //endregion
 
         //deduct parts from plant and add bike to plant
-        saleOrderService.makePlantBike(saleOrder);
-        logService.addLog("Made bike for sale order with id "+id+".", category);
-        //region return
-        return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
+        BooleanWrapper result = saleOrderService.makePlantBike(saleOrder);
+        if(result.isResult()) {
+            logService.addLog("Made bike for sale order with id " + id + ".", category);
+            //region return
+            return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
+        }
+        return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), result.getMessage());
         //endregion
     }
 

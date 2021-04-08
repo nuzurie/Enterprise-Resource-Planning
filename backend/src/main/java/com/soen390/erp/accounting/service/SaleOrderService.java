@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.model.SaleOrderItems;
 import com.soen390.erp.accounting.repository.SaleOrderRepository;
+import com.soen390.erp.configuration.model.BooleanWrapper;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.model.Plant;
@@ -113,14 +114,21 @@ public class SaleOrderService {
         //endregion
     }
 
-    public void makePlantBike(SaleOrder saleOrder){
+    public BooleanWrapper makePlantBike(SaleOrder saleOrder){
         Plant plant = plantRepository.findById(saleOrder.getPlant().getId()).get();
         //because we only sell one bike at a time we can safely take the first bike on the sale order items
         SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
-        plantService.addPlantBike(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+        BooleanWrapper result = plantService.checkSufficientParts(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+        if(result.isResult()) {
 
-        EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
-        emailService.sendMail(email);
+            plantService.addPlantBike(plant, saleOrderItem.getBike(), saleOrderItem.getQuantity());
+
+            EmailToSend email = EmailToSend.builder().to("inventory@msn.com").subject("Bike making finished").body("The Sale Order with id " + saleOrder.getId() + " has all its bikes made.").build();
+            emailService.sendMail(email);
+            return new BooleanWrapper(true, "");
+        }
+        return new BooleanWrapper(false, result.getMessage());
+
     }
 
     public void gatherBikeParts(SaleOrder saleOrder){

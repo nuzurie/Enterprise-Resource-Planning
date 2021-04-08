@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.service;
 
+import com.soen390.erp.configuration.model.BooleanWrapper;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
@@ -185,28 +186,116 @@ public class PlantService {
         plantRepository.save(plantInDb);
     }
 
-    public boolean checkSufficientParts(Plant plant, Bike bike, int quantity) {
-
+    public BooleanWrapper checkSufficientParts(Plant plant, Bike bike, int quantity) {
         //FIXME
-        if (plant.getParts().get().contains(bike.getHandlebar())){
-//            if (){
-//
-//            }
-        }
-
         Set<PlantPart> parts = plant.getParts().get();
 
-        while (parts.iterator().hasNext()) {
-            PlantPart pp = parts.iterator().next();
-            if (pp.getPart().getId() == bike.getHandlebar().getId()) {
-                if (pp.getQuantity() < quantity) {
-                    return false;
+        boolean handlebarCheck = false, frameCheck = false, frontwheelCheck = false, rearwheelCheck= false, pedalCheck = false, seatCheck = false;
+        // PlantPart pp = parts.iterator().next();
+        for (PlantPart pps : parts){
+            if(pps.getPart().getId() == bike.getHandlebar().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getId() + " to complete the order.");
                 }
-                pp = parts.iterator().next();
+                handlebarCheck = true;
+                continue;
+            }
+            if(pps.getPart().getId() == bike.getFrame().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " frames with id " + pps.getId() + " to complete the order.");
+                }
+                frameCheck = true;
+                continue;
+            }
+            if(pps.getPart().getId() == bike.getFrontwheel().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with id " + pps.getId() + " to complete the order.");
+                }
+                frontwheelCheck = true;
+                continue;
+            }
+            if(pps.getPart().getId() == bike.getRearwheel().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with id " + pps.getId() + " to complete the order.");
+                }
+                rearwheelCheck = true;
+                continue;
+            }
+            if(pps.getPart().getId() == bike.getPedal().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " pedals with id " + pps.getId() + " to complete the order.");
+                }
+                pedalCheck = true;
+                continue;
+            }
+            if(pps.getPart().getId() == bike.getSeat().getId()){
+                if(pps.getQuantity() < quantity){
+                    int result = quantity - pps.getQuantity();
+                    return new BooleanWrapper(false, "Missing " + result + " seats with id " + pps.getId() + " to complete the order.");
+                }
+                seatCheck = true;
+                continue;
             }
         }
+        if(handlebarCheck && frameCheck && frontwheelCheck && rearwheelCheck && pedalCheck && seatCheck) {
+            return new BooleanWrapper(true, "All parts needed to make the bikes are present.");
+        }
+        else{
+            return new BooleanWrapper(false, "At least one of the parts are missing.");
+        }
+//        while (parts.iterator().hasNext()) {
+//           parts.iterator().next();
+//            if (pp.getPart().getId() == bike.getHandlebar().getId()) { //bike handlebar id = 84
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " handlebars with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            if (pp.getPart().getId() == bike.getFrame().getId()){ //bike frame id = 85
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " frames with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            if (pp.getPart().getId() == bike.getFrontwheel().getId()){ // bike frontwheel id = 80
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            if (pp.getPart().getId() == bike.getRearwheel().getId()){
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            if (pp.getPart().getId() == bike.getPedal().getId()){
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " pedals with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            if (pp.getPart().getId() == bike.getSeat().getId()){
+//                if (pp.getQuantity() < quantity) {
+//                    int result = quantity - pp.getQuantity();
+//                    return new BooleanWrapper(false, "Missing " + result + " seats with " + pp.getId() + " to complete the order.");
+//                }
+//                pp = parts.iterator().next();
+//            }
+//            pp = parts.iterator().next();
+//        }
 
-        return true;
+
     }
 
 }
