@@ -13,6 +13,7 @@ class Login extends Component {
     super(props);
 
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleLogin(e){
@@ -25,22 +26,39 @@ class Login extends Component {
       const credentials = window.btoa(email+":"+password)
       const auth = "Basic "+credentials
 
+      // auth = Basic bXpudXJpZUBtc24uY29tOnNvZW4zOTA=
+
       axios.get('/login', {
           headers: {
               'authorization': auth
           }
       })
-    .then(res =>
+  .then(res =>
         {
             const role = res.data;
+            console.log(res.headers)
             localStorage.setItem("role", role);
-            localStorage.setItem("user", email); // TODO: set expirty
-            localStorage.setItem("password", password); // TODO: set expirty
+            localStorage.setItem("user", email); // TODO: set expiry
+            localStorage.setItem("password", password); // TODO: set expiry
             this.props.history.push('/');
         }
     )
     .catch(err => console.log(err))
+  }
 
+  handleLogout(){
+      axios.get('/perform_logout')
+          .then(res => {
+              document.cookie.split(";").forEach((c) => {
+                  document.cookie = c
+                      .replace(/^ +/, "")
+                      .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+              localStorage.removeItem("role");
+              localStorage.removeItem("user");
+              localStorage.removeItem("password");
+              });
+              console.log(res)})
+          .catch(err => console.log(err))
   }
 
   render() {
@@ -60,6 +78,7 @@ class Login extends Component {
                     <GradientButton type="submit" buttonValue="Login" />
                 </LoginForm>
             </InnerContainer>
+            <button onClick={this.handleLogout}>LOGOUT</button>
         </MainContainer>
     );
   }
