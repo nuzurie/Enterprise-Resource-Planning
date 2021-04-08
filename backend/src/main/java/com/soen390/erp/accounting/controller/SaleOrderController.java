@@ -5,6 +5,7 @@ import com.soen390.erp.accounting.service.SaleOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.configuration.model.BooleanWrapper;
 import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.service.PlantService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -137,7 +138,12 @@ public class SaleOrderController {
         //endregion
 
         //deduct parts from plant and add bike to plant
-        saleOrderService.makePlantBike(saleOrder);
+        try {
+            saleOrderService.makePlantBike(saleOrder);
+        }
+        catch (NotEnoughMaterialInPlantException e){
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale order with id " + id + " could not make the bikes.");
+        }
         logService.addLog("Made bike for sale order with id "+id+".", category);
         //region return
         return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");

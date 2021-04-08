@@ -187,9 +187,9 @@ public class PlantService {
     }
 
     public BooleanWrapper checkSufficientParts(Plant plant, Bike bike, int quantity) {
-        //FIXME
+        //TODO: return all strings for each part.
         Set<PlantPart> parts = plant.getParts().get();
-
+        String message = "";
         boolean handlebarCheck = false, frameCheck = false, frontwheelCheck = false, rearwheelCheck= false, pedalCheck = false, seatCheck = false;
         // PlantPart pp = parts.iterator().next();
         for (PlantPart pps : parts){
