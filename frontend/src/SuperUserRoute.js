@@ -1,7 +1,7 @@
 import React from "react";
 import {Redirect, Route} from "react-router-dom";
 
-export default function ProtectedRoute({component: Component, ...rest}) {
+export default function SuperUserRoute({component: Component, ...rest}) {
     const role = localStorage.getItem("role");
     return (
         <Route {...rest} render={(props) => {

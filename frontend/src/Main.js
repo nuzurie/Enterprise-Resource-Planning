@@ -9,7 +9,7 @@ import Manufacturing from './pages/Manufacturing.js';
 import Accounting from './pages/Accounting.js';
 import CreateUser from './pages/CreateUser.js';
 import Login from './pages/Login.js';
-import ProtectedRoute from "./ProtectedRoute";
+import SuperUserRoute from "./SuperUserRoute";
 import EmployeeRoute from "./EmployeeRoute";
 
 const Main = () => {
@@ -20,8 +20,8 @@ const Main = () => {
         <EmployeeRoute exact path='/inventory' component={Inventory}></EmployeeRoute>
         <EmployeeRoute exact path='/infrastructure' component={Infrastructure}></EmployeeRoute>
         <EmployeeRoute exact path='/manufacturing' component={Manufacturing}></EmployeeRoute>
-        <ProtectedRoute exact path='/accounting' component={Accounting}></ProtectedRoute>
-        <ProtectedRoute exact path='/createuser' component={CreateUser}></ProtectedRoute>
+        <SuperUserRoute exact path='/accounting' component={Accounting}></SuperUserRoute>
+        <SuperUserRoute exact path='/createuser' component={CreateUser}></SuperUserRoute>
         <Route exact path='/login' component={Login}></Route>
     </Switch>
   );
