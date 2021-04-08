@@ -68,6 +68,14 @@ public class GoogleDriveController {
         return ResponseEntity.ok().body(fileManager.getAllFiles());
     }
 
+    @GetMapping("/files/{id}")
+    public ResponseEntity<?> getFile(@PathVariable String id,
+                                     HttpServletResponse response)
+            throws IOException, GeneralSecurityException
+    {
+        return ResponseEntity.ok().body(fileManager.getFile(id));
+    }
+
     @GetMapping("/download/{id}")
     public void downloadReport(@PathVariable String id,
                         HttpServletResponse response)
