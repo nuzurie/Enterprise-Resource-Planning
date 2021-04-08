@@ -104,6 +104,7 @@ public class SaleOrderController {
         }
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
+        //TODO check if bike exists in plant and enough quantity
         //endregion
 
         saleOrderService.shipBikeTransactions(saleOrder);

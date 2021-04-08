@@ -9,6 +9,7 @@ import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.repository.PlantRepository;
+import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class SaleOrderService {
     private final AccountService accountService;
     private final LedgerService ledgerService;
     private final EmailService emailService;
+    private final PlantService plantService;
 
     public boolean addSaleOrder(SaleOrder saleOrder){
         // set the plant
@@ -158,6 +160,12 @@ public class SaleOrderService {
 
         //save
         ledgerService.addLedger(ledgerEntry);
+        //endregion
+
+        //region inventory
+        //because we only sell one bike at a time we can safely take the first bike on the sale order items
+        SaleOrderItems saleOrderItem = saleOrder.getSaleOrderItems().stream().findFirst().get();
+        plantService.removePlantBike(saleOrder.getPlant(), saleOrderItem.getBike(), saleOrderItem.getQuantity() );
         //endregion
 
     }

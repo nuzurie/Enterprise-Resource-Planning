@@ -170,4 +170,19 @@ public class PlantService {
 
     }
 
+    public void removePlantBike(Plant plant, Bike bike, int quantity){
+        //TODO: consider fetching plant from the controller when validation takes place and pass it
+        Plant plantInDb = plantRepository.findById(plant.getId()).get();
+        Set<PlantBike> plantBikes = plantInDb.getBikes().get();
+
+        for (PlantBike x : plantBikes){
+            if (x.getBike().getId() == bike.getId()){
+                x.setQuantity(x.getQuantity() - quantity);
+                break;
+            }
+        }
+        plantInDb.setBikes(plantBikes);
+        plantRepository.save(plantInDb);
+    }
+
 }
