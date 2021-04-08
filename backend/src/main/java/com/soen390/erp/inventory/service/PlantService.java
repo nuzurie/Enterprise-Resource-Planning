@@ -193,59 +193,108 @@ public class PlantService {
         String message = "";
         boolean handlebarCheck = false, frameCheck = false, frontwheelCheck = false, rearwheelCheck= false, pedalCheck = false, seatCheck = false;
         // PlantPart pp = parts.iterator().next();
-        //TODO: return a concatenated string for all parts missing instead of one
-        //FIXME iterate through a copy of part and not part
-        for (PlantPart pps : parts){
+        Set<PlantPart> parts2 = Set.copyOf(parts);
+        for (PlantPart pps : parts2){
             if(pps.getPart().getId() == bike.getHandlebar().getId()){
                 if(pps.getQuantity() < quantity){
                     try {
                         addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
                         //TODO: notify that part was made because material was sufficient
                     } catch (NotEnoughMaterialInPlantException ex) {
+                        // return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order.");
                         int result = quantity - pps.getQuantity();
-                        return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order.");
+                        message += "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order. \n\r ";
+                        message += "Attempted to create handlebars but not enough materials. \n\r ";
+                        continue;
                     }
                 }
+                message += "All handlebars are present to create the bikes. \n\r ";
                 handlebarCheck = true;
                 continue;
             }
             if(pps.getPart().getId() == bike.getFrame().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " frames with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        //int result = quantity - pps.getQuantity();
+                        //return new BooleanWrapper(false, "Missing " + result + " frames with id " + pps.getPart().getId() + " to complete the order.");
+                        int result = quantity - pps.getQuantity();
+                        message += "Missing " + result + " frames with id " + pps.getPart().getId() + " to complete the order. \n\r ";
+                        message += "Attempted to create handlebars but not enough materials.\n\r ";
+                        continue;
+                    }
                 }
+                message += "All frames needed to create the bikes are present.\n\r ";
                 frameCheck = true;
                 continue;
             }
             if(pps.getPart().getId() == bike.getFrontwheel().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " frontwheels with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        int result = quantity - pps.getQuantity();
+                        //return new BooleanWrapper(false, "Missing " + result + " frontwheels with id " + pps.getPart().getId() + " to complete the order.");
+                        message += "Missing " + result + " front wheels with id " + pps.getPart().getId() + " to complete the order.\n\r ";
+                        message += "Attempted to create front wheels but not enough materials.\n\r ";
+                        continue;
+                    }
                 }
+                message += "All front wheels needed to create the bikes are present.\n\r";
                 frontwheelCheck = true;
                 continue;
             }
             if(pps.getPart().getId() == bike.getRearwheel().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " rearwheels with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        int result = quantity - pps.getQuantity();
+                        message += "Missing " + result + " rear wheels with id " + pps.getPart().getId() + " to complete the order.\n\r";
+                        message += "Attempted to create rear wheels but not enough materials.\n\r";
+                        continue;
+                        // return new BooleanWrapper(false, "Missing " + result + " rearwheels with id " + pps.getPart().getId() + " to complete the order.");
+                    }
                 }
+                message += "All rear wheels needed to create the bikes are present.\n\r";
                 rearwheelCheck = true;
                 continue;
             }
             if(pps.getPart().getId() == bike.getPedal().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " pedals with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        int result = quantity - pps.getQuantity();
+                        // return new BooleanWrapper(false, "Missing " + result + " pedals with id " + pps.getPart().getId() + " to complete the order.");
+                        message += "Missing " + result + " pedals with id " + pps.getPart().getId() + " to complete the order.\n\r ";
+                        message += "Attempted to create pedals but not enough materials.\n\r ";
+                        continue;
+                    }
                 }
+                message += "All pedals needed to create the bikes are present.\n\r ";
                 pedalCheck = true;
                 continue;
             }
             if(pps.getPart().getId() == bike.getSeat().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " seats with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        int result = quantity - pps.getQuantity();
+                        message += "Missing " + result + " seats with id " + pps.getPart().getId() + " to complete the order.\n\r ";
+                        message += "Attempted to create seats but not enough materials.\n\r ";
+                        continue;
+                        //return new BooleanWrapper(false, "Missing " + result + " seats with id " + pps.getPart().getId() + " to complete the order.");
+                    }
                 }
+                message += "All seats needed to create the bikes are present.\n\r ";
                 seatCheck = true;
                 continue;
             }
@@ -254,11 +303,9 @@ public class PlantService {
             return new BooleanWrapper(true, "All parts needed to make the bikes are present.");
         }
         else{
-            return new BooleanWrapper(false, "At least one of the parts are missing.");
+            return new BooleanWrapper(false, message);
         }
-//
-
-
+        
     }
 
 }
