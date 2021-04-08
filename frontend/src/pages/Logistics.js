@@ -5,22 +5,21 @@ import MainContainer from '../components/containers/MainContainer.js';
 import InnerContainer from '../components/containers/InnerContainer.js';
 import CustomRadioButton from '../components/CustomRadioButton.js';
 
-class Infrastructure extends Component {
+class Logistics extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-        <MainContainer title="Infrastructure">
-          <InnerContainer title="Logistics">
-            <div>
+        <MainContainer title="Logistics">
+            <InnerContainer>
               <CustomRadioButton value="Inventory">Inventory</CustomRadioButton>
               <CustomRadioButton value="Manufacturing">Manufacturing</CustomRadioButton>
               <CustomRadioButton value="Accounting">Accounting</CustomRadioButton>
               <CustomRadioButton value="All">All</CustomRadioButton>
-            </div>
-          </InnerContainer>
+            </InnerContainer>
+            
         </MainContainer>
         
     );
@@ -29,7 +28,7 @@ class Infrastructure extends Component {
 
 //STYLED-COMPONENTS
 
-Infrastructure.propTypes = {
+Logistics.propTypes = {
 };
 
-export default Infrastructure;
+export default Logistics;

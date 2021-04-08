@@ -47,7 +47,7 @@ class Navigation extends Component {
             </div>
             
             <div>
-              <Link to="/infrastructure">
+              <Link to="/logistics">
                 <button><SettingsIcon /></button>
               </Link>
             </div>
