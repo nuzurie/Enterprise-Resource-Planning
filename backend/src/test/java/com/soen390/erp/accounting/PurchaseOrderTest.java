@@ -8,6 +8,7 @@ import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class PurchaseOrderTest {
     private AccountService accountService;
     @MockBean
     private LedgerService ledgerService;
+    @MockBean
+    private LogService logService;
 
     @Test
     public void getAllPurchaseOrdersTest()

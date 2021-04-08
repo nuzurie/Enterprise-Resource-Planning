@@ -6,6 +6,8 @@ import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +36,8 @@ public class SalesOrderTest {
     private AccountService accountService;
     @MockBean
     private LedgerService ledgerService;
+    @MockBean
+    private LogService logService;
 
 
     @Test

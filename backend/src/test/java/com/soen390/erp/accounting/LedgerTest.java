@@ -6,6 +6,8 @@ import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.*;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,10 @@ public class LedgerTest {
     private LedgerModelAssembler assembler;
     @MockBean
     private LedgerRepository ledgerRepository;
+    @MockBean
+    private EmailService emailService;
+    @MockBean
+    private LogService logService;
 
 
     @Test

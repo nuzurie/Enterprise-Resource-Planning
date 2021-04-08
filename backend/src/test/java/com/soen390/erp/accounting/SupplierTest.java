@@ -5,6 +5,8 @@ import com.soen390.erp.accounting.exceptions.InvalidSupplierException;
 import com.soen390.erp.accounting.exceptions.SupplierNotFoundException;
 import com.soen390.erp.accounting.model.Supplier;
 import com.soen390.erp.accounting.service.SupplierService;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,10 @@ public class SupplierTest {
 
     @MockBean
     private SupplierService supplierService;
+    @MockBean
+    private EmailService emailService;
+    @MockBean
+    private LogService logService;
 
     @Test
     public void getAllSuppliersTest()
