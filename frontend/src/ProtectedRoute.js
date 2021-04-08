@@ -1,6 +1,5 @@
 import React from "react";
 import {Redirect, Route} from "react-router-dom";
-import Popup from './components/Popup';
 
 export default function ProtectedRoute({component: Component, ...rest}) {
     const role = localStorage.getItem("role");

@@ -10,16 +10,16 @@ import Accounting from './pages/Accounting.js';
 import CreateUser from './pages/CreateUser.js';
 import Login from './pages/Login.js';
 import ProtectedRoute from "./ProtectedRoute";
-
+import EmployeeRoute from "./EmployeeRoute";
 
 const Main = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-        <ProtectedRoute exact path='/dashboard' component={Dashboard}></ProtectedRoute>
-        <ProtectedRoute exact path='/bikeproduction' component={BikeProduction}></ProtectedRoute>
-        <ProtectedRoute exact path='/inventory' component={Inventory}></ProtectedRoute>
-        <ProtectedRoute exact path='/infrastructure' component={Infrastructure}></ProtectedRoute>
-        <ProtectedRoute exact path='/manufacturing' component={Manufacturing}></ProtectedRoute>
+        <EmployeeRoute exact path='/dashboard' component={Dashboard}></EmployeeRoute>
+        <EmployeeRoute exact path='/bikeproduction' component={BikeProduction}></EmployeeRoute>
+        <EmployeeRoute exact path='/inventory' component={Inventory}></EmployeeRoute>
+        <EmployeeRoute exact path='/infrastructure' component={Infrastructure}></EmployeeRoute>
+        <EmployeeRoute exact path='/manufacturing' component={Manufacturing}></EmployeeRoute>
         <ProtectedRoute exact path='/accounting' component={Accounting}></ProtectedRoute>
         <ProtectedRoute exact path='/createuser' component={CreateUser}></ProtectedRoute>
         <Route exact path='/login' component={Login}></Route>
