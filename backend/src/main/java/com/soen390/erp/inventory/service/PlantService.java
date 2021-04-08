@@ -15,6 +15,7 @@ import com.soen390.erp.inventory.repository.PlantPartRepository;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
+import com.soen390.erp.manufacturing.model.Handlebar;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
@@ -192,11 +193,18 @@ public class PlantService {
         String message = "";
         boolean handlebarCheck = false, frameCheck = false, frontwheelCheck = false, rearwheelCheck= false, pedalCheck = false, seatCheck = false;
         // PlantPart pp = parts.iterator().next();
+        //TODO: return a concatenated string for all parts missing instead of one
+        //FIXME iterate through a copy of part and not part
         for (PlantPart pps : parts){
             if(pps.getPart().getId() == bike.getHandlebar().getId()){
                 if(pps.getQuantity() < quantity){
-                    int result = quantity - pps.getQuantity();
-                    return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order.");
+                    try {
+                        addPlantPart(plant,pps.getPart(), quantity - pps.getQuantity());
+                        //TODO: notify that part was made because material was sufficient
+                    } catch (NotEnoughMaterialInPlantException ex) {
+                        int result = quantity - pps.getQuantity();
+                        return new BooleanWrapper(false, "Missing " + result + " handlebars with id " + pps.getPart().getId() + " to complete the order.");
+                    }
                 }
                 handlebarCheck = true;
                 continue;
