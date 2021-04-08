@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect, Route} from "react-router-dom";
-
+import Popup from './components/Popup';
 
 export default function ProtectedRoute({component: Component, ...rest}) {
     const role = localStorage.getItem("role");
@@ -8,7 +8,11 @@ export default function ProtectedRoute({component: Component, ...rest}) {
         <Route {...rest} render={(props) => {
             return role === "ROLE_ADMIN" || role === "ROLE_MANAGER"
                 ? <Component {...props} />
-                : <Redirect to='/login' />
+                : 
+                <>
+                    <Redirect to='/login' />
+                    {alert("You do not have access.")}
+                </>
         }} />
     )
 }

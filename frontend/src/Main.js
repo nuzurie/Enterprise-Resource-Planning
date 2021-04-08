@@ -15,7 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 const Main = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-        <Route exact path='/dashboard' component={Dashboard}></Route>
+        <ProtectedRoute exact path='/dashboard' component={Dashboard}></ProtectedRoute>
         <ProtectedRoute exact path='/bikeproduction' component={BikeProduction}></ProtectedRoute>
         <ProtectedRoute exact path='/inventory' component={Inventory}></ProtectedRoute>
         <ProtectedRoute exact path='/infrastructure' component={Infrastructure}></ProtectedRoute>

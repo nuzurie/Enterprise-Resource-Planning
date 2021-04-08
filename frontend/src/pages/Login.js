@@ -34,9 +34,11 @@ class Login extends Component {
             localStorage.setItem("role", role);
             localStorage.setItem("user", email); // TODO: set expirty
             localStorage.setItem("password", password); // TODO: set expirty
+            alert("You are logged in! :)");
         }
     )
-    .catch(err => console.log(err))
+    .catch(err => {
+        console.log(err)})
 
   }
 
@@ -54,7 +56,9 @@ class Login extends Component {
                         </FieldContainer>
                 
                     </div>
-                    <GradientButton type="submit" buttonValue="Login" />
+                    <GradientButton type="submit" buttonValue="Login" >
+                        <Link to="/bikeproduction" />
+                    </GradientButton>
                 </LoginForm>
             </InnerContainer>
         </MainContainer>
