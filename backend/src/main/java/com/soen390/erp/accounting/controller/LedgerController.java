@@ -118,7 +118,7 @@ public class LedgerController {
         return ex.getMessage();
     }
 
-    @GetMapping("/ledger/export")
+    @GetMapping("/ledger/report/csv")
     public void exportToCSV(HttpServletResponse response)
             throws IOException
     {
