@@ -17,6 +17,7 @@ class Logistics extends Component {
     }
 
     this.initializeLogs = this.initializeLogs.bind(this);
+    this.handleCategory = this.handleCategory.bind(this);
   }
 
   componentDidMount() {
@@ -33,8 +34,23 @@ class Logistics extends Component {
     .catch(err => console.log(err));
     }
 
-  test() {
-    console.log("test");
+  handleCategory(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    const logCategory = form.get("logsDisplay");
+    
+    let url = `/logs/${logCategory}?pageNo=${this.state.currentPage}&pageSize=20`;
+
+    if (logCategory === "all") {
+      url = `/logs?pageNo=${this.state.currentPage}&pageSize=20`;
+    }
+
+    axios.get(url)
+    .then(res =>
+      this.setState({
+        logs: res.data, 
+      }))
+    .catch(err => console.log(err));
   }
 
   handlePageChange(direction){
@@ -74,11 +90,11 @@ class Logistics extends Component {
     return (
         <LogisticsContainer title="Logistics">
             <LogContainer>
-              <ChoicesContainer onSubmit={this.test}>
-                <CustomRadioButton name="logsDisplay" value="Inventory" >Inventory</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="Manufacturing" >Manufacturing</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="Accounting" >Accounting</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="All" defaultChecked={true} >All</CustomRadioButton>
+              <ChoicesContainer onSubmit={this.handleCategory}>
+                <CustomRadioButton name="logsDisplay" value="inventory" >inventory</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="manufacturing" >manufacturing</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="accounting" >accounting</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="all" defaultChecked={true} >all</CustomRadioButton>
                 <button type="submit">display</button>
               </ChoicesContainer>
               {logsList}
@@ -99,6 +115,7 @@ const ChoicesContainer = styled.form`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  background: #F9F9F9;
 `
 
 const LogEntry = styled.div`
