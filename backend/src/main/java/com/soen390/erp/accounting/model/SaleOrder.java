@@ -1,6 +1,7 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.inventory.model.Plant;
 import lombok.*;
 
@@ -62,4 +63,7 @@ public class SaleOrder {
     @JoinColumn(name = "sale_order_id")
     private Set<SaleOrderItems> saleOrderItems;
 
+    public String toString() {
+        return id+"" ;
+    }
 }

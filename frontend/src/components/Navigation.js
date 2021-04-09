@@ -32,7 +32,7 @@ class Navigation extends Component {
               </Link>
             </div>
             <div>
-              <Link to="/dashboard">
+              <Link to="/reports">
                 <button><DashboardOutlinedIcon /></button>
               </Link>
             </div>

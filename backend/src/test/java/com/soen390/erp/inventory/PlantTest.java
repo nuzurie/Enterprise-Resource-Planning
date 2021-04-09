@@ -15,6 +15,7 @@ import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,9 +102,9 @@ public class PlantTest {
         doReturn(part).when(plantPart).getPart();
         doReturn(quantity).when(plantPart).getQuantity();
 
-        ResponseEntity<?> result = plantController.addPartToInventory(plantPart);
+        ResponseEntityWrapper result = plantController.addPartToInventory(plantPart);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -186,9 +187,9 @@ public class PlantTest {
         doReturn(material).when(plantMaterial).getMaterial();
         doReturn(quantity).when(plantMaterial).getQuantity();
 
-        ResponseEntity<?> result = plantController.addMaterialToInventory(plantMaterial);
+        ResponseEntityWrapper result = plantController.addMaterialToInventory(plantMaterial);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -223,9 +224,9 @@ public class PlantTest {
         doReturn(bike).when(plantBike).getBike();
         doReturn(quantity).when(plantBike).getQuantity();
 
-        ResponseEntity<?> result = plantController.addBikeToInventory(plantBike);
+        ResponseEntityWrapper result = plantController.addBikeToInventory(plantBike);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

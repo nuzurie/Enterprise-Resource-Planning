@@ -1,28 +1,34 @@
 package com.soen390.erp.accounting.service;
 
+import com.soen390.erp.accounting.model.IReport;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.model.SaleOrderItems;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.repository.SaleOrderRepository;
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class SaleOrderService {
+public class SaleOrderService implements IReport {
     private final SaleOrderRepository repository;
     private final PlantRepository plantRepository;
     private final BikeRepository bikeRepository;
     private final AccountService accountService;
     private final LedgerService ledgerService;
+    private final EmailService emailService;
 
     public boolean addSaleOrder(SaleOrder saleOrder){
         // set the plant
@@ -51,6 +57,8 @@ public class SaleOrderService {
 
         saleOrder = repository.save(saleOrder);
         if (saleOrder.getId() != 0){
+            EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("New Sale Order").body("A new Sale Order has been received with id " + saleOrder.getId()).build();
+            emailService.sendMail(email);
             return true;
         }else{
             return false;
@@ -97,6 +105,9 @@ public class SaleOrderService {
         ledgerEntry.setDate(new Date());
         ledgerEntry.setAmount(amount);
         ledgerEntry.setSaleOrder(saleOrder);
+
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Supplier Order Payment").body("The payment for the Sale Order with id " + saleOrder.getId() + " has been received.").build();
+        emailService.sendMail(email);
 
         //save
         ledgerService.addLedger(ledgerEntry);
@@ -145,9 +156,18 @@ public class SaleOrderService {
         ledgerEntry.setAmount(amount);
         ledgerEntry.setSaleOrder(saleOrder);
 
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Sale Order Shipment").body("The Sale Order with id " + saleOrder.getId() + " has shipped.").build();
+        emailService.sendMail(email);
+
         //save
         ledgerService.addLedger(ledgerEntry);
         //endregion
 
+    }
+
+    @Override
+    public void accept(IReportGenerator reportGenerator) throws IOException
+    {
+        reportGenerator.generateSaleOrderReport(this);
     }
 }

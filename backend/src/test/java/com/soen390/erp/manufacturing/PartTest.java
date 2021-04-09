@@ -7,6 +7,7 @@ import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.PartModelAssembler;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,9 +98,9 @@ public class PartTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = partController.newPart(part);
+        ResponseEntityWrapper result = partController.newPart(part);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -118,9 +119,9 @@ public class PartTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = partController.newPart(part);
+        ResponseEntityWrapper result = partController.newPart(part);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

@@ -1,30 +1,37 @@
 package com.soen390.erp.accounting.service;
 
+import com.soen390.erp.accounting.model.IReport;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.model.PurchaseOrderItems;
 
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.repository.PurchaseOrderRepository;
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class PurchaseOrderService {
+public class PurchaseOrderService implements IReport
+{
     private final PurchaseOrderRepository repository;
     private final MaterialRepository materialRepository;
     private final PlantRepository plantRepository;
 
     private final AccountService accountService;
     private final LedgerService ledgerService;
+    private final EmailService emailService;
 
     public boolean addPurchaseOrder(PurchaseOrder purchaseOrder){
         purchaseOrder.setDate(new Date());
@@ -33,7 +40,7 @@ public class PurchaseOrderService {
 
         double totalPrice = 0;
         for (PurchaseOrderItems purchaseOrderItem: purchaseOrder.getPurchaseOrderItems()
-             ) {
+        ) {
             totalPrice += purchaseOrderItem.getUnitPrice()*purchaseOrderItem.getQuantity();
             materialRepository.save(purchaseOrderItem.getMaterial());
         }
@@ -50,6 +57,8 @@ public class PurchaseOrderService {
 
         repository.save(purchaseOrder);
         if (purchaseOrder.getId() != 0){
+            EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("New Purchase Order").body("A new Purchase Order has been received with id " + purchaseOrder.getId()).build();
+            emailService.sendMail(email);
             return true;
         }else{
             return false;
@@ -105,6 +114,8 @@ public class PurchaseOrderService {
         ledgerEntry.setAmount(amount);
         ledgerEntry.setPurchaseOrder(purchaseOrder);
 
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Purchase Order Payment").body("The Purchase Order with id " + purchaseOrder.getId() + " has been paid.").build();
+        emailService.sendMail(email);
         //save
         ledgerService.addLedger(ledgerEntry);
         //endregion
@@ -143,7 +154,15 @@ public class PurchaseOrderService {
         ledgerEntry.setPurchaseOrder(purchaseOrder);
 
         //save
+        EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Receive Materials").body("Received materials for Purchase Order with id " + purchaseOrder.getId() + ".").build();
+        emailService.sendMail(email);
         ledgerService.addLedger(ledgerEntry);
         //endregion
+    }
+
+    @Override
+    public void accept(IReportGenerator reportGenerator) throws IOException
+    {
+        reportGenerator.generatePurchaseOrderReport(this);
     }
 }

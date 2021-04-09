@@ -98,8 +98,6 @@ class Accounting extends Component {
     let payableInvoices = <div></div>;
     let receivableInvoices = <div></div>;
 
-    console.log(this.state.receivableInvoices);
-
     if (this.state.payableInvoices.length !== 0) {
       payableInvoices = this.state.payableInvoices.map((invoice, index) => {
         return (
@@ -126,7 +124,7 @@ class Accounting extends Component {
             userName={invoice.saleOrder.client.name}
             userID={invoice.saleOrder.client.id}
             amount={invoice.saleOrder.saleOrderItems.length != 0 ? invoice.saleOrder.saleOrderItems[0].quantity : 1}
-            productName={invoice.saleOrder.saleOrderItems.length != 0 ? invoice.saleOrder.saleOrderItems[0].material.name : "untitled"}
+            productName={invoice.saleOrder.saleOrderItems.length != 0 ? invoice.saleOrder.saleOrderItems[0].bike.name : "untitled"}
             payType="OWED"
             totalCost={invoice.saleOrder.grandTotal}
             readOnly />
@@ -225,7 +223,6 @@ const TopContainer = styled.div`
   display: flex;
   flex: 2;
   width: 100%;
-  // height: 100%;
 
   & > div {
     flex: 1;
@@ -234,6 +231,9 @@ const TopContainer = styled.div`
 
   & > div:nth-child(3) {
     margin-right: 0;
+     & > div {
+       height: 0;
+     }
   }
 `
 

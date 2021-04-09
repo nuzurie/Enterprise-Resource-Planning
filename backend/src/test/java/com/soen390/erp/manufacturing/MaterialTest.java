@@ -1,11 +1,11 @@
 package com.soen390.erp.manufacturing;
 
 import com.soen390.erp.manufacturing.controller.MaterialController;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.service.MaterialModelAssembler;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,9 +93,9 @@ public class MaterialTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = materialController.newMaterial(m1);
+        ResponseEntityWrapper result = materialController.newMaterial(m1);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

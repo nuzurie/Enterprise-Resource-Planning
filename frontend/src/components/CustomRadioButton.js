@@ -79,6 +79,7 @@ const CheckboxContainer = styled.label`
 
 CustomRadioButton.propTypes = {
     children: PropTypes.element.isRequired,
+    name: PropTypes.string.isRequired,
 };
 
 export default CustomRadioButton;
