@@ -41,13 +41,15 @@ class Logistics extends Component {
     console.log(direction)
     console.log(this.state.currentPage)
     if (direction === "+"){
+      if (this.state.logs.length==0)
+        return;
       this.setState({
         currentPage: this.state.currentPage+1
           })
       this.initializeLogs()
     }
     else{
-      if (this.state.currentPage<0)
+      if (this.state.currentPage<1)
         return;
       this.setState({
         currentPage: this.state.currentPage-1
