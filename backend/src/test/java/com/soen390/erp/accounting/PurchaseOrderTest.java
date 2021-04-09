@@ -1,11 +1,15 @@
 package com.soen390.erp.accounting;
 
 import com.soen390.erp.accounting.controller.PurchaseOrderController;
+import com.soen390.erp.accounting.exceptions.AccountNotFoundException;
+import com.soen390.erp.accounting.exceptions.PurchaseNotFoundException;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +38,8 @@ public class PurchaseOrderTest {
     private AccountService accountService;
     @MockBean
     private LedgerService ledgerService;
+    @MockBean
+    private LogService logService;
 
     @Test
     public void getAllPurchaseOrdersTest()
@@ -67,13 +73,19 @@ public class PurchaseOrderTest {
     @Test
     public void oneNotFoundTest()
     {
-        int id = 1;
+        int id = 1 ;
 
-        doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
+        doThrow(new PurchaseNotFoundException("No order with id " + id))
+                .when(purchaseOrderService)
+                .getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.one(id);
+        PurchaseNotFoundException result =
+                Assertions.assertThrows(PurchaseNotFoundException.class, () -> {
+                    purchaseOrderController.one(id);
+                });
 
-        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        assertEquals("No order with id " + id, result
+                .getMessage());
     }
 
     @Test
