@@ -1,9 +1,11 @@
 package com.soen390.erp.accounting.service;
 
+import com.soen390.erp.accounting.model.IReport;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.model.SaleOrderItems;
+import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.repository.SaleOrderRepository;
 import com.soen390.erp.configuration.model.BooleanWrapper;
 import com.soen390.erp.email.model.EmailToSend;
@@ -15,13 +17,14 @@ import com.soen390.erp.manufacturing.repository.BikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class SaleOrderService {
+public class SaleOrderService implements IReport {
     private final SaleOrderRepository repository;
     private final PlantRepository plantRepository;
     private final BikeRepository bikeRepository;
@@ -183,5 +186,11 @@ public class SaleOrderService {
         plantService.removePlantBike(saleOrder.getPlant(), saleOrderItem.getBike(), saleOrderItem.getQuantity() );
         //endregion
 
+    }
+
+    @Override
+    public void accept(IReportGenerator reportGenerator) throws IOException
+    {
+        reportGenerator.generateSaleOrderReport(this);
     }
 }

@@ -40,4 +40,8 @@ public class Bike {
             joinColumns = { @JoinColumn(name = "bike_id") },
             inverseJoinColumns = { @JoinColumn(name = "accessory_id") })
     private Set<Accessory> accessories;
+
+    public String toString() {
+        return name+"" ;
+    }
 }

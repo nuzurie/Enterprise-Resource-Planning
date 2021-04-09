@@ -1,7 +1,6 @@
 package com.soen390.erp.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.soen390.erp.manufacturing.model.Frame;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "account")
 public class Account {
     enum AccountName {AccountPayable, AccountReceivable, Cash, Inventory}
 
@@ -29,4 +29,9 @@ public class Account {
     @OneToMany(mappedBy = "creditAccount")
     @JsonBackReference
     private Set<Ledger> creditLedgerEntries;
+
+    @Override
+    public String toString() {
+        return id+"" ;
+    }
 }

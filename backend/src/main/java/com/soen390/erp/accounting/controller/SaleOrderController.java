@@ -1,6 +1,12 @@
 package com.soen390.erp.accounting.controller;
 
 import com.soen390.erp.accounting.model.SaleOrder;
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
+import com.soen390.erp.accounting.repository.SaleOrderRepository;
+import com.soen390.erp.accounting.service.AccountService;
+import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
 import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.configuration.model.BooleanWrapper;
@@ -8,11 +14,19 @@ import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.service.PlantService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.io.ByteArrayInputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -21,6 +35,10 @@ public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final LogService logService;
     private static final String category = "accounting";
+    private final AccountService accountService;
+    private final LedgerService ledgerService;
+    private final SaleOrderRepository saleOrderRepository;
+
 
     @GetMapping(path = "/SaleOrders")
     public ResponseEntity<?> all(){
@@ -181,8 +199,41 @@ public class SaleOrderController {
         //endregion
     }
 
+    @GetMapping(value = "/SaleOrders/report/pdf")
+    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
+    {
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition",
+                "inline; filename=saleOrderReport" +
+                        ".pdf");
 
+        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
+        saleOrderService.accept(pdfReportGenerator);
+        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
 
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
+    }
 
+    @GetMapping("/SaleOrders/report/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException
+    {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue =
+                "attachment; filename=saleOrdersReport_" + currentDateTime +
+                ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        IReportGenerator csvReportGenerator = new CsvReportGenerator();
+        csvReportGenerator.setResponse(response);
+        saleOrderService.accept(csvReportGenerator);
+    }
 
 }

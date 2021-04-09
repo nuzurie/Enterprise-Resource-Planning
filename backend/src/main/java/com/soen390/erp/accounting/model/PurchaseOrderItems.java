@@ -32,4 +32,8 @@ public class PurchaseOrderItems {
     @ManyToOne
     @JoinColumn(name = "material_id")
     Material material;
+
+    public String toString(){
+        return material+"";
+    }
 }
