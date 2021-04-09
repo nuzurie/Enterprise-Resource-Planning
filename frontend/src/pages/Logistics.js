@@ -13,6 +13,7 @@ class Logistics extends Component {
 
     this.state = {
       logs: [],
+      currentPage: 0
     }
 
     this.initializeLogs = this.initializeLogs.bind(this);
@@ -23,7 +24,8 @@ class Logistics extends Component {
   }
 
   initializeLogs() {
-    axios.get('/logs?pageNo=0&pageSize=20')
+    const currPage = this.state.currentPage;
+    axios.get(`/logs?pageNo=${currPage}&pageSize=20`)
     .then(res =>
       this.setState({
         logs: res.data, 
@@ -33,6 +35,25 @@ class Logistics extends Component {
 
   test() {
     console.log("test");
+  }
+
+  handlePageChange(direction){
+    console.log(direction)
+    console.log(this.state.currentPage)
+    if (direction === "+"){
+      this.setState({
+        currentPage: this.state.currentPage+1
+          })
+      this.initializeLogs()
+    }
+    else{
+      if (this.state.currentPage<0)
+        return;
+      this.setState({
+        currentPage: this.state.currentPage-1
+      })
+      this.initializeLogs()
+    }
   }
 
   render() {
@@ -59,6 +80,8 @@ class Logistics extends Component {
                 <button type="submit">display</button>
               </ChoicesContainer>
               {logsList}
+              <button onClick={()=>this.handlePageChange("-")}>Back</button>
+              <button onClick={()=>this.handlePageChange("+")}>Forward</button>
             </LogContainer>
             
         </LogisticsContainer>
