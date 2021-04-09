@@ -95,35 +95,6 @@ public class LedgerController {
                 .body(new InputStreamResource(inputStream));
     }
 
-    @GetMapping("/ledger/report/csv")
-
-    public void exportCSV(HttpServletResponse response) throws Exception {
-
-        //set file name and content type
-        String filename = "ledgers.csv";
-
-        List<Ledger> ledgers = ledgerService.findAllLedgers();
-
-        response.setContentType("text/csv");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + filename + "\"");
-
-
-//        WriteCSVToResponse.writeLedgers(response.getWriter(), ledgers);
-
-
-
-////        create a csv writer
-//        StatefulBeanToCsv<Ledger> writer = new StatefulBeanToCsvBuilder<Ledger>(response.getWriter())
-//                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-//                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-//                .withOrderedResults(false)
-//                .build();
-//
-////        write all users to csv file
-//        writer.write(ledgers);
-
-    }
 
     @PostMapping("/ledger")
     public ResponseEntityWrapper newTransaction(@RequestBody Ledger ledger){
