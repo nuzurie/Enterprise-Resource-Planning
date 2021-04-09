@@ -33,7 +33,7 @@ class Login extends Component {
               'authorization': auth
           }
       })
-  .then(res =>
+    .then(res =>
         {
             const role = res.data;
             console.log(res.headers)
@@ -46,21 +46,6 @@ class Login extends Component {
     .catch(err => {
         console.log(err)})
     }
-
-  handleLogout(){
-      axios.get('/perform_logout')
-          .then(res => {
-              document.cookie.split(";").forEach((c) => {
-                  document.cookie = c
-                      .replace(/^ +/, "")
-                      .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-              localStorage.removeItem("role");
-              localStorage.removeItem("user");
-              localStorage.removeItem("password");
-              });
-              console.log(res)})
-          .catch(err => console.log(err))
-  }
 
   render() {
     return (
@@ -81,7 +66,6 @@ class Login extends Component {
                     </GradientButton>
                 </LoginForm>
             </InnerContainer>
-            <button onClick={this.handleLogout}>LOGOUT</button>
         </MainContainer>
     );
   }

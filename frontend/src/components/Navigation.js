@@ -11,6 +11,7 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddUser from '@material-ui/icons/PersonAdd';
 import Logout from '@material-ui/icons/PowerSettingsNew';
+import axios from "axios";
 
 function accounts() {
   alert('This is the accounts page!');
@@ -20,6 +21,23 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
    
+  }
+
+  handleLogout(){
+    axios.get('/perform_logout')
+      .then(res => {
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        localStorage.removeItem("password");
+        });
+        console.log(res);
+        alert("Succesfully logged out!");
+      })
+      .catch(err => console.log(err))
   }
 
   render() {
@@ -69,7 +87,7 @@ class Navigation extends Component {
             </Link>
           </div>
           <div>
-            <button><Logout /></button>
+            <button onClick={this.handleLogout}><Logout /></button>
           </div>
         </NavigationContainer>
     );
