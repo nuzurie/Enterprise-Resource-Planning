@@ -11,6 +11,7 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddUser from '@material-ui/icons/PersonAdd';
 import Logout from '@material-ui/icons/PowerSettingsNew';
+import axios from "axios";
 
 function accounts() {
   alert('This is the accounts page!');
@@ -22,54 +23,71 @@ class Navigation extends Component {
    
   }
 
+  handleLogout(){
+    axios.get('/perform_logout')
+      .then(res => {
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        localStorage.removeItem("password");
+        });
+        console.log(res);
+        alert("Succesfully logged out!");
+      })
+      .catch(err => console.log(err))
+  }
+
   render() {
     return (
         <NavigationContainer>
           <div>
-            <div>
+            <div title="Login">
               <Link to="/login">
                 <button><AccountCircleOutlinedIcon /></button>
               </Link>
             </div>
-            <div>
+            <div title="Management">
               <Link to="/reports">
                 <button><DashboardOutlinedIcon /></button>
               </Link>
             </div>
-            <Link to="/bikeproduction">
+            <Link title="BikeProduction" to="/bikeproduction">
               <button><DirectionsBikeIcon /></button>
             </Link>
 
-            <div>
+            <div title="Inventory">
               <Link to="/inventory">
                 <button><CardTravelOutlinedIcon /></button>
               </Link>
             </div>
             
-            <div>
+            <div title="Logistics">
               <Link to="/logistics">
                 <button><SettingsIcon /></button>
               </Link>
             </div>
 
-            <div>
+            <div title="Manufacturing">
               <Link to="/manufacturing">
                 <button><DateRangeOutlinedIcon /></button>
               </Link>
             </div>
 
-            <div>
+            <div title="Accounting">
               <Link to="/accounting">
                 <button><DescriptionOutlinedIcon /></button>
               </Link>
             </div>
 
-            <Link to="/createuser">
+            <Link title="Create User" to="/createuser">
               <button><AddUser /></button>
             </Link>
           </div>
           <div>
-            <button><Logout /></button>
+            <button onClick={this.handleLogout}><Logout /></button>
           </div>
         </NavigationContainer>
     );
