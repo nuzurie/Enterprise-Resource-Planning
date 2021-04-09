@@ -46,19 +46,19 @@ class BikeProgress extends Component {
 
   gatherValidator() {
     axios.post(`/SaleOrders/${this.props.saleOrderID}/GatherBikeParts`)
-      .then(res => console.log(res.data.message))
+      .then(res => alert(res.data.message))
     return true;
   }
 
   makeValidator() {
     axios.post(`/SaleOrders/${this.props.saleOrderID}/MakeBike`)
-      .then(res => console.log(res.data.message))
+      .then(res => alert(res.data.message))
     return true;
   }
 
   shippingValidator() {
     axios.post(`/SaleOrders/${this.props.saleOrderID}/ShipBike`)
-      .then(res => console.log(res.data.message))
+      .then(res => alert(res.data.message))
     return true;
   }
 
