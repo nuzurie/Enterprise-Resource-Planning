@@ -9,20 +9,16 @@ class BikeProgress extends Component {
     super(props);
   }
 
-  step2Validator() {
+  gatherValidator() {
     return true;
   }
 
-  step3Validator() {
-    // return boolean
+  makeValidator() {
+    return true;
   }
 
-  step4Validator() {
-
-  }
-
-  step5Validator() {
-
+  shippingValidator() {
+    return true;
   }
 
   onFormSubmit() {
@@ -40,43 +36,23 @@ class BikeProgress extends Component {
             onSubmit={this.onFormSubmit}
             steps={[
                 {
-                    label: 'procur',
-                    name: 'step 1',
-                    content: step1Content,
-                    onSubmit: this.onFormSubmit
-                },
-                {
                     label: 'gather',
-                    name: 'step 2',
-                    content: step2Content,
-                    validator: this.step2Validator,
-                },
-                {
-                    label: 'assemble',
-                    name: 'step 3',
-                    content: step3Content,
-                    validator: this.step2Validator
-                },
-                {
-                    label: 'check-up',
                     name: 'step 1',
                     content: step1Content,
-                    validator: this.step2Validator,
-                    onSubmit: this.onFormSubmit
+                    onSubmit: this.gatherValidator
                 },
                 {
-                    label: 'packaging',
+                    label: 'make',
                     name: 'step 2',
                     content: step2Content,
-                    validator: this.step2Validator,
-                    onSubmit: this.onFormSubmit
+                    validator: this.makeValidator,
                 },
                 {
                     label: 'shipping',
                     name: 'step 3',
                     content: step3Content,
-                    validator: this.step2Validator
-                }
+                    validator: this.shippingValidator
+                },
             ]}
         />
     );
