@@ -14,9 +14,12 @@ class Reports extends Component {
 
     this.state = {
       cloudReports: [],
+      fileToDownload: '',
     }
 
     this.initializeCloudReports = this.initializeCloudReports.bind(this);
+    this.handleDownloadSelect = this.handleDownloadSelect.bind(this);
+    this.downloadDocument = this.downloadDocument.bind(this);
   }
 
   componentDidMount() {
@@ -32,10 +35,18 @@ class Reports extends Component {
     .catch(err => console.log(err));
   }
 
+  handleDownloadSelect(e) {
+    console.log(":hola amiga");
+    let index = e.target.selectedIndex;
+    this.setState({ fileToDownload: e.target[index].text });
+  }
+
   downloadDocument(e) {
     e.preventDefault();
     const form = new FormData(e.target);
     const documentID = form.get("docToDownload");
+
+    console.log(this.state.fileToDownload);
 
     axios({
       url: `/download/${documentID}`, //your url
@@ -45,7 +56,7 @@ class Reports extends Component {
        const url = window.URL.createObjectURL(new Blob([response.data]));
        const link = document.createElement('a');
        link.href = url;
-       link.setAttribute('download', 'file.pdf');
+       link.setAttribute('download', this.state.fileToDownload);
        document.body.appendChild(link);
        link.click();
     });
@@ -54,17 +65,26 @@ class Reports extends Component {
   uploadDocument(e) {
     e.preventDefault();
     const form = new FormData(e.target);
-    const filePath = form.get("fileToUpload");
+    const fileToUpload = form.get("fileToUpload");
 
-    console.log(filePath);
+    form.append('file', fileToUpload);
 
-    form.append('file', filePath);
+    // axios.post("/upload", form, { // receive two parameter endpoint url ,form data 
+    //   })
+    // .then(res => { // then print response status
+    //   console.log(res.statusText)
+    // })
 
-    axios.post("/upload", form, { // receive two parameter endpoint url ,form data 
-      })
+    axios.post("/upload", form, { 
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    })
     .then(res => { // then print response status
       console.log(res.statusText)
     })
+
+    alert("Uploaded to the cloud! :)");
   }
 
   generateDocument(e) {
@@ -92,7 +112,6 @@ class Reports extends Component {
   }
 
   render() {
-    console.log(this.state.cloudReports);
     let reportsOptions = <option>No files found</option>;
 
     if (this.state.cloudReports.length !== 0) {
@@ -117,7 +136,7 @@ class Reports extends Component {
               <DocumentForm onSubmit={this.downloadDocument}>
                 <div>
                   <Caption>Select the document you wish to download from the cloud.</Caption>
-                  <CustomDropdown key="docToDownload" dropdownName="docToDownload" dropddownID="docToDownload">
+                  <CustomDropdown key="docToDownload" dropdownName="docToDownload" dropddownID="docToDownload" handleChange={this.handleDownloadSelect} >
                     {reportsOptions}
                   </CustomDropdown>
                 </div>
