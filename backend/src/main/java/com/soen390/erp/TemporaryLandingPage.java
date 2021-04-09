@@ -42,4 +42,11 @@ public class TemporaryLandingPage {
         else
             return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("securityNone")
+    public ResponseEntity<?> logout(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return ResponseEntity.ok().build();
+    }
 }

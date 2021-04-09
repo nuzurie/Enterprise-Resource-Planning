@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -22,19 +23,22 @@ public class ERPSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+        http.authorizeRequests()
+                .antMatchers("/securityNone").permitAll();
         http.csrf().disable() //todo: this will have to be changed later for additional security
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
 //                .formLogin().and()
-                .httpBasic()
-                .and()
-                .logout()
-                .logoutUrl("/perform_logout")
+                .httpBasic();
+
+
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout", "GET"))
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout"))
+                .logoutSuccessUrl("/securityNone")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
+                .deleteCookies("JSESSIONID");
         http.cors();
     }
 
