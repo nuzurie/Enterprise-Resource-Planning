@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { CsvToHtmlTable } from 'react-csv-to-table';
 import styled from 'styled-components';
 import MainContainer from '../components/containers/MainContainer.js';
 import InnerContainer from '../components/containers/InnerContainer';
@@ -137,7 +138,9 @@ class Reports extends Component {
     return (
       <Container>
         <MainContainer title="Quality Data">
-          <InnerContainer >{this.state.qualityData}</InnerContainer>
+          <InnerContainer >
+            <CsvToHtmlTable data={this.state.qualityData} csvDelimiter=","/>
+          </InnerContainer>
           <form onSubmit={this.getQualityData}>
             <GradientButton type="submit" buttonValue="get quality data"/>
           </form>
