@@ -1,9 +1,9 @@
 package com.soen390.erp.inventory;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.inventory.controller.SupplierOrderController;
 import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.inventory.service.SupplierOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest

@@ -5,9 +5,8 @@ import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
-import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest

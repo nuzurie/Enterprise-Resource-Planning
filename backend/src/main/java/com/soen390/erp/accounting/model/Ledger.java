@@ -1,7 +1,6 @@
 package com.soen390.erp.accounting.model;
 
 import com.opencsv.bean.CsvBindByName;
-import com.soen390.erp.accounting.report.IReportGenerator;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,14 +43,13 @@ public class Ledger {
     /**
      * the purchase order that is linked to this ledger entry
      */
-    @ManyToOne(optional = true)
+    @ManyToOne()
     @JoinColumn(name = "purchase_order_id")
-//    @JsonBackReference
     private PurchaseOrder purchaseOrder;
     /**
      * the client order that is linked to this ledger entry
      */
-    @ManyToOne(optional = true)
+    @ManyToOne()
     @JoinColumn(name = "sale_order_id")
     private SaleOrder saleOrder;
 

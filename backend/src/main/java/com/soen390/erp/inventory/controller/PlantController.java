@@ -1,12 +1,14 @@
 package com.soen390.erp.inventory.controller;
 
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
 import com.soen390.erp.inventory.exceptions.PlantNotFoundException;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.model.PlantBike;
+import com.soen390.erp.inventory.model.PlantMaterial;
 import com.soen390.erp.inventory.model.PlantPart;
 import com.soen390.erp.inventory.repository.PlantRepository;
 import com.soen390.erp.inventory.service.PlantModelAssembler;
@@ -14,10 +16,8 @@ import com.soen390.erp.inventory.service.PlantService;
 import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
-import com.soen390.erp.manufacturing.model.Part;
-import com.soen390.erp.inventory.model.PlantMaterial;
 import com.soen390.erp.manufacturing.model.Material;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.manufacturing.model.Part;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;

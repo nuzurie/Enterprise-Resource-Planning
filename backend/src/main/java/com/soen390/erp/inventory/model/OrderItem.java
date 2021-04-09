@@ -4,11 +4,6 @@ import com.soen390.erp.manufacturing.model.Material;
 
 import javax.persistence.*;
 
-//@Getter
-//@Setter
-//@Builder
-//@AllArgsConstructor
-//@NoArgsConstructor
 @Entity
 @IdClass(OrderItemId.class)
 public class OrderItem {
@@ -27,6 +22,4 @@ public class OrderItem {
 
     private int quantity;
 
-//    private Double cost;
-//    private Double totalCost;
 }

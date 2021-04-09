@@ -2,11 +2,13 @@ package com.soen390.erp.accounting.controller;
 
 import com.soen390.erp.accounting.exceptions.LedgerNotFoundException;
 import com.soen390.erp.accounting.model.Ledger;
-import com.soen390.erp.accounting.report.*;
+import com.soen390.erp.accounting.report.CsvReportGenerator;
+import com.soen390.erp.accounting.report.IReportGenerator;
+import com.soen390.erp.accounting.report.PdfReportGenerator;
 import com.soen390.erp.accounting.repository.LedgerRepository;
 import com.soen390.erp.accounting.service.LedgerModelAssembler;
 import com.soen390.erp.accounting.service.LedgerService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
@@ -21,14 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

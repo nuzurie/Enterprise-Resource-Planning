@@ -1,7 +1,6 @@
 package com.soen390.erp.configuration.controller;
 
 import com.soen390.erp.configuration.model.Log;
-import com.soen390.erp.configuration.repository.LogRepository;
 import com.soen390.erp.configuration.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

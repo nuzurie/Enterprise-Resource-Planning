@@ -1,20 +1,10 @@
 package com.soen390.erp.accounting.report;
 
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 import com.soen390.erp.GoogleDrive.FileManager;
 import com.soen390.erp.GoogleDrive.GoogleDriveController;
 import com.soen390.erp.GoogleDrive.GoogleDriveManager;
-import org.apache.http.entity.ContentType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.activation.MimetypesFileTypeMap;
-import java.io.*;
-import java.net.FileNameMap;
-import java.net.URLConnection;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**

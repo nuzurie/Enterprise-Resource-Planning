@@ -12,7 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@Data
 @Getter
 @Setter
 @JsonTypeInfo(
@@ -73,7 +72,7 @@ public abstract class Part implements PartFactory{
         //it's possible that the set hasn't been initialized
         Optional<Set<Part>> partsNullable = material.getParts();
         //get a new hashset if doesn't already exist
-        Set<Part> parts = partsNullable.orElseGet(()-> new HashSet<Part>());
+        Set<Part> parts = partsNullable.orElseGet(HashSet::new);
         //add the current part to the materials part set
         parts.add(this);
         material.setParts(parts);

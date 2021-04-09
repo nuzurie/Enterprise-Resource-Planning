@@ -5,7 +5,6 @@ import com.soen390.erp.users.model.User;
 import com.soen390.erp.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import static org.springframework.security.core.userdetails.User.withUsername;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

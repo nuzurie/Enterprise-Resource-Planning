@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.controller.PartController;
 import com.soen390.erp.manufacturing.exceptions.PartNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
@@ -7,7 +8,6 @@ import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.PartModelAssembler;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

@@ -4,15 +4,11 @@ import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.report.CsvReportGenerator;
 import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.report.PdfReportGenerator;
-import com.soen390.erp.accounting.repository.SaleOrderRepository;
-import com.soen390.erp.accounting.service.AccountService;
-import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.configuration.model.BooleanWrapper;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
-import com.soen390.erp.inventory.service.PlantService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -20,13 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.io.ByteArrayInputStream;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,9 +31,6 @@ public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final LogService logService;
     private static final String category = "accounting";
-    private final AccountService accountService;
-    private final LedgerService ledgerService;
-    private final SaleOrderRepository saleOrderRepository;
 
 
     @GetMapping(path = "/SaleOrders")

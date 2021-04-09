@@ -1,7 +1,7 @@
 package com.soen390.erp.manufacturing;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.controller.MaterialController;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
