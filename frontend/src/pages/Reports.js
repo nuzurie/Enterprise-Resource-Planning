@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { CsvToHtmlTable } from 'react-csv-to-table';
 import styled from 'styled-components';
 import MainContainer from '../components/containers/MainContainer.js';
 import InnerContainer from '../components/containers/InnerContainer';
@@ -15,11 +16,13 @@ class Reports extends Component {
     this.state = {
       cloudReports: [],
       fileToDownload: '',
+      qualityData: ''
     }
 
     this.initializeCloudReports = this.initializeCloudReports.bind(this);
     this.handleDownloadSelect = this.handleDownloadSelect.bind(this);
     this.downloadDocument = this.downloadDocument.bind(this);
+    this.getQualityData = this.getQualityData.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +42,16 @@ class Reports extends Component {
     console.log(":hola amiga");
     let index = e.target.selectedIndex;
     this.setState({ fileToDownload: e.target[index].text });
+  }
+
+  getQualityData(e){
+    e.preventDefault();
+
+    axios.get('/quality/report')
+        .then(res => this.setState({
+          qualityData: res.data
+        }))
+        .catch(err => console.log(err))
   }
 
   downloadDocument(e) {
@@ -125,8 +138,10 @@ class Reports extends Component {
     return (
       <Container>
         <MainContainer title="Quality Data">
-          <InnerContainer />
-          <form>
+          <InnerContainer >
+            <CsvToHtmlTable data={this.state.qualityData} csvDelimiter=","/>
+          </InnerContainer>
+          <form onSubmit={this.getQualityData}>
             <GradientButton type="submit" buttonValue="get quality data"/>
           </form>
         </MainContainer>
@@ -149,7 +164,7 @@ class Reports extends Component {
                   <Caption>Choose the file you wish to upload to the cloud.</Caption>
                   <input type="file" name="fileToUpload"/>
                 </div>
-                <GradientButton GradientButton type="submit" buttonValue="upload document"/>
+                <GradientButton type="submit" buttonValue="upload document"/>
               </DocumentForm>
             </Report>
           </TopContainer>
