@@ -19,6 +19,8 @@ public class QualityDataService {
     private String pathToQualityReport;
     private String qualityReportFilename;
     private File qualityDataReport;
+    private String recipient;
+    private String category;
     private final LogService logService;
     private final EmailService emailService;
     private String filePath;
@@ -29,6 +31,8 @@ public class QualityDataService {
     {
         this.pathToQualityReport = "\\src\\main\\resources\\quality\\";
         this.qualityReportFilename = "quality-data-2021.csv";
+        this.category = "quality data";
+        this.recipient = "manager@gmail.com";
         this.logService = logService;
         this.emailService = emailService;
         this.filePath = new File("").getAbsolutePath();
@@ -79,56 +83,44 @@ public class QualityDataService {
 
         List<String> currentMonthRecord = records.get(records.size()-1);
 
-        QualityDataHandler qualityDataHandler =
-                new QualityDataHandler(emailService, logService);
-        Handler h1 = new MaintenanceCostsHandler();
-        Handler h2 = new UnitCostsHandler();
-        Handler h3 = new DefectDensityHandler();
-        qualityDataHandler.add(h1);
-        qualityDataHandler.add(h2);
-        qualityDataHandler.add(h3);
-        h1.setNext(h2);
-        h2.setNext(h3);
-        qualityDataHandler.handle(currentMonthRecord);
-
-//        String maintenanceCosts = currentMonthRecord.get(2);
-//        String unitCosts = currentMonthRecord.get(3);
-//        String defectDensity = currentMonthRecord.get(5);
+        String maintenanceCosts = currentMonthRecord.get(2);
+        String unitCosts = currentMonthRecord.get(3);
+        String defectDensity = currentMonthRecord.get(5);
 
         // check business rules
-//        if (Integer.parseInt(maintenanceCosts) > 5000)
-//        {
-//            String message = "Warning, maintenance costs exceed $5000.";
-//            EmailToSend email = EmailToSend.builder().to(recipient).subject(
-//                    "Quality Data Warning").body(message).build();
-//            emailService.sendMail(email);
-//
-//            logService.addLog("Warning, maintenance costs exceed $5000.",
-//                category);
-//
-//            System.out.println("Warning, maintenance costs exceed $5000.");
-//        }
-//        if (Integer.parseInt(unitCosts) > 160)
-//        {
-//            String message = "Warning, unit costs exceed $160.";
-//            EmailToSend email = EmailToSend.builder().to(recipient).subject(
-//                    "Quality Data Warning").body(message).build();
-//            emailService.sendMail(email);
-//
-//            logService.addLog("Warning, unit costs exceed $160.",
-//                category);
-//            System.out.println("Warning, unit costs exceed $160.");
-//        }
-//        if (Integer.parseInt(defectDensity) > 1)
-//        {
-//            String message = "Warning, defect density exceeds 15%.";
-//            EmailToSend email = EmailToSend.builder().to(recipient).subject(
-//                    "Quality Data Warning").body(message).build();
-//            emailService.sendMail(email);
-//
-//            logService.addLog("Warning, defect density exceeds 15%.",
-//                category);
-//            System.out.println("Warning, defect density exceeds 15%.");
-//        }
+        if (Integer.parseInt(maintenanceCosts) > 5000)
+        {
+            String message = "Warning, maintenance costs exceed $5000.";
+            EmailToSend email = EmailToSend.builder().to(recipient).subject(
+                    "Quality Data Warning").body(message).build();
+            emailService.sendMail(email);
+
+            logService.addLog("Warning, maintenance costs exceed $5000.",
+                category);
+
+            System.out.println("Warning, maintenance costs exceed $5000.");
+        }
+        if (Integer.parseInt(unitCosts) > 160)
+        {
+            String message = "Warning, unit costs exceed $160.";
+            EmailToSend email = EmailToSend.builder().to(recipient).subject(
+                    "Quality Data Warning").body(message).build();
+            emailService.sendMail(email);
+
+            logService.addLog("Warning, unit costs exceed $160.",
+                category);
+            System.out.println("Warning, unit costs exceed $160.");
+        }
+        if (Integer.parseInt(defectDensity) > 15)
+        {
+            String message = "Warning, defect density exceeds 15%.";
+            EmailToSend email = EmailToSend.builder().to(recipient).subject(
+                    "Quality Data Warning").body(message).build();
+            emailService.sendMail(email);
+
+            logService.addLog("Warning, defect density exceeds 15%.",
+                category);
+            System.out.println("Warning, defect density exceeds 15%.");
+        }
     }
 }
