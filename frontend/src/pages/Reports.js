@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components';
 import MainContainer from '../components/containers/MainContainer.js';
+import InnerContainer from '../components/containers/InnerContainer';
 import GradientButton from "../components/GradientButton.js"
 import CustomDropdown from "../components/CustomDropdown";
 import CustomRadioButton from "../components/CustomRadioButton";
@@ -91,6 +92,7 @@ class Reports extends Component {
   }
 
   render() {
+    console.log(this.state.cloudReports);
     let reportsOptions = <option>No files found</option>;
 
     if (this.state.cloudReports.length !== 0) {
@@ -104,7 +106,10 @@ class Reports extends Component {
     return (
       <Container>
         <MainContainer title="Quality Data">
-            
+          <InnerContainer />
+          <form>
+            <GradientButton type="submit" buttonValue="get quality data"/>
+          </form>
         </MainContainer>
         <ReportsContainer>
           <TopContainer>
@@ -165,6 +170,26 @@ const Container = styled.div`
   & > div {
     flex: 1;
   }
+
+  & > div:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & > div:nth-child(2) > div:nth-child(1) {
+      height: 80%;
+    }
+    & > div:nth-child(2) > div:nth-child(2) {
+      flex: 1;
+    }
+  }
+`
+
+const QualityContainer = styled(MainContainer)`
+background: red;
+& > div:nth-child(2) > div:nth-child(1) {
+  background: red !important;
+}
 `
 
 const ReportsContainer = styled.div`
