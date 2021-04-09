@@ -5,6 +5,9 @@ import MainContainer from '../components/containers/MainContainer.js';
 import LogisticsContainer from '../components/containers/LogisticsContainer.js';
 import InnerContainer from '../components/containers/InnerContainer.js';
 import CustomRadioButton from '../components/CustomRadioButton.js';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from "axios";
 
 class Logistics extends Component {
@@ -89,19 +92,20 @@ class Logistics extends Component {
 
     return (
         <LogisticsContainer title="Logistics">
-            <LogContainer>
-              <ChoicesContainer onSubmit={this.handleCategory}>
-                <CustomRadioButton name="logsDisplay" value="inventory" >inventory</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="manufacturing" >manufacturing</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="accounting" >accounting</CustomRadioButton>
-                <CustomRadioButton name="logsDisplay" value="all" defaultChecked={true} >all</CustomRadioButton>
-                <button type="submit">display</button>
-              </ChoicesContainer>
-              {logsList}
-              <button onClick={()=>this.handlePageChange("-")}>Back</button>
-              <button onClick={()=>this.handlePageChange("+")}>Forward</button>
-            </LogContainer>
-            
+          <ChoicesContainer onSubmit={this.handleCategory}>
+            <CustomRadioButton name="logsDisplay" value="inventory" >inventory</CustomRadioButton>
+            <CustomRadioButton name="logsDisplay" value="manufacturing" >manufacturing</CustomRadioButton>
+            <CustomRadioButton name="logsDisplay" value="accounting" >accounting</CustomRadioButton>
+            <CustomRadioButton name="logsDisplay" value="all" defaultChecked={true} >all</CustomRadioButton>
+            <button type="submit">< ArrowForwardIcon /></button>
+          </ChoicesContainer>
+          <EntriesContainer>
+            {logsList}
+          </EntriesContainer>
+          <PageNavigation disabled={this.state.currentPage === 0}>
+            <button onClick={()=>this.handlePageChange("-")}><ArrowBackIosIcon /></button>
+            <button onClick={()=>this.handlePageChange("+")}><ArrowForwardIosIcon /></button>
+          </PageNavigation>
         </LogisticsContainer>
         
     );
@@ -115,7 +119,6 @@ const ChoicesContainer = styled.form`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  background: #F9F9F9;
 `
 
 const LogEntry = styled.div`
@@ -124,8 +127,22 @@ const LogEntry = styled.div`
   font-size: 10pt;
 `
 
-const LogContainer = styled(InnerContainer) `
+const EntriesContainer = styled(InnerContainer) `
   overflow-y: auto;
+`
+
+const PageNavigation = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  & > button:nth-child(1) {
+    pointer-events: ${props => props.disabled ? 'none' : 'default'};
+    color: ${props => props.disabled ? '#BBC8E3' : '#FF7A67'};
+  }
 `
 
 Logistics.propTypes = {

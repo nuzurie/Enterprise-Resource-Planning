@@ -29,13 +29,35 @@ const Container = styled.div`
   width: 40;
   height: calc(100% - 40px);
   box-shadow: 0 0 30px 0 rgba(43, 64, 104, 0.1);
-
+  display: flex;
+  flex-direction: column;
 }
 `
 
 const Content = styled.div`
-  overflow-y: auto;
   height: calc(100% - 20px);
+
+  & > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: calc(100% - 130px);
+  }
+
+  button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: #FF7A67;
+    transition: 250ms;
+    padding: 0;
+
+    &:hover, &::selection {
+      color: #BBC8E3;
+    }
 `
 
 const Header = styled.div`
