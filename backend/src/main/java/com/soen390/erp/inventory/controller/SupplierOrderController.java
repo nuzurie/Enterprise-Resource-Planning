@@ -1,9 +1,9 @@
 package com.soen390.erp.inventory.controller;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.model.SupplierOrder;
 import com.soen390.erp.inventory.service.SupplierOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

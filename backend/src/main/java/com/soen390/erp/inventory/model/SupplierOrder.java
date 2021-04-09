@@ -1,9 +1,7 @@
 package com.soen390.erp.inventory.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.soen390.erp.manufacturing.model.*;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.*;
@@ -47,19 +45,4 @@ public class SupplierOrder {
         this.orderItems = orderItems;
     }
 
-
-
-
-
-
-
-
-
-
-//    private Optional<String> title;
-//    @OneToOne
-//    @JoinColumn(name = "status_id")
-//    public OrderStatus status;
-//    //plus shipping ?
-//    private double totalCost;
 }

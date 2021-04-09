@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
@@ -9,15 +10,16 @@ import com.soen390.erp.manufacturing.model.Handlebar;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.BikeModelAssembler;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class BikeController {

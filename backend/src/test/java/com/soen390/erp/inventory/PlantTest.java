@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.inventory.controller.PlantController;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
@@ -15,7 +16,6 @@ import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.model.Part;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

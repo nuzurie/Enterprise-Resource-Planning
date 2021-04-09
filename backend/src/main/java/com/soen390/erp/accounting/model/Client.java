@@ -1,6 +1,6 @@
 package com.soen390.erp.accounting.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 

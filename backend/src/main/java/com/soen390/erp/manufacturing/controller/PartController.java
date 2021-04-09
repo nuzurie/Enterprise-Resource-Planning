@@ -1,5 +1,6 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
@@ -9,18 +10,19 @@ import com.soen390.erp.manufacturing.model.Part;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.PartModelAssembler;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class PartController {

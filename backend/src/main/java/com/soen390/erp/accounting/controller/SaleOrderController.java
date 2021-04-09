@@ -4,12 +4,11 @@ import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.report.CsvReportGenerator;
 import com.soen390.erp.accounting.report.IReportGenerator;
 import com.soen390.erp.accounting.report.PdfReportGenerator;
-import com.soen390.erp.accounting.repository.SaleOrderRepository;
-import com.soen390.erp.accounting.service.AccountService;
-import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.model.BooleanWrapper;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -17,13 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.io.ByteArrayInputStream;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -32,9 +31,6 @@ public class SaleOrderController {
     private final SaleOrderService saleOrderService;
     private final LogService logService;
     private static final String category = "accounting";
-    private final AccountService accountService;
-    private final LedgerService ledgerService;
-    private final SaleOrderRepository saleOrderRepository;
 
 
     @GetMapping(path = "/SaleOrders")
@@ -121,14 +117,79 @@ public class SaleOrderController {
             logService.addLog("Failed to ship bike for sale order with id "+id+". Already shipped.", category);
             return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been shipped.");
         }
+
         //TODO check if bank balance is more than grand total
         //TODO check if new status is valid
+        //TODO check if bike exists in plant and enough quantity
         //endregion
 
         saleOrderService.shipBikeTransactions(saleOrder);
         logService.addLog("Shipped bike for sale order with id "+id+".", category);
         //region return
         return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " is now shipped.");
+        //endregion
+    }
+
+    @PostMapping(path = "/SaleOrders/{id}/MakeBike")
+    public ResponseEntityWrapper makeBike(@PathVariable int id){
+
+        //region validation
+        //check if sale order exists
+        Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
+        if (saleOrderOptional.isEmpty()){
+            logService.addLog("Failed to make bike for sale order with id "+id+". No such sale order exists.", category);
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Unable to find Sale Order with id " + id + ".");
+        }
+        SaleOrder saleOrder = saleOrderOptional.get();
+        //we assume we wouldn't get any make requests unless it is valid because it id preceded by a check step
+        //check if transaction valid
+        if(saleOrder.isShipped()){
+            logService.addLog("Failed to make bike for sale order with id "+id+". Already shipped.", category);
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been made.");
+        }
+        //endregion
+
+        //deduct parts from plant and add bike to plant
+        try {
+            saleOrderService.makePlantBike(saleOrder);
+        }
+        catch (NotEnoughMaterialInPlantException e){
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale order with id " + id + " could not make the bikes.");
+        }
+        logService.addLog("Made bike for sale order with id "+id+".", category);
+        //region return
+        return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its bikes made.");
+        //endregion
+
+    }
+
+    @PostMapping(path = "/SaleOrders/{id}/GatherBikeParts")
+    public ResponseEntityWrapper gatherBikeParts(@PathVariable int id){
+
+        //region validation
+        //check if sale order exists
+        Optional<SaleOrder> saleOrderOptional = saleOrderService.getSaleOrder(id);
+        if (saleOrderOptional.isEmpty()){
+            logService.addLog("Failed to make bike for sale order with id "+id+". No such sale order exists.", category);
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Unable to find Sale Order with id " + id + ".");
+        }
+        SaleOrder saleOrder = saleOrderOptional.get();
+        //we assume we wouldn't get any make requests unless it is valid because it id preceded by a check step
+        //check if transaction valid
+        if(saleOrder.isShipped()){
+            logService.addLog("Sale order with id "+id+". Already shipped.", category);
+            return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), "Sale Order with id " + id + " has already been shipped.");
+        }
+        //endregion
+
+        //deduct parts from plant and add bike to plant
+        BooleanWrapper result = saleOrderService.gatherBikeParts(saleOrder);
+        if(result.isResult()) {
+            logService.addLog("Gather bike for sale order with id " + id + ".", category);
+            //region return
+            return new ResponseEntityWrapper(ResponseEntity.ok().build(), "Sale order with id " + id + " has all its parts to make the bikes.");
+        }
+        return new ResponseEntityWrapper(ResponseEntity.badRequest().build(), result.getMessage());
         //endregion
     }
 

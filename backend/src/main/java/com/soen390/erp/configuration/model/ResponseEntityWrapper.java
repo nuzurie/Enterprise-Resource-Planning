@@ -1,4 +1,4 @@
-package com.soen390.erp.configuration;
+package com.soen390.erp.configuration.model;
 
 import lombok.Data;
 import org.springframework.http.ResponseEntity;

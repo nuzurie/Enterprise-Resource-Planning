@@ -1,12 +1,11 @@
 package com.soen390.erp.manufacturing;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.controller.BikeController;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Handlebar;
 import com.soen390.erp.manufacturing.repository.BikeRepository;
-import com.soen390.erp.manufacturing.repository.PartRepository;
 import com.soen390.erp.manufacturing.service.BikeModelAssembler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,8 +36,7 @@ public class BikeTest {
     private BikeRepository bikeRepository;
     @MockBean
     private BikeModelAssembler assembler;
-    @MockBean
-    private PartRepository partRepository;
+
 
 
     @Test

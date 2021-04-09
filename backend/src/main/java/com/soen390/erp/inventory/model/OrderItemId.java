@@ -2,7 +2,7 @@ package com.soen390.erp.inventory.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-//@Embeddable
+
 public class OrderItemId implements Serializable {
 
     int id;

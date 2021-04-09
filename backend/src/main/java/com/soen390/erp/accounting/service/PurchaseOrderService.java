@@ -12,6 +12,8 @@ import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.inventory.model.Plant;
 import com.soen390.erp.inventory.repository.PlantRepository;
+import com.soen390.erp.inventory.service.PlantService;
+import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ public class PurchaseOrderService implements IReport
     private final AccountService accountService;
     private final LedgerService ledgerService;
     private final EmailService emailService;
+    private final PlantService plantService;
 
     public boolean addPurchaseOrder(PurchaseOrder purchaseOrder){
         purchaseOrder.setDate(new Date());
@@ -157,6 +160,20 @@ public class PurchaseOrderService implements IReport
         EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Receive Materials").body("Received materials for Purchase Order with id " + purchaseOrder.getId() + ".").build();
         emailService.sendMail(email);
         ledgerService.addLedger(ledgerEntry);
+        //endregion
+
+        //region inventory
+        //TODO check if plant exist
+        //fetch plant from db
+        Plant plant = plantRepository.findById(purchaseOrder.getPlant().getId()).get();
+
+        //fetch all materials from db
+        for(PurchaseOrderItems poItem : purchaseOrder.getPurchaseOrderItems() ){
+
+            //TODO check if material exists
+            Material material = materialRepository.findById(poItem.getMaterial().getId()).get();
+            plantService.addPlantMaterial(plant, material, poItem.getQuantity());
+        }
         //endregion
     }
 

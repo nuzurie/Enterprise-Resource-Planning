@@ -1,13 +1,12 @@
 package com.soen390.erp.accounting;
 
 import com.soen390.erp.accounting.controller.PurchaseOrderController;
-import com.soen390.erp.accounting.exceptions.AccountNotFoundException;
 import com.soen390.erp.accounting.exceptions.PurchaseNotFoundException;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
-import com.soen390.erp.configuration.ResponseEntityWrapper;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.configuration.service.LogService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest

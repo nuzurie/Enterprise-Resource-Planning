@@ -4,7 +4,6 @@ import com.soen390.erp.accounting.exceptions.SupplierNotFoundException;
 import com.soen390.erp.accounting.exceptions.InvalidSupplierException;
 import com.soen390.erp.accounting.model.Supplier;
 import com.soen390.erp.accounting.service.SupplierService;
-import com.soen390.erp.configuration.repository.LogRepository;
 import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.email.model.EmailToSend;
 import com.soen390.erp.email.service.EmailService;
