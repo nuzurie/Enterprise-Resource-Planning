@@ -32,11 +32,11 @@ class BikeProduction extends Component {
   }
 
   initializeBikes() {
-    axios.get('/plants')
+    axios.get('/SaleOrders')
     .then(res =>
       this.setState({
-        bikes: res.data._embedded.plantList[0].bikes,
-        bikeParts: res.data._embedded.plantList[0].parts }))
+        bikes: res.data,
+        bikeParts: res.data }))
     .catch(err => console.log(err))
   }
 
@@ -133,20 +133,26 @@ class BikeProduction extends Component {
   }
 
   render() {
+    console.log(this.state.bikes);
+
     let bikeList = <div></div>;
 
     if (this.state.bikes.length !== 0) {
-      bikeList = this.state.bikes.map((element, index) => {
+      bikeList = this.state.bikes.map((bike, index) => {
         return (
           <BikeContainer
             key={index}
-            title={element.bike.name}
-            size={element.bike.frame.size}
-            frameColor={element.bike.frame.colour ? element.bike.frame.colour : "blue"}
-            finish={element.bike.frame.finish ? element.bike.frame.finish : "matte"}
+            paidStatus={bike.paid}
+            title={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.name : "unnamed"}
+            size={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.frame.size : 26}
+            frameColor={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.frame.colour : "blue"}
+            finish={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.frame.finish : "matte"}
             grade={"aluminium"}
-            handlebar={element.bike.handlebar.type ? element.bike.handlebar.type : "straight"}
-            pedal={element.bike.pedal.type ? element.bike.pedal.type : "strap"} />
+            handlebar={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.handlebar.type : "straight"}
+            pedal={bike.saleOrderItems.length !== 0 ? bike.saleOrderItems[0].bike.pedal.type : "strap"}
+            saleOrderID={bike.id}
+            bikeID={bike.saleOrderItems[0].bike.id}
+            />
         );
       });
     }

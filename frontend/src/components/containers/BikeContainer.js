@@ -32,7 +32,7 @@ class BikeContainer extends Component {
             <Header>
               <div>
                 <Title>{this.props.title}</Title>
-                <PaymentStatus> - NOT PAID</PaymentStatus>
+                <PaymentStatus>&nbsp;- {this.props.paidStatus ? "PAID" : "NOT PAID"}</PaymentStatus>
               </div>
               <ExpandButton onClick={this.toggleExpansion} isExpanded={this.state.showExpansion}>
                 <ExpandLessMore />                
@@ -66,7 +66,7 @@ class BikeContainer extends Component {
             </CharacteristicContainer>
             {/* {this.props.children} */}
             <ProgressContainer isExpanded={this.state.showExpansion} >
-              <BikeProgress progressLevel={this.state.progressLevel} />
+              <BikeProgress saleOrderID={this.props.saleOrderID} bikeID={this.props.bikeID} progressLevel={this.state.progressLevel} />
             </ProgressContainer>
         </Container>
     );
