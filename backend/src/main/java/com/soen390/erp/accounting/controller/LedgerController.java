@@ -39,12 +39,6 @@ public class LedgerController {
     private final LedgerRepository ledgerRepository;
     private final LedgerModelAssembler assembler;
     private final LedgerService ledgerService;
-<<<<<<< HEAD
-
-    public LedgerController(LedgerRepository ledgerRepository,
-                            LedgerModelAssembler assembler,
-                            LedgerService ledgerService)
-=======
     private final EmailService emailService;
     private final LogService logService;
     private static final String category = "accounting";
@@ -54,7 +48,7 @@ public class LedgerController {
                 LedgerService ledgerService,
                 EmailService emailService,
                 LogService logService)
->>>>>>> backend/ERPS-10-quality-data
+
     {
         this.ledgerRepository=ledgerRepository;
         this.assembler=assembler;
@@ -64,19 +58,10 @@ public class LedgerController {
     }
 
     @GetMapping("/ledger")
-<<<<<<< HEAD
-    public ResponseEntity<?> all() {
-
-        List<EntityModel<Ledger>> ledger = ledgerRepository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-
-=======
     public ResponseEntity<?> all()
     {
         List<EntityModel<Ledger>> ledger = ledgerService.assembleToModel();
         logService.addLog("Retrieved all ledgers.", category);
->>>>>>> backend/ERPS-10-quality-data
         return ResponseEntity.ok().body(
                 CollectionModel.of(ledger, linkTo(methodOn(
                         LedgerController.class).all()).withSelfRel()));
@@ -91,27 +76,6 @@ public class LedgerController {
         return ResponseEntity.ok().body(assembler.toModel(ledger));
     }
 
-
-    @GetMapping(value = "/ledger/report/pdf")
-    public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
-    {
-        var headers = new HttpHeaders();
-        headers.add("Content-Disposition",
-                "inline; filename=ledgersReport" +
-                        ".pdf");
-
-        IReportGenerator pdfReportGenerator = new PdfReportGenerator();
-        ledgerService.accept(pdfReportGenerator);
-        ByteArrayInputStream inputStream = pdfReportGenerator.getInputStream();
-
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(inputStream));
-    }
-
-
     @PostMapping("/ledger")
     public ResponseEntityWrapper newTransaction(@RequestBody Ledger ledger){
 
@@ -119,10 +83,6 @@ public class LedgerController {
         EntityModel<Ledger> entityModel = assembler.toModel(
                 ledgerRepository.save(ledger));
 
-<<<<<<< HEAD
-        return ResponseEntity.created(entityModel.
-                getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
-=======
         String message = "A new ledger has been created with id " + ledger.getId();
         EmailToSend email = EmailToSend.builder().to("accountant@msn.com").subject("Created Ledger").body(message).build();
         emailService.sendMail(email);
@@ -130,7 +90,7 @@ public class LedgerController {
 
         return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
                 , "The ledger was successfully created with id " + ledger.getId());
->>>>>>> backend/ERPS-10-quality-data
+
     }
 
     @ResponseBody
@@ -140,7 +100,6 @@ public class LedgerController {
         return ex.getMessage();
     }
 
-<<<<<<< HEAD
     @GetMapping(value = "/ledger/report/pdf")
     public ResponseEntity<InputStreamResource> exportToPdf() throws IOException
     {
@@ -160,8 +119,6 @@ public class LedgerController {
                 .body(new InputStreamResource(inputStream));
     }
 
-=======
->>>>>>> backend/ERPS-10-quality-data
     @GetMapping("/ledger/report/csv")
     public void exportToCSV(HttpServletResponse response)
             throws IOException

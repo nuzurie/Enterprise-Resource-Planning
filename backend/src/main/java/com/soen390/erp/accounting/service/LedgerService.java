@@ -26,25 +26,17 @@ public class LedgerService implements IReport {
         return ledgerRepository.findAll();
     }
 
-    @Override
-    public void accept(IReportGenerator reportGenerator) throws IOException
-    {
-        reportGenerator.generateLedgerReport(this);
-    }
-
     public List<EntityModel<Ledger>> assembleToModel()
     {
         return ledgerRepository.findAll().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
     }
-<<<<<<< HEAD
 
     @Override
     public void accept(IReportGenerator reportGenerator) throws IOException
     {
         reportGenerator.generateLedgerReport(this);
     }
-=======
->>>>>>> backend/ERPS-10-quality-data
+
 }
