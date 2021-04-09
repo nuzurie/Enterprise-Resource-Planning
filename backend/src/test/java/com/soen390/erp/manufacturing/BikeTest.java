@@ -1,6 +1,7 @@
 package com.soen390.erp.manufacturing;
 
 import com.soen390.erp.manufacturing.controller.BikeController;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import com.soen390.erp.manufacturing.exceptions.BikeNotFoundException;
 import com.soen390.erp.manufacturing.model.Bike;
 import com.soen390.erp.manufacturing.model.Handlebar;
@@ -99,8 +100,8 @@ public class BikeTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = bikeController.newBike(bike);
+        ResponseEntityWrapper result = bikeController.newBike(bike);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 }

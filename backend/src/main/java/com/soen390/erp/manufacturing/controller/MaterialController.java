@@ -1,9 +1,13 @@
 package com.soen390.erp.manufacturing.controller;
 
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.model.EmailToSend;
+import com.soen390.erp.email.service.EmailService;
 import com.soen390.erp.manufacturing.exceptions.MaterialNotFoundException;
 import com.soen390.erp.manufacturing.model.Material;
 import com.soen390.erp.manufacturing.repository.MaterialRepository;
 import com.soen390.erp.manufacturing.service.MaterialModelAssembler;
+import com.soen390.erp.configuration.ResponseEntityWrapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -13,26 +17,31 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class MaterialController {
 
     private final MaterialRepository materialRepository;
     private final MaterialModelAssembler assembler;
+    private final EmailService emailService;
+    private final LogService logService;
+    private static final String category = "manufacturing";
 
     public MaterialController(MaterialRepository materialRepository,
-                              MaterialModelAssembler assembler)
+                              MaterialModelAssembler assembler,
+                              EmailService emailService, LogService logService)
     {
         this.materialRepository = materialRepository;
         this.assembler = assembler;
+        this.emailService = emailService;
+        this.logService = logService;
     }
 
     @GetMapping("/materials")
     public ResponseEntity<?> all() {
 
         List<EntityModel<Material>> materials = assembler.assembleToModel();
-
+        logService.addLog("Retrieved all materials.", category);
         return ResponseEntity.ok().body(
                 CollectionModel.of(materials, linkTo(methodOn(MaterialController
                         .class).all()).withSelfRel()));
@@ -41,6 +50,7 @@ public class MaterialController {
     @GetMapping(path = "/materials/{id}")
     public ResponseEntity<?> one(@PathVariable int id) {
 
+        logService.addLog("Retrieved material with id "+id+".", category);
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new MaterialNotFoundException(id));
 
@@ -48,14 +58,20 @@ public class MaterialController {
     }
 
     @PostMapping("/materials")
-    public ResponseEntity<?> newMaterial(@RequestBody Material material){
+    public ResponseEntityWrapper newMaterial(@RequestBody Material material){
 
         EntityModel<Material> entityModel = assembler
                 .toModel(materialRepository.save(material));
 
-        return ResponseEntity.created(entityModel
-                .getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+        String message = "A new material has been added with id " + material.getId();
+        logService.addLog(message, category);
+        EmailToSend email = EmailToSend.builder().to("material.manager@msn.com").subject("Added Material").body(message).build();
+        emailService.sendMail(email);
+
+        return new ResponseEntityWrapper(ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel)
+                , "The material was successfully added with id " + material.getId());
+
+
     }
 
     @ResponseBody
