@@ -11,14 +11,20 @@ class Logistics extends Component {
     super(props);
   }
 
+  test() {
+    console.log("test");
+  }
+
   render() {
     return (
         <LogisticsContainer title="Logistics">
             <InnerContainer>
-              <CustomRadioButton value="Inventory">Inventory</CustomRadioButton>
-              <CustomRadioButton value="Manufacturing">Manufacturing</CustomRadioButton>
-              <CustomRadioButton value="Accounting">Accounting</CustomRadioButton>
-              <CustomRadioButton value="All">All</CustomRadioButton>
+              <ChoicesContainer onSubmit={this.test}>
+                <CustomRadioButton name="logsDisplay" value="Inventory" onChange={this.form.submit()}>Inventory</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="Manufacturing" onChange={this.form.submit()}>Manufacturing</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="Accounting" onChange={this.form.submit()}>Accounting</CustomRadioButton>
+                <CustomRadioButton name="logsDisplay" value="All" onChange={this.form.submit()}>All</CustomRadioButton>
+              </ChoicesContainer>
             </InnerContainer>
             
         </LogisticsContainer>
@@ -28,6 +34,11 @@ class Logistics extends Component {
 }
 
 //STYLED-COMPONENTS
+const ChoicesContainer = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
 
 Logistics.propTypes = {
 };
