@@ -47,6 +47,7 @@ class BikeProgress extends Component {
   gatherValidator() {
     axios.post(`/SaleOrders/${this.props.saleOrderID}/GatherBikeParts`)
       .then(res => alert(res.data.message))
+
     return true;
   }
 

@@ -112,7 +112,7 @@ class BikeProduction extends Component {
       "quantity": 2
     }
 
-    axios.post('/addBikeToInventory', plantBike);
+    axios.post('/SaleOrders', plantBike);
     console.log(bikeName + ": " + bikeSize + " " + bikeColor + " " + bikeFinish + " " + bikeGrade + " " + bikeHandlebar + " " + bikePedal);
   }
 
