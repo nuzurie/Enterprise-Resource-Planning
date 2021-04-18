@@ -290,12 +290,19 @@ const RawMaterialsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
+
   & > div {
     flex: 1;
     width: calc(100% - 40px); // TODO: fix fixed-width (100% should work, probably not accessing the right div)
   }
+
   & > div:nth-child(2) {
     margin-top: 20px;
+  }
+
+  & > div:nth-child(1) {
+    height: 0;
   }
 `
 

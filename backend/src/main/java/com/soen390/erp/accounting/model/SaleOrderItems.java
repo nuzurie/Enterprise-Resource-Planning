@@ -21,13 +21,11 @@ public class SaleOrderItems {
     private int quantity;
     private double unitPrice;
 
-
-//    @ManyToOne
-//    @JoinColumn(name = "sale_order_id")
-//    @JsonIgnore
-//    private SaleOrder saleOrder;
-
     @ManyToOne
     @JoinColumn(name = "bike_id")
     private Bike bike;
+
+    public String toString() {
+        return bike+"" ;
+    }
 }

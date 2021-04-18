@@ -22,7 +22,7 @@ const Container = styled.div`
   background: #F9F9F9;
   padding: 20px;
   border-radius: 12px;
-  height: calc(100% - 88px);
+  height: 100%;
   margin-top: 15px;
 `
 

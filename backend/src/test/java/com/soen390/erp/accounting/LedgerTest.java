@@ -4,7 +4,11 @@ import com.soen390.erp.accounting.controller.LedgerController;
 import com.soen390.erp.accounting.exceptions.LedgerNotFoundException;
 import com.soen390.erp.accounting.model.Ledger;
 import com.soen390.erp.accounting.repository.LedgerRepository;
-import com.soen390.erp.accounting.service.*;
+import com.soen390.erp.accounting.service.LedgerModelAssembler;
+import com.soen390.erp.accounting.service.LedgerService;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,10 @@ public class LedgerTest {
     private LedgerModelAssembler assembler;
     @MockBean
     private LedgerRepository ledgerRepository;
+    @MockBean
+    private EmailService emailService;
+    @MockBean
+    private LogService logService;
 
 
     @Test
@@ -94,9 +102,9 @@ public class LedgerTest {
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = ledgerController.newTransaction(l1);
+        ResponseEntityWrapper result = ledgerController.newTransaction(l1);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

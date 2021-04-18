@@ -23,13 +23,11 @@ public class PurchaseOrderItems {
     private int quantity;
     private double unitPrice;
 
-
-//    @ManyToOne
-//    @JoinColumn(name = "purchase_order_id")
-////    @JsonBackReference
-//    private PurchaseOrder purchaseOrder;
-
     @ManyToOne
     @JoinColumn(name = "material_id")
     Material material;
+
+    public String toString(){
+        return material+"";
+    }
 }

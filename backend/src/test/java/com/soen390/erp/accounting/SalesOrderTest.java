@@ -5,6 +5,8 @@ import com.soen390.erp.accounting.model.SaleOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.SaleOrderService;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest
@@ -33,6 +35,8 @@ public class SalesOrderTest {
     private AccountService accountService;
     @MockBean
     private LedgerService ledgerService;
+    @MockBean
+    private LogService logService;
 
 
     @Test
@@ -83,9 +87,9 @@ public class SalesOrderTest {
 
         doReturn(true).when(saleOrderService).addSaleOrder(s1);
 
-        ResponseEntity<?> result = saleOrderController.createSaleOrder(s1);
+        ResponseEntityWrapper result = saleOrderController.createSaleOrder(s1);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -95,9 +99,9 @@ public class SalesOrderTest {
 
         doReturn(false).when(saleOrderService).addSaleOrder(s1);
 
-        ResponseEntity<?> result = saleOrderController.createSaleOrder(s1);
+        ResponseEntityWrapper result = saleOrderController.createSaleOrder(s1);
 
-        assertEquals(HttpStatus.NOT_MODIFIED, result.getStatusCode());
+        assertEquals(HttpStatus.NOT_MODIFIED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -109,9 +113,9 @@ public class SalesOrderTest {
 
         doReturn(saleOrder).when(saleOrderService).getSaleOrder(id);
 
-        ResponseEntity<?> result = saleOrderController.receivePayment(id);
+        ResponseEntityWrapper result = saleOrderController.receivePayment(id);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -121,9 +125,9 @@ public class SalesOrderTest {
 
         doReturn(Optional.empty()).when(saleOrderService).getSaleOrder(id);
 
-        ResponseEntity<?> result = saleOrderController.receivePayment(id);
+        ResponseEntityWrapper result = saleOrderController.receivePayment(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -135,9 +139,9 @@ public class SalesOrderTest {
 
         doReturn(saleOrder).when(saleOrderService).getSaleOrder(id);
 
-        ResponseEntity<?> result = saleOrderController.shipBike(id);
+        ResponseEntityWrapper result = saleOrderController.shipBike(id);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -147,9 +151,9 @@ public class SalesOrderTest {
 
         doReturn(Optional.empty()).when(saleOrderService).getSaleOrder(id);
 
-        ResponseEntity<?> result = saleOrderController.shipBike(id);
+        ResponseEntityWrapper result = saleOrderController.shipBike(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 }
 

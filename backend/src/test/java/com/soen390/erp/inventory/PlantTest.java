@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory;
 
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
 import com.soen390.erp.inventory.controller.PlantController;
 import com.soen390.erp.inventory.exceptions.NotEnoughMaterialInPlantException;
 import com.soen390.erp.inventory.exceptions.NotEnoughPartsInPlantException;
@@ -101,9 +102,9 @@ public class PlantTest {
         doReturn(part).when(plantPart).getPart();
         doReturn(quantity).when(plantPart).getQuantity();
 
-        ResponseEntity<?> result = plantController.addPartToInventory(plantPart);
+        ResponseEntityWrapper result = plantController.addPartToInventory(plantPart);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -186,9 +187,9 @@ public class PlantTest {
         doReturn(material).when(plantMaterial).getMaterial();
         doReturn(quantity).when(plantMaterial).getQuantity();
 
-        ResponseEntity<?> result = plantController.addMaterialToInventory(plantMaterial);
+        ResponseEntityWrapper result = plantController.addMaterialToInventory(plantMaterial);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -223,9 +224,9 @@ public class PlantTest {
         doReturn(bike).when(plantBike).getBike();
         doReturn(quantity).when(plantBike).getQuantity();
 
-        ResponseEntity<?> result = plantController.addBikeToInventory(plantBike);
+        ResponseEntityWrapper result = plantController.addBikeToInventory(plantBike);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

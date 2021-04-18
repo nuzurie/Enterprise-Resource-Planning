@@ -2,7 +2,6 @@ package com.soen390.erp.email.service;
 
 import com.soen390.erp.email.model.EmailToSend;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 

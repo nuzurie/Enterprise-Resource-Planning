@@ -69,4 +69,8 @@ public class Plant {
         bikes.add(plantBike);
     }
 
+    public String toString() {
+        return name+" "+address ;
+    }
+
 }

@@ -1,10 +1,14 @@
 package com.soen390.erp.accounting;
 
 import com.soen390.erp.accounting.controller.PurchaseOrderController;
+import com.soen390.erp.accounting.exceptions.PurchaseNotFoundException;
 import com.soen390.erp.accounting.model.PurchaseOrder;
 import com.soen390.erp.accounting.service.AccountService;
 import com.soen390.erp.accounting.service.LedgerService;
 import com.soen390.erp.accounting.service.PurchaseOrderService;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest
@@ -33,6 +38,8 @@ public class PurchaseOrderTest {
     private AccountService accountService;
     @MockBean
     private LedgerService ledgerService;
+    @MockBean
+    private LogService logService;
 
     @Test
     public void getAllPurchaseOrdersTest()
@@ -66,13 +73,19 @@ public class PurchaseOrderTest {
     @Test
     public void oneNotFoundTest()
     {
-        int id = 1;
+        int id = 1 ;
 
-        doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
+        doThrow(new PurchaseNotFoundException("No order with id " + id))
+                .when(purchaseOrderService)
+                .getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.one(id);
+        PurchaseNotFoundException result =
+                Assertions.assertThrows(PurchaseNotFoundException.class, () -> {
+                    purchaseOrderController.one(id);
+                });
 
-        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        assertEquals("No order with id " + id, result
+                .getMessage());
     }
 
     @Test
@@ -82,9 +95,9 @@ public class PurchaseOrderTest {
 
         doReturn(true).when(purchaseOrderService).addPurchaseOrder(p1);
 
-        ResponseEntity<?> result = purchaseOrderController.createPurchaseOrder(p1);
+        ResponseEntityWrapper result = purchaseOrderController.createPurchaseOrder(p1);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -94,9 +107,9 @@ public class PurchaseOrderTest {
 
         doReturn(false).when(purchaseOrderService).addPurchaseOrder(p1);
 
-        ResponseEntity<?> result = purchaseOrderController.createPurchaseOrder(p1);
+        ResponseEntityWrapper result = purchaseOrderController.createPurchaseOrder(p1);
 
-        assertEquals(HttpStatus.NOT_MODIFIED, result.getStatusCode());
+        assertEquals(HttpStatus.NOT_MODIFIED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -108,9 +121,9 @@ public class PurchaseOrderTest {
 
         doReturn(purchaseOrder).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.makePayment(id);
+        ResponseEntityWrapper result = purchaseOrderController.makePayment(id);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -120,9 +133,9 @@ public class PurchaseOrderTest {
 
         doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.makePayment(id);
+        ResponseEntityWrapper result = purchaseOrderController.makePayment(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -134,9 +147,9 @@ public class PurchaseOrderTest {
 
         doReturn(purchaseOrder).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.receiveMaterial(id);
+        ResponseEntityWrapper result = purchaseOrderController.receiveMaterial(id);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test
@@ -146,8 +159,8 @@ public class PurchaseOrderTest {
 
         doReturn(Optional.empty()).when(purchaseOrderService).getPurchaseOrder(id);
 
-        ResponseEntity<?> result = purchaseOrderController.receiveMaterial(id);
+        ResponseEntityWrapper result = purchaseOrderController.receiveMaterial(id);
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getResponseEntity().getStatusCode());
     }
 }

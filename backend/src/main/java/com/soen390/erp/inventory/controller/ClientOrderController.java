@@ -1,5 +1,6 @@
 package com.soen390.erp.inventory.controller;
 
+import com.soen390.erp.configuration.service.LogService;
 import com.soen390.erp.inventory.exceptions.InvalidClientOrderException;
 import com.soen390.erp.inventory.model.ClientOrder;
 import com.soen390.erp.inventory.service.ClientOrderService;
@@ -14,13 +15,17 @@ import java.util.List;
 public class ClientOrderController {
 
     private final ClientOrderService clientOrderService;
+    private final LogService logService;
+    private static final String category = "inventory";
 
-    public ClientOrderController(ClientOrderService clientOrderService) {
+    public ClientOrderController(ClientOrderService clientOrderService, LogService logService) {
         this.clientOrderService = clientOrderService;
+        this.logService = logService;
     }
 
     @GetMapping
     public List<ClientOrder> getAllClientOrders() {
+        logService.addLog("Retrieved all client order", category);
         return clientOrderService.findAllClientOrders();
     }
 
@@ -30,9 +35,12 @@ public class ClientOrderController {
             clientOrderService.addClientOrder(clientOrder);
 
         } catch (InvalidClientOrderException e) {
-
+            logService.addLog("Failed to create client.", category);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Client Order");
+        String message = "The Client Order was successfully created with id " + clientOrder.getId();
+        logService.addLog(message, category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 }
+

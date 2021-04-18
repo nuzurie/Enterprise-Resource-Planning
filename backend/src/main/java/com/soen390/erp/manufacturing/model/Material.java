@@ -1,15 +1,12 @@
 package com.soen390.erp.manufacturing.model;
 
-import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
-
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
-//@Data
 @Getter
 @Setter
 @Builder
@@ -52,10 +49,6 @@ public class Material {
 
     @Override
     public String toString() {
-        return "Material{" +
-                "name='" + name + '\'' +
-                ", cost=" + cost +
-                ", parts=" + parts +
-                '}';
+        return name;
     }
 }

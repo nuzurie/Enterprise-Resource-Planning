@@ -4,7 +4,11 @@ import com.soen390.erp.accounting.controller.AccountController;
 import com.soen390.erp.accounting.exceptions.AccountNotFoundException;
 import com.soen390.erp.accounting.model.Account;
 import com.soen390.erp.accounting.repository.AccountRepository;
-import com.soen390.erp.accounting.service.*;
+import com.soen390.erp.accounting.service.AccountModelAssembler;
+import com.soen390.erp.accounting.service.AccountService;
+import com.soen390.erp.configuration.model.ResponseEntityWrapper;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,10 @@ public class AccountTest {
     private AccountModelAssembler assembler;
     @MockBean
     private AccountRepository accountRepository;
+    @MockBean
+    private EmailService emailService;
+    @MockBean
+    private LogService logService;
 
 
     @Test
@@ -83,7 +91,8 @@ public class AccountTest {
     @Test
     public void newTransactionTest()
     {
-        Account a1 = new Account();
+        int id = 1 ;
+        Account a1 = mock(Account.class);
         EntityModel<Account> entityModel =
                 (EntityModel<Account>)mock(EntityModel.class);
         Link link = spy(Link.class);
@@ -91,12 +100,15 @@ public class AccountTest {
         doReturn(a1).when(accountRepository).save(a1);
         doReturn(entityModel).when(assembler).toModel(a1);
 
+        doReturn(a1).when(entityModel).getContent();
+        doReturn(id).when(a1).getId();
+
         doReturn(link).when(entityModel).getRequiredLink(IanaLinkRelations.SELF);
         doReturn(null).when(link).toUri();
 
-        ResponseEntity<?> result = accountController.newTransaction(a1);
+        ResponseEntityWrapper result = accountController.newTransaction(a1);
 
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getResponseEntity().getStatusCode());
     }
 
     @Test

@@ -23,6 +23,8 @@ const Container = styled.div`
   border-radius: 12px;
   margin-top: 15px;
   border: solid 2px #BBC8E3;
+  max-height: 400px;
+  overflow-y: auto;
 
   
   font-size: 9pt;

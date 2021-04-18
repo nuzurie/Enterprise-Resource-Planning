@@ -9,7 +9,7 @@ class CustomDropdown extends Component {
 
   render() {
     return (
-        <Container name={this.props.dropdownName} id={this.props.dropdownID}>
+        <Container name={this.props.dropdownName} id={this.props.dropdownID} onChange={this.props.handleChange} onLoad={() => this.props.handleChange}>
             {this.props.children}
         </Container>
     );

@@ -5,6 +5,8 @@ import com.soen390.erp.accounting.exceptions.ClientNotFoundException;
 import com.soen390.erp.accounting.exceptions.InvalidClientException;
 import com.soen390.erp.accounting.model.Client;
 import com.soen390.erp.accounting.service.ClientService;
+import com.soen390.erp.configuration.service.LogService;
+import com.soen390.erp.email.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,10 @@ public class ClientTest {
 
     @MockBean
     ClientService clientService;
+    @MockBean
+    private EmailService emailService;
+    @MockBean
+    private LogService logService;
 
     @Test
     public void getAllClientsTest()

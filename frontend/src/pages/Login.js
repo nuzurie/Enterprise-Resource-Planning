@@ -11,6 +11,8 @@ import axios from "axios";
 class Login extends Component {
   constructor(props) {
     super(props);
+
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin(e){
@@ -23,15 +25,26 @@ class Login extends Component {
       const credentials = window.btoa(email+":"+password)
       const auth = "Basic "+credentials
 
-      axios.get('/', {
+      // auth = Basic bXpudXJpZUBtc24uY29tOnNvZW4zOTA=
+
+      axios.get('/login', {
           headers: {
               'authorization': auth
           }
       })
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
-
-  }
+    .then(res =>
+        {
+            const role = res.data;
+            console.log(res.headers)
+            localStorage.setItem("role", role);
+            localStorage.setItem("user", email); // TODO: set expirty
+            localStorage.setItem("password", password); // TODO: set expirty
+            alert("You are logged in! :)");
+        }
+    )
+    .catch(err => {
+        console.log(err)})
+    }
 
   render() {
     return (
@@ -47,7 +60,9 @@ class Login extends Component {
                         </FieldContainer>
                 
                     </div>
-                    <GradientButton type="submit" buttonValue="Login" />
+                    <GradientButton type="submit" buttonValue="Login" >
+                        <Link to="/bikeproduction" />
+                    </GradientButton>
                 </LoginForm>
             </InnerContainer>
         </MainContainer>

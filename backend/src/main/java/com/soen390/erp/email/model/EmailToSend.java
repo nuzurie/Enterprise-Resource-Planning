@@ -3,9 +3,7 @@ package com.soen390.erp.email.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 

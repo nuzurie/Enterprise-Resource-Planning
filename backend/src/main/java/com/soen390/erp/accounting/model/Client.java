@@ -1,6 +1,6 @@
 package com.soen390.erp.accounting.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 
@@ -12,4 +12,8 @@ public class Client  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    public String toString() {
+        return name ;
+    }
 }
